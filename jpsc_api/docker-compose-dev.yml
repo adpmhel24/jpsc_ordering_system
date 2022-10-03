@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+
+  psql_db:
+    platform: linux/amd64
+    container_name: psql_db
+    image: postgres
+    # restart: always
+    ports:
+      - 5431:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+  api:
+    platform: linux/amd64
+    container_name: jpsc_api
+    build: .
+    command: uvicorn my_app.main:app --host 0.0.0.0 --port 8001 --reload
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 8800:8001
+    # restart: always
+    depends_on:
+      - psql_db
