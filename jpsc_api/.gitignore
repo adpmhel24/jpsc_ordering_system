@@ -1,1 +1,4 @@
 .env
+my_app/core/settings/.env
+my_app/gcp_jpsc_storage_key.json
+.gitignore
