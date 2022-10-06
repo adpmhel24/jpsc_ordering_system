@@ -17,6 +17,8 @@ from my_app.core.settings.config import settings
 from my_app.shared.utils import logger
 from my_app.core.modules.routers import *
 
+from google.cloud import storage
+
 router = APIRouter(route_class=RouteErrorHandler)
 
 app = FastAPI(
@@ -86,6 +88,11 @@ app.include_router(master_data_router, prefix=settings.API_V1_STR)
 app.include_router(inventory_router, prefix=settings.API_V1_STR)
 app.include_router(sales_router, prefix=settings.API_V1_STR)
 add_pagination(app)
+
+
+gcp_storage = storage.Client()
+
+bucket_name = settings.CLOUD_STORAGE_BUCKET
 
 
 @app.get("/")

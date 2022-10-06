@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -92,6 +93,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _contactNumberController =
       TextEditingController();
+  final TextEditingController _creditLimitController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
   BranchModel? selectedBranch;
@@ -104,7 +106,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
     _lastNameController.dispose();
     _contactNumberController.dispose();
     _emailController.dispose();
-
+    _creditLimitController.dispose();
     super.dispose();
   }
 
@@ -134,6 +136,8 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
           _contactNumberField(createCustomerBloc),
           Constant.heightSpacer,
           _emailAddressField(createCustomerBloc),
+          Constant.heightSpacer,
+          _creditLimitField(createCustomerBloc),
           Constant.heightSpacer,
           TextButton(
             onPressed: () {
@@ -220,6 +224,23 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
       onChanged: (_) => createCustomerBloc.add(
         CustContactNumberChanged(
           _contactNumberController.text,
+        ),
+      ),
+    );
+  }
+
+  CustomTextField _creditLimitField(CreateCustomerBloc createCustomerBloc) {
+    return CustomTextField(
+      controller: _creditLimitController,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+      ],
+      labelText: "Credit Limit",
+      prefixIcon: const Icon(Icons.money_sharp),
+      onChanged: (value) => createCustomerBloc.add(
+        CustCreditLimitChanged(
+          double.parse(value.isEmpty ? "0" : value),
         ),
       ),
     );

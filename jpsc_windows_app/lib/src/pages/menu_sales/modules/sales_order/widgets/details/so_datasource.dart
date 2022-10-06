@@ -168,11 +168,11 @@ class DataSource extends DataGridSource {
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
     double srpPrice = row.getCells()[3].value;
-    double unitPrice = row.getCells()[4].value;
+    double actualPrice = row.getCells()[4].value;
     return DataGridRowAdapter(
-        color: (srpPrice > unitPrice)
+        color: (srpPrice > actualPrice)
             ? Colors.red.light
-            : (srpPrice < unitPrice)
+            : (srpPrice < actualPrice)
                 ? Colors.green.light
                 : null,
         cells: row.getCells().map<Widget>((dataGridCell) {

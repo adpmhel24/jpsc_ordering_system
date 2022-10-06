@@ -1,8 +1,11 @@
+from datetime import datetime
 from fastapi import HTTPException, status
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from sqlmodel import or_, func, and_
 from fastapi_sqlalchemy import db
 from my_app.shared.crud import CRUDBase
+from fastapi.encoders import jsonable_encoder
+
 
 from .models import Customer
 from .schemas import CustomerCreate, CustomerUpdate, CustomerRead
@@ -101,18 +104,24 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
         self,
         fk: str,
         *,
-        update_schema: Union[CustomerUpdate, Dict[str, Any]],
+        update_dict_data: Dict[str, Any],
+        user_id: int,
     ) -> Any:
-        db_obj = self.get(fk=fk)
-        if not db_obj:
+        cust_db_obj = self.get(fk=fk)
+        if not cust_db_obj:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Customer Code."
             )
+
+        cust_dict_data = update_dict_data.pop("customer_schema")
+        cust_addresses_dict_data = update_dict_data.pop("addresses_schema")
+
+        # Get the schema code and check if the code is existing
         existing_obj = (
             db.session.query(self.model)
             .filter(
                 and_(
-                    func.lower(self.model.code) == update_schema.code.lower(),
+                    func.lower(self.model.code) == cust_dict_data["code"].lower(),
                     self.model.code != fk,
                 )
             )
@@ -123,12 +132,40 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Customer code Already exist.",
             )
-        if isinstance(update_schema, dict):
-            update_data = update_schema
-        else:
-            update_data = update_schema.dict(exclude_unset=True)
+        cust_obj_data = jsonable_encoder(cust_db_obj)
 
-        return super().update(db_obj=db_obj, obj_in=update_data)
+        # update customer
+        for field in cust_obj_data:
+            if field in cust_dict_data:
+                setattr(cust_db_obj, field, cust_dict_data[field])
+
+        for address_dict in cust_addresses_dict_data:
+            if address_dict["id"]:
+                cust_address_db_obj = db.session.query(CustomerAddress).get(
+                    address_dict["id"]
+                )
+                if address_dict["isRemove"]:
+                    db.session.delete(cust_address_db_obj)
+                else:
+                    cust_add_obj_data = jsonable_encoder(cust_address_db_obj)
+                    for field in cust_add_obj_data:
+                        if field in address_dict:
+                            setattr(cust_address_db_obj, field, address_dict[field])
+                    cust_address_db_obj.updated_by = user_id
+                    cust_address_db_obj.date_updated = datetime.now()
+            else:
+                address_obj = CustomerAddress(**address_dict)
+                address_obj.created_by = user_id
+                cust_db_obj.addresses.append(address_obj)
+
+        cust_db_obj.full_name = f"{cust_db_obj.first_name.capitalize()} {cust_db_obj.last_name.capitalize()}"
+        cust_db_obj.updated_by = user_id
+        cust_db_obj.date_updated = datetime.now()
+
+        db.session.add(cust_db_obj)
+        db.session.commit()
+        db.session.refresh(cust_db_obj)
+        return cust_db_obj
 
 
 crud_customer = CRUDCustomer(Customer)

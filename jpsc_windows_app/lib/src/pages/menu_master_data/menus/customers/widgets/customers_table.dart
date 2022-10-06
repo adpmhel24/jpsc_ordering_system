@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter/material.dart' as m;
 
 import '../../../../../global_blocs/bloc_customer/fetching_bloc/bloc.dart';
+import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 
 class CustomersTable extends StatefulWidget {
@@ -41,16 +43,18 @@ class _CustomersTableState extends State<CustomersTable> {
           rowsPerPage: _rowsPerPage,
           onRefresh: widget.onRefresh,
         );
-        return LayoutBuilder(
-          builder: (context, constraint) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                tableBody(constraint),
-                tableFooter(state.datas.length),
-              ],
-            );
-          },
+        return Card(
+          child: LayoutBuilder(
+            builder: (context, constraint) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  tableBody(constraint),
+                  tableFooter(state.datas.length),
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -84,11 +88,6 @@ class _CustomersTableState extends State<CustomersTable> {
 
                 return true;
               },
-              // onCellDoubleTap: (
-              //   details,
-              // ) async {
-
-              // },
             ),
           );
   }
@@ -187,6 +186,8 @@ class DataSource extends DataGridSource {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
       if (dataGridCell.columnName == 'Customer Code') {
+        final int dataRowIndex = dataGridRows.indexOf(row);
+
         return Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(Constant.minPadding),
@@ -195,8 +196,17 @@ class DataSource extends DataGridSource {
               m.Material(
                 child: m.InkWell(
                   onTap: () {
-                    final int dataRowIndex = dataGridRows.indexOf(row);
-                    print(paginatedDatas[dataRowIndex].code);
+                    cntx.router.navigate(
+                      CustomerWrapper(
+                        children: [
+                          CustomerFormRoute(
+                            header: "Edit Customer",
+                            selectedCustomer: paginatedDatas[dataRowIndex],
+                            onRefresh: onRefresh,
+                          ),
+                        ],
+                      ),
+                    );
                     // cntx.router.navigate(
                     //   BranchesWrapper(
                     //     children: [

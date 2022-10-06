@@ -46,6 +46,14 @@ class CustContactNumberChanged extends CreateCustomerEvent {
   List<Object?> get props => [value];
 }
 
+class CustCreditLimitChanged extends CreateCustomerEvent {
+  final double value;
+  const CustCreditLimitChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class CustEmailChanged extends CreateCustomerEvent {
   final String value;
   const CustEmailChanged(this.value);

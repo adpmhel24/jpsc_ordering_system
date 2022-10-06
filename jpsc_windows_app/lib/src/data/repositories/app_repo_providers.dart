@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../http_services/ph_location_api/ph_location_api.dart';
 import 'repos.dart';
 
 class AppRepoProvider {
@@ -72,6 +73,9 @@ List<RepositoryProvider> masterDataProviders = [
     create: (context) => PaymentTermRepo(
       localStorage: context.read<LocalStorageRepo>().localStorage,
     ),
+  ),
+  RepositoryProvider<PhLocationRepo>(
+    create: (context) => PhLocationRepo(PhLocationApiService()),
   ),
 ];
 

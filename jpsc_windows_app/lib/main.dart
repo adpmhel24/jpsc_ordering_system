@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:localization/localization.dart';
@@ -103,6 +104,12 @@ class _MyAppState extends State<MyApp> {
           builder: (context, _) {
             final appTheme = context.watch<AppTheme>();
             return GlobalLoaderOverlay(
+              useDefaultLoading: false,
+              overlayWidget: const Center(
+                child: SpinKitWave(
+                  color: Colors.white,
+                ),
+              ),
               child: FluentApp.router(
                 locale: _locale,
                 localizationsDelegates: [

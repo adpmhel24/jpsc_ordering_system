@@ -17,6 +17,14 @@ class SalesOrderRepo {
   List<SalesOrderModel> _datas = [];
   List<SalesOrderModel> get datas => _datas;
 
+  int _forPriceConf = 0;
+  int _forCreditConf = 0;
+  int _forDispatch = 0;
+
+  int get forPriceConf => _forPriceConf;
+  int get forCreditConf => _forCreditConf;
+  int get forDispatch => _forDispatch;
+
   get _token {
     return "${localStorage.getString('access_token')}";
   }
@@ -30,7 +38,13 @@ class SalesOrderRepo {
       params: params,
     );
     _datas = List<SalesOrderModel>.from(
-        response.data['data'].map((e) => SalesOrderModel.fromJson(e))).toList();
+      response.data['data'].map(
+        (e) => SalesOrderModel.fromJson(e),
+      ),
+    ).toList();
+    _forPriceConf = response.data["others"]["for_price_confirmation"];
+    _forCreditConf = response.data["others"]["for_credit_confirmation"];
+    _forDispatch = response.data["others"]["for_dispatch"];
   }
 
   Future<String> create(Map<String, dynamic> data) async {

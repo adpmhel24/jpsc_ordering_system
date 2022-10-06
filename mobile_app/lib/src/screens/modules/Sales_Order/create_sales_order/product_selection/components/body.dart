@@ -75,45 +75,11 @@ class _BodyState extends State<Body> {
               ),
             ),
             Expanded(
-                child: RefreshIndicator(
-              onRefresh: () => _refresh(),
-              child: ProductGrid(products: state.products),
-            ))
-            // Expanded(
-            //   child: FutureBuilder<List<ProductModel>>(
-            //     future: context.read<ProductRepo>().offlineSearch(),
-            //     builder: (context, AsyncSnapshot snapshot) {
-            //       if (snapshot.hasError) {
-            //         return Center(
-            //           child: Text(snapshot.error.toString()),
-            //         );
-            //       }
-            //       switch (snapshot.connectionState) {
-            //         case ConnectionState.active:
-            //         case ConnectionState.waiting:
-            //           return const Center(
-            //             child: CircularProgressIndicator(),
-            //           );
-            //         case ConnectionState.done:
-            //           return RefreshIndicator(
-            //             onRefresh: () => _refresh(context),
-            //             child: ProductGrid(
-            //                 products: _searchController.text.isEmpty
-            //                     ? snapshot.data
-            //                     : snapshot.data
-            //                         .where(
-            //                           (item) => item.code
-            //                               .toLowerCase()
-            //                               .contains("atlantic c"),
-            //                         )
-            //                         .toList()),
-            //           );
-            //         default:
-            //           return const SizedBox.expand();
-            //       }
-            //     },
-            //   ),
-            // ),
+              child: RefreshIndicator(
+                onRefresh: () => _refresh(),
+                child: ProductGrid(products: state.products),
+              ),
+            )
           ],
         );
       },

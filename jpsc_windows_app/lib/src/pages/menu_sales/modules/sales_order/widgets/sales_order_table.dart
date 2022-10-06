@@ -24,7 +24,8 @@ class SalesOrderHeaderTable extends StatefulWidget {
       required this.docStatus,
       required this.orderStatus,
       required this.fromDate,
-      required this.toDate})
+      required this.toDate,
+      required this.branch})
       : super(key: key);
 
   final GlobalKey<SfDataGridState> sfDataGridKey;
@@ -32,6 +33,7 @@ class SalesOrderHeaderTable extends StatefulWidget {
   final int? orderStatus;
   final String fromDate;
   final String toDate;
+  final String branch;
 
   @override
   State<SalesOrderHeaderTable> createState() => _InvAdjInTableState();
@@ -50,15 +52,7 @@ class _InvAdjInTableState extends State<SalesOrderHeaderTable> {
     return Card(
       child: BlocBuilder<FetchingSalesOrderHeaderBloc,
           FetchingSalesOrderHeaderState>(
-        bloc: context.read<FetchingSalesOrderHeaderBloc>()
-          ..add(
-            FetchAllSalesOrderHeader(
-              docStatus: widget.docStatus,
-              orderStatus: widget.orderStatus,
-              fromDate: widget.fromDate,
-              toDate: widget.toDate,
-            ),
-          ),
+        bloc: context.read<FetchingSalesOrderHeaderBloc>(),
         buildWhen: (prev, curr) => prev.datas != curr.datas,
         builder: (context, state) {
           _dataSource = DataSource(
@@ -70,6 +64,7 @@ class _InvAdjInTableState extends State<SalesOrderHeaderTable> {
                       orderStatus: widget.orderStatus,
                       fromDate: widget.fromDate,
                       toDate: widget.toDate,
+                      branch: widget.branch,
                     ),
                   );
             },

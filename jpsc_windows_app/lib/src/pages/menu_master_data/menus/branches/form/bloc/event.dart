@@ -25,12 +25,12 @@ class BranchDescriptionChanged extends BranchFormEvent {
 }
 
 class BranchPricelistChanged extends BranchFormEvent {
-  final TextEditingController pricelistCodeController;
+  final String pricelistCode;
 
-  const BranchPricelistChanged(this.pricelistCodeController);
+  const BranchPricelistChanged(this.pricelistCode);
 
   @override
-  List<Object> get props => [pricelistCodeController];
+  List<Object> get props => [pricelistCode];
 }
 
 class BranchIsActiveChanged extends BranchFormEvent {

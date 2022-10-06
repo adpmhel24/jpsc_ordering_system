@@ -29,11 +29,11 @@ class CustomerBase(SQLModel):
     payment_term: Optional[str] = Field(
         foreign_key="payment_term.code", fk_kwargs={"onupdate": "CASCADE"}
     )
+    credit_limit: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
 
 
 class CustomerOtherColumn(SQLModel):
     full_name: Optional[str] = Field(index=True)
-    balance: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
     is_active: bool = Field(
         default=True, sa_column_kwargs={"server_default": text("true")}
     )
@@ -51,3 +51,7 @@ class Customer(UpdatedBase, CreatedBase, CustomerOtherColumn, CustomerBase, tabl
             back_populates="customer",
         )
     )
+
+
+# class CustomerAttachment(UpdatedBase, CreatedBase, table=True):
+#     pass

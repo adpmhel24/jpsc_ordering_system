@@ -26,8 +26,8 @@ class SalesOrderModel {
   @JsonKey(name: "delivery_method")
   String? deliveryMethod;
 
-  @JsonKey(name: "payment_method")
-  String? paymentMethod;
+  @JsonKey(name: "payment_term")
+  String? paymentTerm;
 
   String? remarks;
 
@@ -112,7 +112,7 @@ class SalesOrderModel {
     required this.customerCode,
     required this.deliveryDate,
     this.deliveryMethod,
-    this.paymentMethod,
+    this.paymentTerm,
     this.remarks,
     this.dispatchingBranch,
     required this.hashedId,

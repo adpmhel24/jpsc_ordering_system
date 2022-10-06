@@ -1,6 +1,5 @@
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 from fastapi import APIRouter, Depends, Query, status
-from sqlmodel import Session
 
 
 from my_app.shared.schemas.success_response import SuccessMessage
@@ -79,10 +78,12 @@ async def get_all_customer(
 async def update(
     *,
     customer_code: str,
-    schema: CustomerUpdate,
+    schema: Dict[str, Any],
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_customer.update(update_schema=schema, fk=customer_code)
+    result = crud_customer.update(
+        update_dict_data=schema, fk=customer_code, user_id=current_user.id
+    )
     return SuccessMessage(message="Update successfully", data=result)
 
 

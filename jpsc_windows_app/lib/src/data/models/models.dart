@@ -21,3 +21,7 @@ export 'sales_order/model.dart';
 export 'customer_address/model.dart';
 export 'customer/model.dart';
 export 'payment_term/model.dart';
+export 'ph_location/brgy/brgy_model.dart';
+export 'ph_location/city_municipality/city_municipality_model.dart';
+export 'ph_location/municipality/municipality_model.dart';
+export 'ph_location/province/province_model.dart';

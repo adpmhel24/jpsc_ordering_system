@@ -19,12 +19,12 @@ import 'router_guard.dart';
       path: '/',
       guards: [RouteGuard],
       children: [
-        AutoRoute(page: DashboardScreen, path: "dashboard", initial: true),
+        AutoRoute(page: DashboardScreen, path: "dashboard"),
         AutoRoute(
-          page: CreateSalesOrderScreen,
-          path: "create",
-          children: CreateSalesOrderScreen.childrenRoutes,
-        ),
+            page: CreateSalesOrderScreen,
+            path: "create",
+            children: CreateSalesOrderScreen.childrenRoutes,
+            initial: true),
         AutoRoute(
           page: SalesOrdersScreen,
           path: "sales_orders",

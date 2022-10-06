@@ -17,6 +17,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       isActive: json['is_active'] as bool?,
       location: json['location'] as String?,
       paymentTerm: json['payment_term'] as String?,
+      creditLimit: (json['credit_limit'] as num).toDouble(),
       isApproved: json['is_approved'] as bool?,
       createdBy: json['created_by'] as int?,
       dateCreated: json['date_created'] == null
@@ -26,8 +27,9 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       dateUpdated: json['date_updated'] == null
           ? null
           : DateTime.parse(json['date_updated'] as String),
-      addresses:
-          CustomerModel.customerAddressFromJson(json['addresses'] as List),
+      addresses: json['addresses'] == null
+          ? const []
+          : CustomerModel.customerAddressFromJson(json['addresses'] as List),
     );
 
 Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
@@ -41,6 +43,7 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'is_active': instance.isActive,
       'location': instance.location,
       'payment_term': instance.paymentTerm,
+      'credit_limit': instance.creditLimit,
       'is_approved': instance.isApproved,
       'date_created': instance.dateCreated?.toIso8601String(),
       'created_by': instance.createdBy,

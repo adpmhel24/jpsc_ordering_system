@@ -15,7 +15,7 @@ class LoginBody extends StatelessWidget {
             height: 200,
             width: 300,
             child: Image.asset(
-              'assets/images/logo.png',
+              'assets/images/logo_large.png',
               fit: BoxFit.fitWidth,
             ),
           ),

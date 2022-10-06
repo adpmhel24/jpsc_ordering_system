@@ -8,6 +8,7 @@ class CreateCustomerState extends Equatable {
   final FormzString custBranch;
   final FormzString custContactNumber;
   final FormzEmail custEmail;
+  final FormzDouble custCreditLimit;
   final FormzString custPaymentTerm;
   final FormzList<Map<String, dynamic>> addresses;
   final String message;
@@ -20,6 +21,7 @@ class CreateCustomerState extends Equatable {
     this.custBranch = const FormzString.pure(),
     this.custContactNumber = const FormzString.pure(),
     this.custEmail = const FormzEmail.pure(),
+    this.custCreditLimit = const FormzDouble.pure(),
     this.custPaymentTerm = const FormzString.pure(),
     this.addresses = const FormzList.pure(),
     this.message = "",
@@ -33,6 +35,7 @@ class CreateCustomerState extends Equatable {
     FormzString? custBranch,
     FormzString? custContactNumber,
     FormzEmail? custEmail,
+    FormzDouble? custCreditLimit,
     FormzString? custPaymentTerm,
     FormzList<Map<String, dynamic>>? addresses,
     String? message,
@@ -45,6 +48,7 @@ class CreateCustomerState extends Equatable {
         custBranch: custBranch ?? this.custBranch,
         custContactNumber: custContactNumber ?? this.custContactNumber,
         custEmail: custEmail ?? this.custEmail,
+        custCreditLimit: custCreditLimit ?? this.custCreditLimit,
         custPaymentTerm: custPaymentTerm ?? this.custPaymentTerm,
         addresses: addresses ?? this.addresses,
         message: message ?? this.message,
@@ -59,6 +63,7 @@ class CreateCustomerState extends Equatable {
         custBranch,
         custContactNumber,
         custEmail,
+        custCreditLimit,
         custPaymentTerm,
         addresses,
         message,

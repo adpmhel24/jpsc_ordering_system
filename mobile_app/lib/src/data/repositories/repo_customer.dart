@@ -34,10 +34,9 @@ class CustomerRepo {
         response.data['data'].map((e) => CustomerModel.fromJson(e))).toList();
   }
 
-  Future<List<CustomerModel>> getByLocationWithSearchOffline({
+  Future<List<CustomerModel>> getCustomerByLocation({
     String? branchCode,
     Map<String, dynamic>? params,
-    String? keyword,
   }) async {
     Response response;
     try {
@@ -51,7 +50,7 @@ class CustomerRepo {
     } on HttpException catch (_) {
       _datas = [];
     }
-    return await offlineSearch(keyword ?? "");
+    return _datas;
   }
 
   Future<String> create(Map<String, dynamic> data) async {

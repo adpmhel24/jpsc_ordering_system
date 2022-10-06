@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "jpsc-abc-web-api-prod-1",
+    "private_key_id": "d33a2ea48bbcdab69b165251a0c558e4ed17628b",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC+SqWvh98X+CMT\nBnYVKsVxEF9+bM+z1o6RWb0gRGUVynwgSsHJHVtXtQkgMKbL0Hlzou5TKdPhoRqM\nt1xjOeBM08nEHbXk6sekg6YD+djpesiDZRDLBHpPBimaz2ftz2kE6cEeNUeutc/u\nrxBw2h7J0Q8Fw9UT4X5Ebmi38nrq/2uwKaUXlCm3kTwjACRBfkLnQIhsK6y8eCi5\nb/00y6QknPCg9UnC3OpDquulZD9dT7Uv8V3NvtZ2lEt2kctZVY+3oZXL9Yprhc1g\na/3JzuM43ShOOk95brM/jEp2wLQswRMbmUdmUyRxRJkVS2mjq0M4GFeHNAhnGAdX\n+/286p65AgMBAAECggEAMHHXmYbpPHRvFX5dHIlth5nH/escu6eBVy6179uJspEA\npcXybM18/ii4IIpSRGwYJ2DQ9Loe13/Ivw9FRXusB1MZuERqFNPSrKbZYoS+fL5G\nAvF9Y3oJ20lx2Rg5WLknftk10Yd17twZiiXmdRyKnw2Kmgifm/aZyzkijsX8Fgws\n0kWLbQNnNHjCzskpcYv3X+2Ixud13Dh855egCrELHw+hu6YZ69fUi2SGSeFdqEIh\n53/MJFBBr0VsWsJYqY6XUmTjWwT/mjPiYS5miWl2m9q56vDNv6fFFuPUrwl9jwh3\nWkJ5oG/o/frfQxrHI4s3DPhepdL1ODZubtOXps4powKBgQDyWyNpLD5oHbt8VUTK\n7Qit81TWso7euUooimSrXJmk44VcJskxsBhu76eL4ypF9JXO+/kEd9+U8/XyNv0J\nVBTXf5XUXVKlCXNnTjF3waMSHsQstZ2xh/jBdp14W8cPA9nikk5bEotEYuSkPYkb\niIryL2LIor2yP6yxhm/SMDJGOwKBgQDJASaVPbWqZ0FfXF+4oiUuxCRkr5Tz0us1\nS1pIjJK51KPI/neXT5H83OpMw8oE7CuR1ZS6hR3VsMFKrUTvIdOLUPAKj6SBVwBu\nHDh8uKNAPQG7rBZJ5jySMSHkBWJTRU29fJVJnhrBMbiJ87zHFc3jrW50RqjY0Tto\nRd3p07e7mwKBgQDZGUEgTozc0X2IhA2qxijXQjmGVc9bvpmqtUY2py3PIiztfqUO\nCJPqlG3/BpBwuAeWserA0O0MznlL72w99f7xiA3cfXix9ERXjxkLEP+WFM9gyZQo\nWwg/rZSkI3qufaGpr6vXM0ZkDT6JzcHLU0Y8aqxP1FCfoyB8qlPy8k+mzwKBgHov\nRuLlli61gZmUL2OuvOeGt5C04tisV+oXmhQLz41C4yTk+pFx/w40xABR69W+MmX9\n7ODM1mv1fCoG1aZ/a3Z+hswEsT0mQ86rPPMj0ajU7N7GJu5ZFGzRjQZs924i7LTI\nrH8Jqr3RmZnSHejvKi7CWCg6Y50Y4wHpppHi7wcNAoGAE7NwrEceKItnA/GmfVs5\n/sVcpMv6jR1h/mIFGcUmLih3MI+lcBSEDREcozge5e9GTagt9jpKD1AuK0Wk9eFe\n5coS1boXQ84m5e17GysLX5LyyX0nNAvUgajNlMvLtkIr9YJx4ILdnpGqeHD02FPC\nWR/Pu7asE9P1hgTrRlr1090=\n-----END PRIVATE KEY-----\n",
+    "client_email": "cloudstorage@jpsc-abc-web-api-prod-1.iam.gserviceaccount.com",
+    "client_id": "105714918834214135646",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloudstorage%40jpsc-abc-web-api-prod-1.iam.gserviceaccount.com"
+}

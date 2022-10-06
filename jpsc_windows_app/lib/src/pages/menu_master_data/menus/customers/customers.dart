@@ -46,6 +46,7 @@ class _CustomersPageState extends State<CustomersPage> {
               children: [
                 CustomerFormRoute(
                   header: "New Customer",
+                  onRefresh: sfDataGridKey.currentState!.refresh,
                 ),
               ],
             ),

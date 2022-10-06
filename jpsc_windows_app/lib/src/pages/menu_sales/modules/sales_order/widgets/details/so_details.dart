@@ -275,12 +275,19 @@ class _SalesOrderHeaderDetailsBodyState
                               ),
                             ),
                             Constant.heightSpacer,
+                            wrapLabelSelectableText(
+                              label: "Payment Term :",
+                              value: widget.salesOrder.paymentTerm ?? "",
+                            ),
+                            Constant.heightSpacer,
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
+                Constant.heightSpacer,
+                legends(),
                 Constant.heightSpacer,
                 Expanded(
                   child: DetailsTable(
@@ -347,6 +354,34 @@ class _SalesOrderHeaderDetailsBodyState
           },
         );
       },
+    );
+  }
+
+  Row legends() {
+    return Row(
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 10,
+              height: 10,
+              color: Colors.green.light,
+            ),
+            const Text("Over SRP")
+          ],
+        ),
+        Constant.widthSpacer,
+        Row(
+          children: [
+            Container(
+              width: 10,
+              height: 10,
+              color: Colors.red.light,
+            ),
+            const Text("Below SRP")
+          ],
+        )
+      ],
     );
   }
 

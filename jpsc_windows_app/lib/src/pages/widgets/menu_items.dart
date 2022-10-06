@@ -15,10 +15,10 @@ class AppMenu {
       svgSrc: "assets/icons/menu_tag.svg",
       title: "Sales",
     ),
-    _paneItemBuilder(
-      svgSrc: "assets/icons/menu_inventory.svg",
-      title: "Inventory",
-    ),
+    // _paneItemBuilder(
+    //   svgSrc: "assets/icons/menu_inventory.svg",
+    //   title: "Inventory",
+    // ),
     _paneItemBuilder(
       svgSrc: "assets/icons/database.svg",
       title: "Master Data",

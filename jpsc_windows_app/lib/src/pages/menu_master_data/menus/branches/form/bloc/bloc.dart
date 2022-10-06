@@ -67,11 +67,13 @@ class BranchFormBloc extends Bloc<BranchFormEvent, BranchFormState> {
       status = Formz.validate([
         if (!state.code.pure) state.code,
         if (!state.isActive.pure) state.isActive,
+        if (!state.pricelistCode.pure) state.pricelistCode,
       ]);
     } else {
       description = FormzString.dirty(branchDescription);
       status = Formz.validate([
         state.code,
+        state.pricelistCode,
       ]);
     }
 
@@ -82,7 +84,7 @@ class BranchFormBloc extends Bloc<BranchFormEvent, BranchFormState> {
       BranchPricelistChanged event, Emitter<BranchFormState> emit) {
     FormzString pricelistCode;
     FormzStatus status;
-    String branchPricelist = event.pricelistCodeController.text;
+    String branchPricelist = event.pricelistCode;
 
     if (selectedBranch != null) {
       pricelistCode = selectedBranch!.pricelistCode == branchPricelist
@@ -91,11 +93,14 @@ class BranchFormBloc extends Bloc<BranchFormEvent, BranchFormState> {
       status = Formz.validate([
         if (!state.code.pure) state.code,
         if (!state.isActive.pure) state.isActive,
+        if (!pricelistCode.pure) pricelistCode,
       ]);
     } else {
       pricelistCode = FormzString.dirty(branchPricelist);
       status = Formz.validate([
         state.code,
+        state.isActive,
+        pricelistCode,
       ]);
     }
 
@@ -114,12 +119,14 @@ class BranchFormBloc extends Bloc<BranchFormEvent, BranchFormState> {
       status = Formz.validate([
         if (!state.code.pure) state.code,
         if (!isActive.pure) isActive,
+        if (!state.pricelistCode.pure) state.pricelistCode,
       ]);
     } else {
       isActive = FormzBool.dirty(branchIsActive);
       status = Formz.validate([
         state.code,
         isActive,
+        state.pricelistCode,
       ]);
     }
 

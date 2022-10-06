@@ -88,6 +88,7 @@ class CRUDSalesOrder(
         order_status: Optional[OrderStatusEnum],
         from_date: Optional[str],
         to_date: Optional[str],
+        branch: Optional[str],
     ) -> Any:
         db_obj = (
             db.session.query(self.model)
@@ -100,12 +101,32 @@ class CRUDSalesOrder(
                         cast(self.model.transdate, DATE) >= from_date,
                     ),
                     or_(to_date == "", cast(self.model.transdate, DATE) <= to_date),
+                    or_(branch == "", self.model.dispatching_branch == branch),
                 ),
             )
             .order_by(self.model.id.desc())
             .all()
         )
         return db_obj
+
+    def count_orders(
+        self,
+        *,
+        docstatus: Optional[DocstatusEnum],
+        order_status: Optional[OrderStatusEnum],
+    ):
+        db_obj_length = (
+            db.session.query(self.model)
+            .filter(
+                and_(
+                    or_(docstatus == None, self.model.docstatus == docstatus),
+                    or_(order_status == None, self.model.order_status == order_status),
+                ),
+            )
+            .order_by(self.model.id.desc())
+            .count()
+        )
+        return db_obj_length
 
     def get_all_by_owner(
         self,
@@ -143,6 +164,7 @@ class CRUDSalesOrder(
             raise HTTPException(status_code=403, detail="Document already canceled.")
 
         db_obj.docstatus = DocstatusEnum.canceled
+        db_obj.canceled_remarks = schema.comment
         db_obj.canceled_by = user_id
         db_obj.date_canceled = datetime.now()
 

@@ -37,6 +37,7 @@ class _LoginFormState extends State<LoginForm> {
         TextFormBox(
           header: "Email",
           autovalidateMode: AutovalidateMode.always,
+          textInputAction: TextInputAction.next,
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           autofocus: true,
@@ -53,6 +54,7 @@ class _LoginFormState extends State<LoginForm> {
         TextFormBox(
           header: "Password",
           autovalidateMode: AutovalidateMode.always,
+          textInputAction: TextInputAction.send,
           keyboardType: TextInputType.visiblePassword,
           controller: _passwordController,
           obscureText: isPasswordHidden,
@@ -67,6 +69,16 @@ class _LoginFormState extends State<LoginForm> {
           onChanged: (_) => context.read<LoginBloc>().add(
                 PasswordChanged(_passwordController),
               ),
+          onFieldSubmitted: (_) {
+            if (context.read<LoginBloc>().state.status.isValidated) {
+              context.read<AuthBloc>().add(
+                    LoginSubmitted(
+                      username: context.read<LoginBloc>().state.email.value,
+                      password: context.read<LoginBloc>().state.password.value,
+                    ),
+                  );
+            }
+          },
           validator: (_) {
             return (context.watch<LoginBloc>().state.password.invalid)
                 ? "Invalid password"
@@ -80,11 +92,14 @@ class _LoginFormState extends State<LoginForm> {
           child: FilledButton(
             onPressed: context.watch<LoginBloc>().state.status.isValidated
                 ? () {
-                    context.read<AuthBloc>().add(LoginSubmitted(
-                          username: context.read<LoginBloc>().state.email.value,
-                          password:
-                              context.read<LoginBloc>().state.password.value,
-                        ));
+                    context.read<AuthBloc>().add(
+                          LoginSubmitted(
+                            username:
+                                context.read<LoginBloc>().state.email.value,
+                            password:
+                                context.read<LoginBloc>().state.password.value,
+                          ),
+                        );
                   }
                 : null,
             child: Row(

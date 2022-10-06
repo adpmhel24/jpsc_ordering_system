@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import '../../../data/repositories/repos.dart';
+import '../../../screens/utils/formz_double.dart';
 import '../../../screens/utils/formz_email.dart';
 import '../../../screens/utils/formz_list.dart';
 import '../../../screens/utils/formz_string.dart';
@@ -22,6 +23,7 @@ class CreateCustomerBloc
     on<CustBranchChanged>(_onCustBranchChanged);
     on<CustContactNumberChanged>(_onCustContactNumberChanged);
     on<CustEmailChanged>(_onCustEmailChanged);
+    on<CustCreditLimitChanged>(_onCustCreditLimitChanged);
     on<CustPaymentTermChanged>(_onCustPaymentTermChanged);
     on<CustAddressAdded>(_onCustAddressAdded);
     on<CustAddressRemoved>(_onCustAddressRemoved);
@@ -125,6 +127,22 @@ class CreateCustomerBloc
     );
   }
 
+  void _onCustCreditLimitChanged(
+      CustCreditLimitChanged event, Emitter<CreateCustomerState> emit) {
+    final custCreditLimit = FormzDouble.dirty(event.value);
+
+    emit(
+      state.copyWith(
+        custCreditLimit: custCreditLimit,
+        status: Formz.validate([
+          state.custCode,
+          state.custPaymentTerm,
+          state.custBranch,
+        ]),
+      ),
+    );
+  }
+
   void _onCustPaymentTermChanged(
       CustPaymentTermChanged event, Emitter<CreateCustomerState> emit) {
     final custPaymentTerm = FormzString.dirty(event.value);
@@ -197,6 +215,7 @@ class CreateCustomerBloc
         "email": state.custEmail.invalid ? null : state.custEmail.value,
         "location": state.custBranch.value,
         "payment_term": state.custPaymentTerm.value,
+        "credit_limit": state.custCreditLimit.value,
       },
       "addresses_schema": state.addresses.value,
     };

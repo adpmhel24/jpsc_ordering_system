@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -162,13 +163,14 @@ class _SelectItemFormState extends State<SelectItemForm> {
 
                                     // to pop the Modal
                                     Navigator.of(context).pop();
-                                    ScaffoldMessenger.of(context)
-                                      ..hideCurrentSnackBar()
-                                      ..showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Item Added"),
-                                        ),
-                                      );
+
+                                    Fluttertoast.showToast(
+                                        msg: "Item Added",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.TOP,
+                                        timeInSecForIosWeb: 1,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
                                   });
                             }
                           : null,

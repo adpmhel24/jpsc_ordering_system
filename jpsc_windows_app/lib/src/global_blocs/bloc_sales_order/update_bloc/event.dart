@@ -6,13 +6,6 @@ abstract class SalesOrderUpdateEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// class SalesOrderSelected extends SalesOrderUpdateEvent {
-//   final SalesOrderModel salesOrder;
-//   const SalesOrderSelected(this.salesOrder);
-//   @override
-//   List<Object?> get props => [salesOrder];
-// }
-
 class DispatchBranchChanged extends SalesOrderUpdateEvent {
   final String dispatchingBranch;
   const DispatchBranchChanged(this.dispatchingBranch);

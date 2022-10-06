@@ -48,12 +48,13 @@ async def create_sales_order(
 
 
 @router.get("/", response_model=SuccessMessage[List[SalesOrderHeaderRead]])
-async def get_all_sales_orders_by_created_by(
+async def get_all_sales_order(
     *,
     docstatus: Optional[str] = Query(default=DocstatusEnum.open),
     order_status: Optional[int] = Query(default=None),
     from_date: Optional[str] = Query(default=""),
     to_date: Optional[str] = Query(default=""),
+    branch: Optional[str] = Query(default=""),
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
     result = crud_so.get_all(
@@ -61,8 +62,23 @@ async def get_all_sales_orders_by_created_by(
         order_status=order_status,
         from_date=from_date,
         to_date=to_date,
+        branch=branch,
     )
-    return {"data": result}
+    others = {
+        "for_price_confirmation": crud_so.count_orders(
+            docstatus=DocstatusEnum.open,
+            order_status=OrderStatusEnum.for_price_confirmation,
+        ),
+        "for_credit_confirmation": crud_so.count_orders(
+            docstatus=DocstatusEnum.open,
+            order_status=OrderStatusEnum.price_confirmed,
+        ),
+        "for_dispatch": crud_so.count_orders(
+            docstatus=DocstatusEnum.open,
+            order_status=OrderStatusEnum.credit_confirmed,
+        ),
+    }
+    return {"others": others, "data": result}
 
 
 @router.get("/by_owner", response_model=SuccessMessage[List[SalesOrderHeaderRead]])
@@ -81,6 +97,7 @@ async def get_all_sales_orders_by_created_by(
         to_date=to_date,
         user_id=current_user.id,
     )
+
     return {"data": result}
 
 

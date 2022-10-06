@@ -5,7 +5,7 @@ part 'model.g.dart';
 
 @JsonSerializable()
 class CustomerModel {
-  static List<CustomerAddressModel?> customerAddressFromJson(
+  static List<CustomerAddressModel> customerAddressFromJson(
       List<dynamic> data) {
     if (data.isNotEmpty) {
       return data.map((e) => CustomerAddressModel.fromJson(e!)).toList();
@@ -15,9 +15,9 @@ class CustomerModel {
   }
 
   static List<Map<String, dynamic>>? _rowsToJson(
-      List<CustomerAddressModel?> rows) {
+      List<CustomerAddressModel> rows) {
     if (rows.isNotEmpty) {
-      return rows.map((e) => e!.toJson()).toList();
+      return rows.map((e) => e.toJson()).toList();
     }
     return [];
   }
@@ -46,6 +46,9 @@ class CustomerModel {
   @JsonKey(name: "payment_term")
   String? paymentTerm;
 
+  @JsonKey(name: "credit_limit")
+  double creditLimit;
+
   @JsonKey(name: "is_approved")
   bool? isApproved;
 
@@ -62,7 +65,7 @@ class CustomerModel {
   int? updatedBy;
 
   @JsonKey(fromJson: customerAddressFromJson, toJson: _rowsToJson)
-  List<CustomerAddressModel?> addresses;
+  List<CustomerAddressModel> addresses;
 
   CustomerModel({
     required this.code,
@@ -74,12 +77,13 @@ class CustomerModel {
     this.isActive,
     this.location,
     this.paymentTerm,
+    required this.creditLimit,
     this.isApproved,
     this.createdBy,
     this.dateCreated,
     this.updatedBy,
     this.dateUpdated,
-    required this.addresses,
+    this.addresses = const [],
   });
 
   factory CustomerModel.fromJson(Map<String, dynamic> json) =>

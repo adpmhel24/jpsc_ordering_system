@@ -57,7 +57,7 @@ class CustomerRepo {
   Future<String> create(Map<String, dynamic> data) async {
     Response response;
 
-    response = await api.create(_token, urlPath: '$_urlPath/', data: data);
+    response = await api.create(_token, urlPath: _urlPath, data: data);
     return response.data['message'];
   }
 

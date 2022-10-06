@@ -330,6 +330,8 @@ class AppRouter extends _i9.RootStackRouter {
         child: _i8.CustomerFormPage(
           key: args.key,
           header: args.header,
+          selectedCustomer: args.selectedCustomer,
+          onRefresh: args.onRefresh,
         ),
         opaque: true,
         barrierDismissible: false,
@@ -1311,12 +1313,16 @@ class CustomerFormRoute extends _i9.PageRouteInfo<CustomerFormRouteArgs> {
   CustomerFormRoute({
     _i12.Key? key,
     required String header,
+    _i13.CustomerModel? selectedCustomer,
+    required void Function() onRefresh,
   }) : super(
           CustomerFormRoute.name,
           path: 'create',
           args: CustomerFormRouteArgs(
             key: key,
             header: header,
+            selectedCustomer: selectedCustomer,
+            onRefresh: onRefresh,
           ),
         );
 
@@ -1327,15 +1333,21 @@ class CustomerFormRouteArgs {
   const CustomerFormRouteArgs({
     this.key,
     required this.header,
+    this.selectedCustomer,
+    required this.onRefresh,
   });
 
   final _i12.Key? key;
 
   final String header;
 
+  final _i13.CustomerModel? selectedCustomer;
+
+  final void Function() onRefresh;
+
   @override
   String toString() {
-    return 'CustomerFormRouteArgs{key: $key, header: $header}';
+    return 'CustomerFormRouteArgs{key: $key, header: $header, selectedCustomer: $selectedCustomer, onRefresh: $onRefresh}';
   }
 }
 

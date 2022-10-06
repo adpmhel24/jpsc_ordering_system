@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     FIRST_SUPERUSER_EMAIL: str = os.environ.get("FIRST_SUPERUSER_EMAIL")
     FIRST_SUPERUSER_PASSWORD: str = os.environ.get("FIRST_SUPERUSER_PASSWORD")
     SECRET_KEY: str = os.environ.get("SECRET_KEY")
+    CLOUD_STORAGE_BUCKET = os.environ.get("CLOUD_STORAGE_BUCKET")
+    GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
@@ -26,6 +28,7 @@ class Settings(BaseSettings):
         "http://localhost",
         "http://localhost:8001",
         "http://localhost:8081",
+        "http://localhost:8800",
     ]
     PROJECT_NAME: str = "Inventory System"
 

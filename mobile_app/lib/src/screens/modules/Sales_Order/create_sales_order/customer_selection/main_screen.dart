@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mobile_app/src/screens/widgets/custom_text_field.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -40,7 +41,7 @@ class _BodyState extends State<Body> {
   CustomerModel? selectedCustomer;
 
   late List<String> _branchesCode = [];
-  late List<CustomerModel> customers = [];
+  final ValueNotifier<List<CustomerModel>> _customers = ValueNotifier([]);
 
   @override
   void initState() {
@@ -70,55 +71,70 @@ class _BodyState extends State<Body> {
         return Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                "Create Order",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Constant.heightSpacer,
               MyCustomDropdownSearch<String>(
                 labelText: "Select Branch",
                 selectedItem: branchCode,
                 itemAsString: (data) => data!,
                 items: _branchesCode,
                 compareFn: (data, selectedData) => data == selectedData,
-                onChanged: (String? data) {
-                  createSalesOrderBloc.add(BranchCodeChanged(data ?? ""));
-                  if (data == null) {
-                    createSalesOrderBloc.add(ClearSalesOrder());
+                onChanged: (String? data) async {
+                  createSalesOrderBloc.add(ClearSalesOrder());
 
-                    setState(() {
-                      selectedCustomer = null;
-                      onSelectedCustomerChanged();
-                    });
+                  setState(() {
+                    selectedCustomer = null;
+                    onSelectedCustomerChanged();
+                  });
+
+                  createSalesOrderBloc.add(BranchCodeChanged(data ?? ""));
+                  if (data != null && data.isNotEmpty) {
+                    context.loaderOverlay.show();
+                    _customers.value = await context
+                        .read<CustomerRepo>()
+                        .getCustomerByLocation(
+                      branchCode: data,
+                      params: {"is_active": true, "is_approved": true},
+                    );
+                    context.loaderOverlay.hide();
                   }
                 },
               ),
               Constant.heightSpacer,
-              MyCustomDropdownSearch<CustomerModel>(
-                enable: state.dispatchingBranch.valid,
-                labelText: "Select Customer Name",
-                selectedItem: selectedCustomer,
-                itemAsString: (data) => data!.code,
-                onFind: (value) => context
-                    .read<CustomerRepo>()
-                    .getByLocationWithSearchOffline(
-                        branchCode: state.dispatchingBranch.value,
-                        params: {"is_active": true, "is_approved": true},
-                        keyword: value),
-                compareFn: (data, selectedData) => data == selectedCustomer,
-                itemBuilder: (context, data, _) => Card(
-                  elevation: 2,
-                  child: ListTile(
-                    selected: data.code == state.customerCode.value,
-                    title: Text("Customer Code: ${data.code}"),
-                  ),
-                ),
-                onChanged: (CustomerModel? data) {
-                  setState(() {
-                    selectedCustomer = data;
-                    onSelectedCustomerChanged();
-                  });
-                  context
-                      .read<CreateSalesOrderBloc>()
-                      .add(CustomerChanged(data));
-                },
-              ),
+              ValueListenableBuilder<List<CustomerModel>>(
+                  valueListenable: _customers,
+                  builder: (context, customers, _) {
+                    return MyCustomDropdownSearch<CustomerModel>(
+                      enable: state.dispatchingBranch.valid,
+                      labelText: "Select Customer Name",
+                      selectedItem: selectedCustomer,
+                      itemAsString: (data) => data!.code,
+                      items: customers,
+                      compareFn: (data, selectedData) =>
+                          data == selectedCustomer,
+                      itemBuilder: (context, data, _) => Card(
+                        elevation: 2,
+                        child: ListTile(
+                          selected: data.code == state.customerCode.value,
+                          title: Text("Customer Code: ${data.code}"),
+                        ),
+                      ),
+                      onChanged: (CustomerModel? data) {
+                        setState(() {
+                          selectedCustomer = data;
+                          onSelectedCustomerChanged();
+                        });
+                        context
+                            .read<CreateSalesOrderBloc>()
+                            .add(CustomerChanged(data));
+                      },
+                    );
+                  }),
               Constant.heightSpacer,
               CustomTextField(
                 labelText: "Customer Code",

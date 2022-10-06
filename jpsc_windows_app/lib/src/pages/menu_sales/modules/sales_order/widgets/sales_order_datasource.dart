@@ -127,9 +127,10 @@ class TableSettings {
   static Map<String, dynamic> columnName = {
     "id": {"name": "Id", "width": double.nan},
     "reference": {"name": "Reference", "width": double.nan},
-    "deliveryDate": {"name": "Delivery Date", "width": double.nan},
     "transDate": {"name": "Posting Date", "width": double.nan},
+    "deliveryDate": {"name": "Delivery Date", "width": double.nan},
     "customerCode": {"name": "Customer Code", "width": double.nan},
+    "paymentTerm": {"name": "Payment Term", "width": double.nan},
     "details": {"name": "Details", "width": double.nan},
     "subtotal": {"name": "Subtotal", "width": double.nan},
     "remarks": {"name": "Remarks", "width": double.nan},
@@ -137,7 +138,12 @@ class TableSettings {
     "address": {"name": "Address", "width": double.nan},
     "createdBy": {"name": "Created By", "width": double.nan},
     "updatedBy": {"name": "Updated By", "width": double.nan},
-    "action": {"name": "Cancel", "width": 80.0}
+    "canceledBy": {"name": "Canceled By", "width": double.nan},
+    "canceledRemarks": {"name": "Canceled Remarks", "width": double.nan},
+    "action": {
+      "name": "Action",
+      "width": 80.0,
+    },
   };
 
   static DataGridRow dataGrid(
@@ -150,6 +156,10 @@ class TableSettings {
             columnName: columnName["reference"]["name"],
             value: salesOrder.reference),
         DataGridCell<String>(
+          columnName: columnName["transDate"]["name"],
+          value: dateFormatter(salesOrder.transdate),
+        ),
+        DataGridCell<String>(
           columnName: columnName["deliveryDate"]["name"],
           value: dateFormatter(
             salesOrder.deliveryDate,
@@ -157,12 +167,12 @@ class TableSettings {
           ),
         ),
         DataGridCell<String>(
-          columnName: columnName["transDate"]["name"],
-          value: dateFormatter(salesOrder.transdate),
-        ),
-        DataGridCell<String>(
           columnName: columnName["customerCode"]["name"],
           value: salesOrder.customerCode,
+        ),
+        DataGridCell<String>(
+          columnName: columnName["paymentTerm"]["name"],
+          value: salesOrder.paymentTerm,
         ),
         DataGridCell<String>(
           columnName: columnName["details"]["name"],
@@ -192,11 +202,31 @@ class TableSettings {
           columnName: columnName["updatedBy"]["name"],
           value: salesOrder.updatedByUser?.email ?? "",
         ),
-        DataGridCell<IconButton>(
+        DataGridCell<String>(
+          columnName: columnName["canceledBy"]["name"],
+          value: salesOrder.canceledByUser?.email ?? "",
+        ),
+        DataGridCell<String>(
+          columnName: columnName["canceledRemarks"]["name"],
+          value: salesOrder.canceledRemarks ?? "",
+        ),
+        DataGridCell<SizedBox>(
           columnName: columnName["action"]["name"],
-          value: IconButton(
-            onPressed: salesOrder.docstatus != 'N'
-                ? () {
+          value: SizedBox(
+            child: DropDownButton(
+              disabled: salesOrder.docstatus == 'N',
+              leading: const Icon(
+                FluentIcons.settings,
+                size: 15,
+              ),
+              items: [
+                MenuFlyoutItem(
+                  leading: const Icon(
+                    FluentIcons.cancel,
+                    size: 15,
+                  ),
+                  text: const Text('Cancel'),
+                  onPressed: () {
                     CustomDialogBox.warningWithRemarks(
                       context,
                       message:
@@ -209,9 +239,10 @@ class TableSettings {
                         cntx.router.pop();
                       },
                     );
-                  }
-                : null,
-            icon: const Icon(FluentIcons.delete),
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

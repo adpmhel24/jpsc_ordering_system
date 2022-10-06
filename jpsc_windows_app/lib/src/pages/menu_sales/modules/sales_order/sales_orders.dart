@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:badges/badges.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:jpsc_windows_app/src/data/models/branch/model.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -28,6 +30,9 @@ class SalesOrderPage extends StatefulWidget {
 class _SalesOrderPageState extends State<SalesOrderPage> {
   final GlobalKey<SfDataGridState> sfDataGridKey = GlobalKey<SfDataGridState>();
   final TextEditingController _searchBoxController = TextEditingController();
+  final TextEditingController _selectedBranchController =
+      TextEditingController();
+
   DateTime? fromDate;
   DateTime? toDate;
   DateFormat dateFormat = DateFormat('MM/dd/yyyy');
@@ -37,14 +42,30 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
   // 0 for price confirmations
   // 1 for credit confirmation
   // 2 dispatched
-  int orderStatus = 0;
+  int? orderStatus = 0;
 
   int currentIndex = 0;
+
+  final ValueNotifier<List<BranchModel>> _branches = ValueNotifier([]);
+
+  @override
+  void initState() {
+    _fetchBranchForDispatch();
+    super.initState();
+  }
 
   @override
   void dispose() {
     _searchBoxController.dispose();
+    _selectedBranchController.dispose();
+    _branches.dispose();
     super.dispose();
+  }
+
+  void _fetchBranchForDispatch() async {
+    final branchRepo = context.read<BranchRepo>();
+    await branchRepo.getAll();
+    _branches.value = branchRepo.datas;
   }
 
   @override
@@ -54,7 +75,15 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
         BlocProvider(
           create: (_) => FetchingSalesOrderHeaderBloc(
             context.read<SalesOrderRepo>(),
-          ),
+          )..add(
+              FetchAllSalesOrderHeader(
+                docStatus: docStatus,
+                orderStatus: orderStatus,
+                fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+                toDate: toDate == null ? "" : dateFormat.format(toDate!),
+                branch: _selectedBranchController.text,
+              ),
+            ),
         ),
         BlocProvider(
           create: (_) => SalesOrderCancelBloc(
@@ -95,171 +124,255 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
             },
           ),
         ],
-        child: ScaffoldPage.withPadding(
-          header: _header(context),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flex(
-                mainAxisSize: MainAxisSize.min,
+        child: Builder(
+          builder: (context) {
+            return ScaffoldPage.withPadding(
+              header: _header(context),
+              content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                direction: Axis.horizontal,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  _searchBox(),
-                  const Spacer(),
-                  _fromDatePicker(),
-                  Constant.widthSpacer,
-                  _toDatePicker(),
+                  Flex(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    direction: Axis.horizontal,
+                    children: [
+                      _searchBox(),
+                      const Spacer(),
+                      _fromDatePicker(),
+                      Constant.widthSpacer,
+                      _toDatePicker(),
+                    ],
+                  ),
+                  Constant.heightSpacer,
+                  _filterByBranchBox(),
+                  Constant.heightSpacer,
+                  _commandBar(context.read<FetchingSalesOrderHeaderBloc>()),
+                  Constant.heightSpacer,
+                  Expanded(
+                    child: _tabView(
+                      context.read<FetchingSalesOrderHeaderBloc>(),
+                    ),
+                  ),
                 ],
               ),
-              Constant.heightSpacer,
-              _commandBar(),
-              Constant.heightSpacer,
-              Expanded(
-                child: TabView(
-                  tabWidthBehavior: TabWidthBehavior.sizeToContent,
-                  currentIndex: currentIndex,
-                  closeButtonVisibility: CloseButtonVisibilityMode.never,
-                  onChanged: (index) {
-                    setState(() {
-                      currentIndex = index;
-                      orderStatus = index;
-                      if (index == 0 || index == 1 || index == 2) {
-                        fromDate = null;
-                        toDate = null;
-                      } else {
-                        fromDate = DateTime.now();
-                        toDate = DateTime.now();
-                      }
-                    });
-                  },
-                  tabs: [
-                    Tab(
-                      icon: const ImageIcon(
-                        AssetImage('assets/icons/done_document.png'),
-                      ),
-                      text: Text(
-                        "For Price Confirmation",
-                        style: (currentIndex == 0)
-                            ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.teal.lightest)
-                            : null,
-                      ),
-                      body: SalesOrderHeaderTable(
-                        sfDataGridKey: sfDataGridKey,
-                        docStatus: docStatus,
-                        fromDate: fromDate == null
-                            ? ""
-                            : dateFormat.format(fromDate!),
-                        toDate:
-                            toDate == null ? "" : dateFormat.format(toDate!),
-                        orderStatus: orderStatus,
-                      ),
-                    ),
-                    Tab(
-                      icon: const ImageIcon(
-                        AssetImage('assets/icons/done_document.png'),
-                      ),
-                      text: Text(
-                        "For Credit Confirmation",
-                        style: (currentIndex == 1)
-                            ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.teal.lightest)
-                            : null,
-                      ),
-                      body: SalesOrderHeaderTable(
-                        sfDataGridKey: sfDataGridKey,
-                        docStatus: docStatus,
-                        fromDate: fromDate == null
-                            ? ""
-                            : dateFormat.format(fromDate!),
-                        toDate:
-                            toDate == null ? "" : dateFormat.format(toDate!),
-                        orderStatus: orderStatus,
-                      ),
-                    ),
-                    Tab(
-                      icon: const ImageIcon(
-                        AssetImage('assets/icons/done_document.png'),
-                      ),
-                      text: Text(
-                        "For Dispatch",
-                        style: (currentIndex == 2)
-                            ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.teal.lightest)
-                            : null,
-                      ),
-                      body: SalesOrderHeaderTable(
-                        sfDataGridKey: sfDataGridKey,
-                        docStatus: docStatus,
-                        fromDate: fromDate == null
-                            ? ""
-                            : dateFormat.format(fromDate!),
-                        toDate:
-                            toDate == null ? "" : dateFormat.format(toDate!),
-                        orderStatus: orderStatus,
-                      ),
-                    ),
-                    Tab(
-                      icon: const ImageIcon(
-                        AssetImage('assets/icons/done_document.png'),
-                      ),
-                      text: Text(
-                        "Dispatched",
-                        style: (currentIndex == 3)
-                            ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.teal.lightest)
-                            : null,
-                      ),
-                      body: SalesOrderHeaderTable(
-                        sfDataGridKey: sfDataGridKey,
-                        docStatus: "C",
-                        fromDate: fromDate == null
-                            ? ""
-                            : dateFormat.format(fromDate!),
-                        toDate:
-                            toDate == null ? "" : dateFormat.format(toDate!),
-                        orderStatus: orderStatus,
-                      ),
-                    ),
-                    Tab(
-                      icon: const ImageIcon(
-                        AssetImage('assets/icons/done_document.png'),
-                      ),
-                      text: Text(
-                        "Canceled",
-                        style: (currentIndex == 4)
-                            ? TextStyle(
-                                fontWeight: FontWeight.bold,
-                                backgroundColor: Colors.teal.lightest)
-                            : null,
-                      ),
-                      body: SalesOrderHeaderTable(
-                        sfDataGridKey: sfDataGridKey,
-                        docStatus: "N",
-                        fromDate: fromDate == null
-                            ? ""
-                            : dateFormat.format(fromDate!),
-                        toDate:
-                            toDate == null ? "" : dateFormat.format(toDate!),
-                        orderStatus: null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
-  CommandBarCard _commandBar() {
+  TabView _tabView(FetchingSalesOrderHeaderBloc bloc) {
+    return TabView(
+      tabWidthBehavior: TabWidthBehavior.sizeToContent,
+      currentIndex: currentIndex,
+      closeButtonVisibility: CloseButtonVisibilityMode.never,
+      onChanged: (index) {
+        setState(
+          () {
+            currentIndex = index;
+            orderStatus = index;
+            if (index == 0 || index == 1 || index == 2) {
+              fromDate = null;
+              toDate = null;
+              docStatus = "O";
+            } else {
+              fromDate = DateTime.now();
+              toDate = DateTime.now();
+              if (index == 3) {
+                docStatus = "C";
+                orderStatus = null;
+              } else {
+                docStatus = "N";
+                orderStatus = null;
+              }
+            }
+          },
+        );
+
+        bloc.add(
+          FetchAllSalesOrderHeader(
+            docStatus: docStatus,
+            orderStatus: orderStatus,
+            fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+            toDate: toDate == null ? "" : dateFormat.format(toDate!),
+            branch: _selectedBranchController.text,
+          ),
+        );
+      },
+      tabs: [
+        Tab(
+          icon: const ImageIcon(
+            AssetImage('assets/icons/open_document.png'),
+          ),
+          text: BlocBuilder<FetchingSalesOrderHeaderBloc,
+              FetchingSalesOrderHeaderState>(
+            builder: (context, state) {
+              return Badge(
+                badgeContent: Text(
+                  state.forPriceConfirmation.toString(),
+                ),
+                position: BadgePosition.topStart(),
+                child: Text(
+                  "For Price Confirmation",
+                  style: (currentIndex == 0)
+                      ? TextStyle(
+                          fontWeight: FontWeight.bold,
+                          backgroundColor: Colors.teal.lightest)
+                      : null,
+                ),
+              );
+            },
+          ),
+          body: SalesOrderHeaderTable(
+            sfDataGridKey: sfDataGridKey,
+            docStatus: docStatus,
+            fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+            toDate: toDate == null ? "" : dateFormat.format(toDate!),
+            orderStatus: orderStatus,
+            branch: _selectedBranchController.text,
+          ),
+        ),
+        Tab(
+          icon: const ImageIcon(
+            AssetImage('assets/icons/open_document.png'),
+          ),
+          text: BlocBuilder<FetchingSalesOrderHeaderBloc,
+              FetchingSalesOrderHeaderState>(
+            builder: (context, state) {
+              return Badge(
+                badgeContent: Text(
+                  state.forCreditConfirmation.toString(),
+                ),
+                position: BadgePosition.topStart(),
+                child: Text(
+                  "For Credit Confirmation",
+                  style: (currentIndex == 1)
+                      ? TextStyle(
+                          fontWeight: FontWeight.bold,
+                          backgroundColor: Colors.teal.lightest)
+                      : null,
+                ),
+              );
+            },
+          ),
+          body: SalesOrderHeaderTable(
+            sfDataGridKey: sfDataGridKey,
+            docStatus: docStatus,
+            fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+            toDate: toDate == null ? "" : dateFormat.format(toDate!),
+            orderStatus: orderStatus,
+            branch: _selectedBranchController.text,
+          ),
+        ),
+        Tab(
+          icon: const ImageIcon(
+            AssetImage('assets/icons/open_document.png'),
+          ),
+          text: BlocBuilder<FetchingSalesOrderHeaderBloc,
+              FetchingSalesOrderHeaderState>(
+            builder: (context, state) {
+              return Badge(
+                badgeContent: Text(state.forDispatch.toString()),
+                position: BadgePosition.topStart(),
+                child: Text(
+                  "For Dispatch",
+                  style: (currentIndex == 2)
+                      ? TextStyle(
+                          fontWeight: FontWeight.bold,
+                          backgroundColor: Colors.teal.lightest)
+                      : null,
+                ),
+              );
+            },
+          ),
+          body: SalesOrderHeaderTable(
+            sfDataGridKey: sfDataGridKey,
+            docStatus: docStatus,
+            fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+            toDate: toDate == null ? "" : dateFormat.format(toDate!),
+            orderStatus: orderStatus,
+            branch: _selectedBranchController.text,
+          ),
+        ),
+        Tab(
+          icon: const ImageIcon(
+            AssetImage('assets/icons/done_document.png'),
+          ),
+          text: Text(
+            "Dispatched",
+            style: (currentIndex == 3)
+                ? TextStyle(
+                    fontWeight: FontWeight.bold,
+                    backgroundColor: Colors.teal.lightest)
+                : null,
+          ),
+          body: SalesOrderHeaderTable(
+            sfDataGridKey: sfDataGridKey,
+            docStatus: "C",
+            fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+            toDate: toDate == null ? "" : dateFormat.format(toDate!),
+            orderStatus: orderStatus,
+            branch: _selectedBranchController.text,
+          ),
+        ),
+        Tab(
+          icon: const ImageIcon(
+            AssetImage('assets/icons/delete_document.png'),
+          ),
+          text: Text(
+            "Canceled",
+            style: (currentIndex == 4)
+                ? TextStyle(
+                    fontWeight: FontWeight.bold,
+                    backgroundColor: Colors.teal.lightest)
+                : null,
+          ),
+          body: SalesOrderHeaderTable(
+            sfDataGridKey: sfDataGridKey,
+            docStatus: "N",
+            fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
+            toDate: toDate == null ? "" : dateFormat.format(toDate!),
+            orderStatus: null,
+            branch: _selectedBranchController.text,
+          ),
+        ),
+      ],
+    );
+  }
+
+  InfoLabel _filterByBranchBox() {
+    return InfoLabel(
+      label: "Filter By Branch",
+      child: SizedBox(
+        width: 200,
+        child: StatefulBuilder(builder: (context, setState) {
+          return ValueListenableBuilder<List<BranchModel>>(
+            valueListenable: _branches,
+            builder: (context, datas, _) {
+              return AutoSuggestBox(
+                controller: _selectedBranchController,
+                items: datas
+                    .map<AutoSuggestBoxItem>(
+                      (e) => AutoSuggestBoxItem(
+                        value: e.code,
+                        child: Text(e.description ?? ""),
+                        onSelected: () {
+                          _selectedBranchController.text = e.code;
+                        },
+                      ),
+                    )
+                    .toList(),
+              );
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  CommandBarCard _commandBar(FetchingSalesOrderHeaderBloc bloc) {
     return CommandBarCard(
       child: CommandBar(
         overflowBehavior: CommandBarOverflowBehavior.clip,
@@ -285,20 +398,19 @@ class _SalesOrderPageState extends State<SalesOrderPage> {
           CommandBarBuilderItem(
             builder: (context, mode, w) => w,
             wrappedItem: CommandBarButton(
-              icon: const Icon(FluentIcons.filter),
+              icon: const Icon(FluentIcons.search),
               label: const Text("Filter"),
               onPressed: () {
-                context.read<FetchingSalesOrderHeaderBloc>().add(
-                      FetchAllSalesOrderHeader(
-                        docStatus: docStatus,
-                        orderStatus: orderStatus,
-                        fromDate: fromDate == null
-                            ? ""
-                            : dateFormat.format(fromDate!),
-                        toDate:
-                            fromDate == null ? "" : dateFormat.format(toDate!),
-                      ),
-                    );
+                bloc.add(
+                  FetchAllSalesOrderHeader(
+                    docStatus: docStatus,
+                    orderStatus: orderStatus,
+                    fromDate:
+                        fromDate == null ? "" : dateFormat.format(fromDate!),
+                    toDate: toDate == null ? "" : dateFormat.format(toDate!),
+                    branch: _selectedBranchController.text,
+                  ),
+                );
               },
             ),
           ),
