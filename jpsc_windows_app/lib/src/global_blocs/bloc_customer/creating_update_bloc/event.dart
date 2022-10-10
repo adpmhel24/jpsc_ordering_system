@@ -113,6 +113,16 @@ class CustAddressRemoved extends CreateUpdateCustomerEvent {
   List<Object?> get props => [index];
 }
 
+class CustAddressUpdated extends CreateUpdateCustomerEvent {
+  final int index;
+  final CustomerAddressModel value;
+
+  const CustAddressUpdated(this.index, this.value);
+
+  @override
+  List<Object?> get props => [index, value];
+}
+
 class NewCustomerSubmitted extends CreateUpdateCustomerEvent {}
 
 class UpdateCustomerSubmitted extends CreateUpdateCustomerEvent {}

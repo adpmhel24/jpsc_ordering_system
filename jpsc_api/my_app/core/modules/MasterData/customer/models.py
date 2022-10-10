@@ -18,8 +18,8 @@ class CustomerBase(SQLModel):
 
     first_name: Optional[str] = Field(index=True)
     last_name: Optional[str] = Field(index=True)
-    contact_number: Optional[str]
-    email: Optional[EmailStr]
+    contact_number: Optional[str] = Field(default=None)
+    email: Optional[EmailStr] = Field(default=None)
     location: str = Field(
         foreign_key="branch.code",
         fk_kwargs={"onupdate": "CASCADE"},
@@ -29,7 +29,9 @@ class CustomerBase(SQLModel):
     payment_term: Optional[str] = Field(
         foreign_key="payment_term.code", fk_kwargs={"onupdate": "CASCADE"}
     )
-    credit_limit: condecimal(max_digits=20, decimal_places=2) = Field(default=0)
+    credit_limit: Optional[condecimal(max_digits=20, decimal_places=2)] = Field(
+        default=0
+    )
 
 
 class CustomerOtherColumn(SQLModel):

@@ -23,18 +23,18 @@ import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_custo
     as _i4;
 import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_customer/create_customer_screen.dart'
     as _i8;
-import 'package:mobile_app/src/screens/modules/Sales_Order/create_sales_order/cart/main_screen.dart'
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/cart/main_screen.dart'
     as _i11;
-import 'package:mobile_app/src/screens/modules/Sales_Order/create_sales_order/create_sales_order_screen.dart'
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/create_pq_screen.dart'
     as _i6;
-import 'package:mobile_app/src/screens/modules/Sales_Order/create_sales_order/customer_selection/main_screen.dart'
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/customer_selection/main_screen.dart'
     as _i9;
-import 'package:mobile_app/src/screens/modules/Sales_Order/create_sales_order/product_selection/main_screen.dart'
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/product_selection/main_screen.dart'
     as _i10;
-import 'package:mobile_app/src/screens/modules/Sales_Order/sales_orders/sales_orders_screen.dart'
-    as _i7;
-import 'package:mobile_app/src/screens/modules/Sales_Order/sales_orders/so_base_screent.dart'
+import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/pq_base_screen.dart'
     as _i12;
+import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/purch_quotations_screen.dart'
+    as _i7;
 import 'package:mobile_app/src/screens/widgets/success_screen.dart' as _i2;
 
 class AppRouter extends _i13.RootStackRouter {
@@ -88,16 +88,16 @@ class AppRouter extends _i13.RootStackRouter {
         child: const _i5.DashboardScreen(),
       );
     },
-    CreateSalesOrderScreenRoute.name: (routeData) {
+    CreatePriceQuotationScreenRoute.name: (routeData) {
       return _i13.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i6.CreateSalesOrderScreen(),
+        child: const _i6.CreatePriceQuotationScreen(),
       );
     },
-    SalesOrdersScreenRoute.name: (routeData) {
+    PriceQuotationScreenRoute.name: (routeData) {
       return _i13.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i7.SalesOrdersScreen(),
+        child: const _i7.PriceQuotationScreen(),
       );
     },
     CreateCustomerScreenRoute.name: (routeData) {
@@ -124,15 +124,15 @@ class AppRouter extends _i13.RootStackRouter {
         child: const _i11.CartScreen(),
       );
     },
-    SalesOrdersBaseScreenRoute.name: (routeData) {
-      final args = routeData.argsAs<SalesOrdersBaseScreenRouteArgs>();
+    PurchaseQuotationsBaseScreenRoute.name: (routeData) {
+      final args = routeData.argsAs<PurchaseQuotationsBaseScreenRouteArgs>();
       return _i13.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: _i12.SalesOrdersBaseScreen(
+        child: _i12.PurchaseQuotationsBaseScreen(
           key: args.key,
           startdateController: args.startdateController,
           enddateController: args.enddateController,
-          orderstatus: args.orderstatus,
+          pqStatus: args.pqStatus,
           docStatus: args.docStatus,
         ),
       );
@@ -158,7 +158,7 @@ class AppRouter extends _i13.RootStackRouter {
               '#redirect',
               path: '',
               parent: MainScreenRoute.name,
-              redirectTo: 'create',
+              redirectTo: 'create_pq',
               fullMatch: true,
             ),
             _i13.RouteConfig(
@@ -167,43 +167,43 @@ class AppRouter extends _i13.RootStackRouter {
               parent: MainScreenRoute.name,
             ),
             _i13.RouteConfig(
-              CreateSalesOrderScreenRoute.name,
-              path: 'create',
+              CreatePriceQuotationScreenRoute.name,
+              path: 'create_pq',
               parent: MainScreenRoute.name,
               children: [
                 _i13.RouteConfig(
                   '#redirect',
                   path: '',
-                  parent: CreateSalesOrderScreenRoute.name,
+                  parent: CreatePriceQuotationScreenRoute.name,
                   redirectTo: 'select_customer',
                   fullMatch: true,
                 ),
                 _i13.RouteConfig(
                   CustomerSelectionRoute.name,
                   path: 'select_customer',
-                  parent: CreateSalesOrderScreenRoute.name,
+                  parent: CreatePriceQuotationScreenRoute.name,
                 ),
                 _i13.RouteConfig(
                   ProductionSelectionRoute.name,
                   path: 'select_product',
-                  parent: CreateSalesOrderScreenRoute.name,
+                  parent: CreatePriceQuotationScreenRoute.name,
                 ),
                 _i13.RouteConfig(
                   CartRoute.name,
                   path: 'select_product',
-                  parent: CreateSalesOrderScreenRoute.name,
+                  parent: CreatePriceQuotationScreenRoute.name,
                 ),
               ],
             ),
             _i13.RouteConfig(
-              SalesOrdersScreenRoute.name,
-              path: 'sales_orders',
+              PriceQuotationScreenRoute.name,
+              path: 'price_quotations',
               parent: MainScreenRoute.name,
               children: [
                 _i13.RouteConfig(
-                  SalesOrdersBaseScreenRoute.name,
-                  path: 'orders',
-                  parent: SalesOrdersScreenRoute.name,
+                  PurchaseQuotationsBaseScreenRoute.name,
+                  path: 'my_transaction',
+                  parent: PriceQuotationScreenRoute.name,
                 )
               ],
             ),
@@ -343,29 +343,29 @@ class DashboardScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i6.CreateSalesOrderScreen]
-class CreateSalesOrderScreenRoute extends _i13.PageRouteInfo<void> {
-  const CreateSalesOrderScreenRoute({List<_i13.PageRouteInfo>? children})
+/// [_i6.CreatePriceQuotationScreen]
+class CreatePriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
+  const CreatePriceQuotationScreenRoute({List<_i13.PageRouteInfo>? children})
       : super(
-          CreateSalesOrderScreenRoute.name,
-          path: 'create',
+          CreatePriceQuotationScreenRoute.name,
+          path: 'create_pq',
           initialChildren: children,
         );
 
-  static const String name = 'CreateSalesOrderScreenRoute';
+  static const String name = 'CreatePriceQuotationScreenRoute';
 }
 
 /// generated route for
-/// [_i7.SalesOrdersScreen]
-class SalesOrdersScreenRoute extends _i13.PageRouteInfo<void> {
-  const SalesOrdersScreenRoute({List<_i13.PageRouteInfo>? children})
+/// [_i7.PriceQuotationScreen]
+class PriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
+  const PriceQuotationScreenRoute({List<_i13.PageRouteInfo>? children})
       : super(
-          SalesOrdersScreenRoute.name,
-          path: 'sales_orders',
+          PriceQuotationScreenRoute.name,
+          path: 'price_quotations',
           initialChildren: children,
         );
 
-  static const String name = 'SalesOrdersScreenRoute';
+  static const String name = 'PriceQuotationScreenRoute';
 }
 
 /// generated route for
@@ -417,36 +417,36 @@ class CartRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.SalesOrdersBaseScreen]
-class SalesOrdersBaseScreenRoute
-    extends _i13.PageRouteInfo<SalesOrdersBaseScreenRouteArgs> {
-  SalesOrdersBaseScreenRoute({
+/// [_i12.PurchaseQuotationsBaseScreen]
+class PurchaseQuotationsBaseScreenRoute
+    extends _i13.PageRouteInfo<PurchaseQuotationsBaseScreenRouteArgs> {
+  PurchaseQuotationsBaseScreenRoute({
     _i14.Key? key,
     required _i14.TextEditingController startdateController,
     required _i14.TextEditingController enddateController,
-    int? orderstatus,
+    int? pqStatus,
     required String docStatus,
   }) : super(
-          SalesOrdersBaseScreenRoute.name,
-          path: 'orders',
-          args: SalesOrdersBaseScreenRouteArgs(
+          PurchaseQuotationsBaseScreenRoute.name,
+          path: 'my_transaction',
+          args: PurchaseQuotationsBaseScreenRouteArgs(
             key: key,
             startdateController: startdateController,
             enddateController: enddateController,
-            orderstatus: orderstatus,
+            pqStatus: pqStatus,
             docStatus: docStatus,
           ),
         );
 
-  static const String name = 'SalesOrdersBaseScreenRoute';
+  static const String name = 'PurchaseQuotationsBaseScreenRoute';
 }
 
-class SalesOrdersBaseScreenRouteArgs {
-  const SalesOrdersBaseScreenRouteArgs({
+class PurchaseQuotationsBaseScreenRouteArgs {
+  const PurchaseQuotationsBaseScreenRouteArgs({
     this.key,
     required this.startdateController,
     required this.enddateController,
-    this.orderstatus,
+    this.pqStatus,
     required this.docStatus,
   });
 
@@ -456,12 +456,12 @@ class SalesOrdersBaseScreenRouteArgs {
 
   final _i14.TextEditingController enddateController;
 
-  final int? orderstatus;
+  final int? pqStatus;
 
   final String docStatus;
 
   @override
   String toString() {
-    return 'SalesOrdersBaseScreenRouteArgs{key: $key, startdateController: $startdateController, enddateController: $enddateController, orderstatus: $orderstatus, docStatus: $docStatus}';
+    return 'PurchaseQuotationsBaseScreenRouteArgs{key: $key, startdateController: $startdateController, enddateController: $enddateController, pqStatus: $pqStatus, docStatus: $docStatus}';
   }
 }

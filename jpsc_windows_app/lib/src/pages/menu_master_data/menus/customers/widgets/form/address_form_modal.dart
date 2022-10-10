@@ -10,10 +10,16 @@ import '../../../../../../utils/constant.dart';
 import '../../../../../../utils/responsive.dart';
 
 class CustomerAddressFormModal extends StatefulWidget {
-  const CustomerAddressFormModal({Key? key, required this.bloc})
-      : super(key: key);
+  const CustomerAddressFormModal({
+    Key? key,
+    required this.bloc,
+    this.selectedAddressObj,
+    this.currentIndex,
+  }) : super(key: key);
 
   final CreateUpdateCustomerBloc bloc;
+  final CustomerAddressModel? selectedAddressObj;
+  final int? currentIndex;
   @override
   State<CustomerAddressFormModal> createState() =>
       _CustomerAddressFormModalState();
@@ -25,6 +31,8 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
   final TextEditingController _cityMunicipalityController =
       TextEditingController();
   final TextEditingController _brgyController = TextEditingController();
+  final TextEditingController _streetAddressController =
+      TextEditingController();
 
   final ValueNotifier<String> _streetAddress = ValueNotifier("");
   final ValueNotifier<List<ProvinceModel>> _provinces = ValueNotifier([]);
@@ -42,6 +50,15 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
   @override
   void initState() {
     locationRepo = context.read<PhLocationRepo>();
+    _otherDetailsController.text =
+        widget.selectedAddressObj?.otherDetails ?? "";
+    _provinceController.text = widget.selectedAddressObj?.province ?? "";
+    _cityMunicipalityController.text =
+        widget.selectedAddressObj?.cityMunicipality ?? "";
+    _brgyController.text = widget.selectedAddressObj?.brgy ?? "";
+    _streetAddress.value = widget.selectedAddressObj?.streetAddress ?? "";
+    _streetAddressController.text = _streetAddress.value;
+    isDefault = widget.selectedAddressObj?.isDefault ?? false;
     fetchProvinces();
     super.initState();
   }
@@ -56,6 +73,7 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
     _provinceController.dispose();
     _cityMunicipalityController.dispose();
     _brgyController.dispose();
+    _streetAddressController.dispose();
     super.dispose();
   }
 
@@ -115,21 +133,31 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
                 onPressed: street.isEmpty
                     ? null
                     : () {
+                        CustomerAddressModel address = CustomerAddressModel(
+                          id: widget.selectedAddressObj?.id,
+                          streetAddress: _streetAddress.value,
+                          brgy: _brgyController.text,
+                          cityMunicipality: _cityMunicipalityController.text,
+                          province: _provinceController.text,
+                          otherDetails: _otherDetailsController.text,
+                          isDefault: isDefault,
+                        );
                         widget.bloc.add(
-                          CustAddressAdded(
-                            CustomerAddressModel(
-                              streetAddress: _streetAddress.value,
-                              brgy: selectedBrgy?.name,
-                              cityMunicipality: selectedCityMunicipality?.name,
-                              province: selectedProvince?.name,
-                              otherDetails: _otherDetailsController.text,
-                              isDefault: isDefault,
-                            ),
-                          ),
+                          widget.currentIndex != null
+                              // Update
+                              ? CustAddressUpdated(
+                                  widget.currentIndex!,
+                                  address,
+                                )
+                              // Add New
+                              : CustAddressAdded(
+                                  address,
+                                ),
                         );
                         context.router.pop();
                       },
-                child: const Text("Add"),
+                child:
+                    Text(widget.selectedAddressObj != null ? "Update" : "Add"),
               );
             }),
         Button(
@@ -172,12 +200,13 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
       header: "Other Details",
       controller: _otherDetailsController,
       minLines: 1,
-      maxLength: 4,
+      maxLines: 4,
     );
   }
 
   TextFormBox streetAddressField() {
     return TextFormBox(
+      controller: _streetAddressController,
       header: "Street Address *",
       minLines: 1,
       maxLines: 4,

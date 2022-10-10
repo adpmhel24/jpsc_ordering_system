@@ -4,6 +4,8 @@ import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/customers/cust
 
 import '../pages/exports.dart';
 import '../pages/menu_master_data/menus/customers/widgets/form/customer_form.dart';
+import '../pages/menu_master_data/menus/payment_terms/components/form.dart';
+import '../pages/menu_master_data/menus/payment_terms/payment_terms.dart';
 import '../pages/menu_sales/main.dart';
 import 'router_guard.dart';
 
@@ -115,6 +117,23 @@ import 'router_guard.dart';
                   name: "ItemEditPage",
                   path: "edit",
                 )
+              ],
+            ),
+            AutoRoute(
+              page: EmptyRouterPage,
+              name: "PaymentTermWrapper",
+              path: "payment_term",
+              children: [
+                AutoRoute(page: PaymentTermsPage, path: "", initial: true),
+                AutoRoute(
+                  page: PaymentTermFormPage,
+                  path: "form",
+                ),
+                // AutoRoute(
+                //   page: ItemFormPage,
+                //   name: "ItemEditPage",
+                //   path: "edit",
+                // )
               ],
             ),
           ],

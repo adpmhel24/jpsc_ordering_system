@@ -80,8 +80,8 @@ List<RepositoryProvider> masterDataProviders = [
 ];
 
 List<RepositoryProvider> salesProviders = [
-  RepositoryProvider<SalesOrderRepo>(
-    create: (context) => SalesOrderRepo(
+  RepositoryProvider<PriceQuotationRepo>(
+    create: (context) => PriceQuotationRepo(
       localStorage: context.read<LocalStorageRepo>().localStorage,
     ),
   ),

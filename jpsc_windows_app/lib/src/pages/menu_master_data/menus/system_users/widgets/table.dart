@@ -75,6 +75,7 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
               key: widget.sfDataGridKey,
               source: _dataSource,
               allowSorting: true,
+              allowFiltering: true,
               allowMultiColumnSorting: true,
               selectionMode: SelectionMode.single,
               navigationMode: GridNavigationMode.cell,
@@ -221,7 +222,7 @@ class DataSource extends DataGridSource {
                     ),
                   ),
                 ),
-                Flexible(child: Text(dataGridCell.value.email)),
+                Flexible(child: SelectableText(dataGridCell.value.email)),
               ],
             ),
           );
@@ -255,7 +256,7 @@ class DataSource extends DataGridSource {
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(Constant.minPadding),
           child: dataGridCell.value.runtimeType != Icon
-              ? Text(dataGridCell.value.toString())
+              ? SelectableText(dataGridCell.value.toString())
               : dataGridCell.value,
         );
       }).toList(),

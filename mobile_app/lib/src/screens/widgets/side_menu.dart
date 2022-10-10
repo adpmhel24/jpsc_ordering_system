@@ -6,6 +6,7 @@ import 'package:mobile_app/src/router/router.gr.dart';
 
 import '../../data/repositories/repos.dart';
 import '../../global_bloc/bloc_auth/bloc.dart';
+import '../../global_bloc/bloc_menu/bloc.dart';
 import '../utils/constant.dart';
 import '../utils/responsive.dart';
 
@@ -14,8 +15,8 @@ class SideMenu extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  void toggleMenu(BuildContext context, String currentMenu) {
-    RepositoryProvider.of<MenuController>(context).controlMenu(currentMenu);
+  void toggleMenu(BuildContext context) {
+    RepositoryProvider.of<MenuController>(context).controlMenu();
   }
 
   @override
@@ -36,29 +37,38 @@ class SideMenu extends StatelessWidget {
                   svgSrc: "assets/icons/menu_dashbord.svg",
                   press: () {
                     if (!isDesktop) {
-                      toggleMenu(context, "Dashboard");
+                      toggleMenu(context);
                     }
                     router!.replace(const DashboardScreenRoute());
+                    context.read<DrawerMenuBloc>().add(
+                          const DrawerMenuClicked("Dashboard"),
+                        );
                   },
                 ),
                 DrawerListTile(
-                  title: "Create Sales Order",
+                  title: "Create Price Quotation",
                   svgSrc: "assets/icons/menu_tag.svg",
                   press: () {
                     if (!isDesktop) {
-                      toggleMenu(context, "Create Sales Order");
+                      toggleMenu(context);
                     }
-                    router!.replace(const CreateSalesOrderScreenRoute());
+                    router!.replace(const CreatePriceQuotationScreenRoute());
+                    context.read<DrawerMenuBloc>().add(
+                          const DrawerMenuClicked("Create Price Quotation"),
+                        );
                   },
                 ),
                 DrawerListTile(
-                  title: "My Orders",
+                  title: "My Transactions",
                   svgSrc: "assets/icons/shopping-cart-check.svg",
                   press: () {
                     if (!isDesktop) {
-                      toggleMenu(context, "My Orders");
+                      toggleMenu(context);
                     }
-                    router!.replace(const SalesOrdersScreenRoute());
+                    router!.replace(const PriceQuotationScreenRoute());
+                    context.read<DrawerMenuBloc>().add(
+                          const DrawerMenuClicked("For Price Confirmation"),
+                        );
                   },
                 ),
                 DrawerListTile(
@@ -66,9 +76,12 @@ class SideMenu extends StatelessWidget {
                   svgSrc: "assets/icons/menu_profile.svg",
                   press: () {
                     if (!isDesktop) {
-                      toggleMenu(context, "Create Customer");
+                      toggleMenu(context);
                     }
                     router!.replace(const CreateCustomerScreenRoute());
+                    context.read<DrawerMenuBloc>().add(
+                          const DrawerMenuClicked("Create Customer"),
+                        );
                   },
                 ),
               ],
@@ -101,28 +114,28 @@ class SideMenu extends StatelessWidget {
   //   StackRouter? router,
   // ) {
   //   return DrawerExpansionListTile(
-  //     title: "Sales Order",
+  //     title: "Price Quotation",
   //     svgSrc: "assets/icons/menu_tag.svg",
   //     children: [
   //       DrawerListTile(
-  //         title: "Create Sales Order",
+  //         title: "Create Price Quotation",
   //         press: () {
   //           if (!isDesktop) {
   //             toggleMenu(context);
   //           }
   //           router!.replace(
-  //               const SalesOrder(children: [CreateSalesOrderScreenRoute()]));
+  //               const SalesOrder(children: [CreatePriceQuotationScreenRoute()]));
   //         },
   //       ),
   //       DrawerListTile(
-  //         title: "Sales Orders",
+  //         title: "Price Quotations",
   //         press: () {
   //           if (!isDesktop) {
   //             toggleMenu(context);
   //           }
 
   //           router!.replace(
-  //               const SalesOrder(children: [SalesOrdersScreenRoute()]));
+  //               const SalesOrder(children: [PriceQuotationScreenRoute()]));
   //         },
   //       ),
   //     ],

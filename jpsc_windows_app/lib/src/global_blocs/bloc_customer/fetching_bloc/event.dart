@@ -1,6 +1,6 @@
 part of 'bloc.dart';
 
-class CustomerFetchingEvent extends Equatable {
+abstract class CustomerFetchingEvent extends Equatable {
   const CustomerFetchingEvent();
   @override
   List<Object?> get props => [];

@@ -48,8 +48,8 @@ class AppRepoProvider {
 }
 
 final salesRepo = [
-  RepositoryProvider<SalesOrderRepo>(
-    create: (context) => SalesOrderRepo(
+  RepositoryProvider<PriceQuotationRepo>(
+    create: (context) => PriceQuotationRepo(
       localStorage: context.read<LocalStorageRepo>().localStorage,
     ),
   ),

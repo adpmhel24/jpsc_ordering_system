@@ -39,7 +39,7 @@ class ProductRepo {
 
     response = await api.getAll(
       _token,
-      pathUrl: "$_urlPath/with_price/by_branch/$branchCode",
+      pathUrl: "${_urlPath}with_price/by_branch/$branchCode",
     );
     _datas = List<ProductModel>.from(
         response.data['data'].map((e) => ProductModel.fromJson(e))).toList();

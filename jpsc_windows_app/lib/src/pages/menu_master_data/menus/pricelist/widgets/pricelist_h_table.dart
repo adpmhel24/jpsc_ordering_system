@@ -72,6 +72,7 @@ class _PricelistTableState extends State<PricelistHeaderTable> {
               key: widget.sfDataGridKey,
               source: _dataSource,
               allowSorting: true,
+              allowFiltering: true,
               allowMultiColumnSorting: true,
               selectionMode: SelectionMode.single,
               navigationMode: GridNavigationMode.cell,
@@ -213,7 +214,7 @@ class DataSource extends DataGridSource {
                   ),
                 ),
               ),
-              Flexible(child: Text(dataGridCell.value.code)),
+              Flexible(child: SelectableText(dataGridCell.value.code)),
             ],
           ),
         );
@@ -250,7 +251,7 @@ class DataSource extends DataGridSource {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.all(16.0),
         child: dataGridCell.value.runtimeType != Icon
-            ? Text(dataGridCell.value.toString())
+            ? SelectableText(dataGridCell.value.toString())
             : dataGridCell.value,
       );
     }).toList());

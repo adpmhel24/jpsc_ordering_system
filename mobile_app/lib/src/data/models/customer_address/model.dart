@@ -14,6 +14,8 @@ class CustomerAddressModel {
   @JsonKey(name: "city_municipality")
   String? cityMunicipality;
 
+  String? province;
+
   String? brgy;
 
   @JsonKey(name: "other_details")
@@ -23,16 +25,17 @@ class CustomerAddressModel {
   double? deliveryFee;
 
   @JsonKey(name: "is_default")
-  bool? isDefault;
+  bool isDefault;
 
   CustomerAddressModel({
     this.uid = '',
+    this.province,
     this.streetAddress,
     this.cityMunicipality,
     this.brgy,
     this.otherDetails,
     this.deliveryFee,
-    this.isDefault,
+    this.isDefault = false,
   });
 
   factory CustomerAddressModel.fromJson(Map<String, dynamic> json) =>

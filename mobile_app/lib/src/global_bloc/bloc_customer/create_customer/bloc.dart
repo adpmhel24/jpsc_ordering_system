@@ -212,9 +212,10 @@ class CreateCustomerBloc
         "first_name": state.custFirstName.value,
         "last_name": state.custLastName.value,
         "contact_number": state.custContactNumber.value,
-        "email": state.custEmail.invalid ? null : state.custEmail.value,
+        if (state.custEmail.value.isNotEmpty) "email": state.custEmail.value,
         "location": state.custBranch.value,
-        "payment_term": state.custPaymentTerm.value,
+        if (state.custPaymentTerm.value.isNotEmpty)
+          "payment_term": state.custPaymentTerm.value,
         "credit_limit": state.custCreditLimit.value,
       },
       "addresses_schema": state.addresses.value,

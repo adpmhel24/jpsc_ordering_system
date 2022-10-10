@@ -109,7 +109,7 @@ class DataSource extends DataGridSource {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.all(16.0),
         child: dataGridCell.value.runtimeType != Icon
-            ? Text(dataGridCell.value.toString())
+            ? SelectableText(dataGridCell.value.toString())
             : dataGridCell.value,
       );
     }).toList());

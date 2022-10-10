@@ -11,41 +11,46 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i16;
+import 'dart:async' as _i18;
 
-import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:auto_route/auto_route.dart' as _i11;
 import 'package:auto_route/empty_router_widgets.dart' as _i4;
-import 'package:fluent_ui/fluent_ui.dart' as _i12;
-import 'package:flutter/material.dart' as _i10;
+import 'package:fluent_ui/fluent_ui.dart' as _i14;
+import 'package:flutter/material.dart' as _i12;
 
-import '../data/models/models.dart' as _i13;
+import '../data/models/models.dart' as _i15;
 import '../pages/exports.dart' as _i1;
 import '../pages/menu_inventory/menus/inv_adj_in/bloc/inv_adj_in_bloc.dart'
-    as _i14;
+    as _i16;
 import '../pages/menu_inventory/menus/inv_adj_out/bloc/inv_adj_out_bloc.dart'
-    as _i15;
+    as _i17;
 import '../pages/menu_master_data/menus/customers/customers.dart' as _i7;
 import '../pages/menu_master_data/menus/customers/widgets/form/customer_form.dart'
     as _i8;
+import '../pages/menu_master_data/menus/payment_terms/components/form.dart'
+    as _i10;
+import '../pages/menu_master_data/menus/payment_terms/payment_terms.dart'
+    as _i9;
 import '../pages/menu_sales/main.dart' as _i2;
-import '../pages/menu_sales/modules/sales_order/sales_orders.dart' as _i5;
-import '../pages/menu_sales/modules/sales_order/widgets/details/so_details.dart'
+import '../pages/menu_sales/modules/price_quotation/components/details/pq_details.dart'
     as _i6;
+import '../pages/menu_sales/modules/price_quotation/price_quotation.dart'
+    as _i5;
 import '../pages/menu_sales/sales_menu.dart' as _i3;
-import 'router_guard.dart' as _i11;
+import 'router_guard.dart' as _i13;
 
-class AppRouter extends _i9.RootStackRouter {
+class AppRouter extends _i11.RootStackRouter {
   AppRouter({
-    _i10.GlobalKey<_i10.NavigatorState>? navigatorKey,
+    _i12.GlobalKey<_i12.NavigatorState>? navigatorKey,
     required this.routeGuard,
   }) : super(navigatorKey);
 
-  final _i11.RouteGuard routeGuard;
+  final _i13.RouteGuard routeGuard;
 
   @override
-  final Map<String, _i9.PageFactory> pagesMap = {
+  final Map<String, _i11.PageFactory> pagesMap = {
     LoginRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginPage(),
         opaque: true,
@@ -53,7 +58,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     MainRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MainPage(),
         opaque: true,
@@ -61,7 +66,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     DashboardRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.DashboardPage(),
         opaque: true,
@@ -69,7 +74,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     PurchasingMenuRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.PurchasingMenuPage(),
         opaque: true,
@@ -77,7 +82,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     SalesMenuWrapperRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.SalesMenuWrapperPage(),
         opaque: true,
@@ -85,7 +90,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     InventoryWrapperRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InventoryWrapperPage(),
         opaque: true,
@@ -93,7 +98,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     MasterDataWrapperRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MasterDataWrapperPage(),
         opaque: true,
@@ -101,37 +106,37 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     SalesMenuRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i3.SalesMenuPage(),
         opaque: true,
         barrierDismissible: false,
       );
     },
-    SalesOrderWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+    PriceQuotationWrapper.name: (routeData) {
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
         barrierDismissible: false,
       );
     },
-    SalesOrderRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+    PriceQuotationRoute.name: (routeData) {
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i5.SalesOrderPage(),
+        child: const _i5.PriceQuotationPage(),
         opaque: true,
         barrierDismissible: false,
       );
     },
-    SalesOrderHeaderDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<SalesOrderHeaderDetailsRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+    PriceQuotationHeaderDetailsRoute.name: (routeData) {
+      final args = routeData.argsAs<PriceQuotationHeaderDetailsRouteArgs>();
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i6.SalesOrderHeaderDetailsPage(
+        child: _i6.PriceQuotationHeaderDetailsPage(
           key: args.key,
           header: args.header,
-          salesOrder: args.salesOrder,
+          priceQuotation: args.priceQuotation,
           onRefresh: args.onRefresh,
         ),
         opaque: true,
@@ -139,7 +144,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     InventoryMenuRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InventoryMenuPage(),
         opaque: true,
@@ -147,7 +152,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     InvAdjInWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -155,7 +160,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     InvAdjOutWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -163,7 +168,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     InvAdjustmentInRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InvAdjustmentInPage(),
         opaque: true,
@@ -172,7 +177,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     InvAdjustmentInCreateRoute.name: (routeData) {
       final args = routeData.argsAs<InvAdjustmentInCreateRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.InvAdjustmentInFormPage(
           key: args.key,
@@ -185,7 +190,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     InvAdjustmentInDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<InvAdjustmentInDetailsRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.InvAdjustmentInDetailsPage(
           key: args.key,
@@ -197,7 +202,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     InvAdjustmentOutRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InvAdjustmentOutPage(),
         opaque: true,
@@ -206,7 +211,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     InvAdjustmentOutCreateRoute.name: (routeData) {
       final args = routeData.argsAs<InvAdjustmentOutCreateRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.InvAdjustmentOutFormPage(
           key: args.key,
@@ -219,7 +224,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     InvAdjustmentOutDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<InvAdjustmentOutDetailsRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.InvAdjustmentOutDetailsPage(
           key: args.key,
@@ -231,7 +236,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     MasterDataMenuRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MasterDataMenuPage(),
         opaque: true,
@@ -239,7 +244,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     SystemUsersWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -247,7 +252,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     CustomerWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -255,7 +260,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     BranchesWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -263,7 +268,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     UomsWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -271,7 +276,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     PricelistWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -279,7 +284,15 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     ItemWrapper.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i4.EmptyRouterPage(),
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    PaymentTermWrapper.name: (routeData) {
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
         opaque: true,
@@ -287,7 +300,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     SystemUsersRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.SystemUsersPage(),
         opaque: true,
@@ -295,7 +308,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     SystemUserCreateFormRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.SystemUserCreateFormPage(),
         opaque: true,
@@ -305,7 +318,7 @@ class AppRouter extends _i9.RootStackRouter {
     SystemUserUpdateFormRoute.name: (routeData) {
       final args = routeData.argsAs<SystemUserUpdateFormRouteArgs>(
           orElse: () => const SystemUserUpdateFormRouteArgs());
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.SystemUserUpdateFormPage(
           key: args.key,
@@ -316,7 +329,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     CustomersRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i7.CustomersPage(),
         opaque: true,
@@ -325,7 +338,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     CustomerFormRoute.name: (routeData) {
       final args = routeData.argsAs<CustomerFormRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i8.CustomerFormPage(
           key: args.key,
@@ -338,7 +351,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     BranchesRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.BranchesPage(),
         opaque: true,
@@ -347,7 +360,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     BranchCreateRoute.name: (routeData) {
       final args = routeData.argsAs<BranchCreateRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.BranchFormPage(
           key: args.key,
@@ -360,7 +373,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     BranchEditRoute.name: (routeData) {
       final args = routeData.argsAs<BranchEditRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.BranchFormPage(
           key: args.key,
@@ -372,7 +385,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     UomsRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.UomsPage(),
         opaque: true,
@@ -381,7 +394,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     UomCreateRoute.name: (routeData) {
       final args = routeData.argsAs<UomCreateRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.UomFormPage(
           key: args.key,
@@ -394,7 +407,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     UomEditRoute.name: (routeData) {
       final args = routeData.argsAs<UomEditRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.UomFormPage(
           key: args.key,
@@ -406,7 +419,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     PricelistRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.PricelistPage(),
         opaque: true,
@@ -415,7 +428,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     PricelistCreateRoute.name: (routeData) {
       final args = routeData.argsAs<PricelistCreateRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.PricelistFormPage(
           key: args.key,
@@ -429,7 +442,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     PricelistRowRoute.name: (routeData) {
       final args = routeData.argsAs<PricelistRowRouteArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.PricelistRowPage(
           key: args.key,
@@ -441,7 +454,7 @@ class AppRouter extends _i9.RootStackRouter {
       );
     },
     ItemsRoute.name: (routeData) {
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.ItemsPage(),
         opaque: true,
@@ -450,7 +463,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     ItemCreatePage.name: (routeData) {
       final args = routeData.argsAs<ItemCreatePageArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.ItemFormPage(
           key: args.key,
@@ -463,7 +476,7 @@ class AppRouter extends _i9.RootStackRouter {
     },
     ItemEditPage.name: (routeData) {
       final args = routeData.argsAs<ItemEditPageArgs>();
-      return _i9.CustomPage<dynamic>(
+      return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.ItemFormPage(
           key: args.key,
@@ -474,127 +487,149 @@ class AppRouter extends _i9.RootStackRouter {
         barrierDismissible: false,
       );
     },
+    PaymentTermsRoute.name: (routeData) {
+      return _i11.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i9.PaymentTermsPage(),
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    PaymentTermFormRoute.name: (routeData) {
+      final args = routeData.argsAs<PaymentTermFormRouteArgs>();
+      return _i11.CustomPage<dynamic>(
+        routeData: routeData,
+        child: _i10.PaymentTermFormPage(
+          key: args.key,
+          header: args.header,
+          selectedPayTermObj: args.selectedPayTermObj,
+          onRefresh: args.onRefresh,
+        ),
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
   };
 
   @override
-  List<_i9.RouteConfig> get routes => [
-        _i9.RouteConfig(
+  List<_i11.RouteConfig> get routes => [
+        _i11.RouteConfig(
           LoginRoute.name,
           path: '/login',
         ),
-        _i9.RouteConfig(
+        _i11.RouteConfig(
           MainRoute.name,
           path: '/',
           guards: [routeGuard],
           children: [
-            _i9.RouteConfig(
+            _i11.RouteConfig(
               '#redirect',
               path: '',
               parent: MainRoute.name,
               redirectTo: 'dashboard',
               fullMatch: true,
             ),
-            _i9.RouteConfig(
+            _i11.RouteConfig(
               DashboardRoute.name,
               path: 'dashboard',
               parent: MainRoute.name,
             ),
-            _i9.RouteConfig(
+            _i11.RouteConfig(
               PurchasingMenuRoute.name,
               path: 'purchasing',
               parent: MainRoute.name,
             ),
-            _i9.RouteConfig(
+            _i11.RouteConfig(
               SalesMenuWrapperRoute.name,
               path: 'sales',
               parent: MainRoute.name,
               children: [
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: SalesMenuWrapperRoute.name,
                   redirectTo: 'menu',
                   fullMatch: true,
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   SalesMenuRoute.name,
                   path: 'menu',
                   parent: SalesMenuWrapperRoute.name,
                 ),
-                _i9.RouteConfig(
-                  SalesOrderWrapper.name,
+                _i11.RouteConfig(
+                  PriceQuotationWrapper.name,
                   path: 'sales_order',
                   parent: SalesMenuWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
-                      SalesOrderRoute.name,
+                    _i11.RouteConfig(
+                      PriceQuotationRoute.name,
                       path: '',
-                      parent: SalesOrderWrapper.name,
+                      parent: PriceQuotationWrapper.name,
                     ),
-                    _i9.RouteConfig(
-                      SalesOrderHeaderDetailsRoute.name,
+                    _i11.RouteConfig(
+                      PriceQuotationHeaderDetailsRoute.name,
                       path: '',
-                      parent: SalesOrderWrapper.name,
+                      parent: PriceQuotationWrapper.name,
                     ),
                   ],
                 ),
               ],
             ),
-            _i9.RouteConfig(
+            _i11.RouteConfig(
               InventoryWrapperRoute.name,
               path: 'inventory',
               parent: MainRoute.name,
               children: [
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: InventoryWrapperRoute.name,
                   redirectTo: 'menu',
                   fullMatch: true,
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   InventoryMenuRoute.name,
                   path: 'menu',
                   parent: InventoryWrapperRoute.name,
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   InvAdjInWrapper.name,
                   path: 'inv_adj_in',
                   parent: InventoryWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       InvAdjustmentInRoute.name,
                       path: '',
                       parent: InvAdjInWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       InvAdjustmentInCreateRoute.name,
                       path: 'create',
                       parent: InvAdjInWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       InvAdjustmentInDetailsRoute.name,
                       path: 'details/:id',
                       parent: InvAdjInWrapper.name,
                     ),
                   ],
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   InvAdjOutWrapper.name,
                   path: 'inv_adj_out',
                   parent: InventoryWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       InvAdjustmentOutRoute.name,
                       path: '',
                       parent: InvAdjOutWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       InvAdjustmentOutCreateRoute.name,
                       path: 'create',
                       parent: InvAdjOutWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       InvAdjustmentOutDetailsRoute.name,
                       path: 'details/:id',
                       parent: InvAdjOutWrapper.name,
@@ -603,147 +638,164 @@ class AppRouter extends _i9.RootStackRouter {
                 ),
               ],
             ),
-            _i9.RouteConfig(
+            _i11.RouteConfig(
               MasterDataWrapperRoute.name,
               path: 'master_data',
               parent: MainRoute.name,
               children: [
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: MasterDataWrapperRoute.name,
                   redirectTo: 'menu',
                   fullMatch: true,
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   MasterDataMenuRoute.name,
                   path: 'menu',
                   parent: MasterDataWrapperRoute.name,
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   SystemUsersWrapper.name,
                   path: 'systemUsers',
                   parent: MasterDataWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       SystemUsersRoute.name,
                       path: '',
                       parent: SystemUsersWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       SystemUserCreateFormRoute.name,
                       path: 'create',
                       parent: SystemUsersWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       SystemUserUpdateFormRoute.name,
                       path: 'edit',
                       parent: SystemUsersWrapper.name,
                     ),
                   ],
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   CustomerWrapper.name,
                   path: 'customer',
                   parent: MasterDataWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       CustomersRoute.name,
                       path: '',
                       parent: CustomerWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       CustomerFormRoute.name,
                       path: 'create',
                       parent: CustomerWrapper.name,
                     ),
                   ],
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   BranchesWrapper.name,
                   path: 'branches',
                   parent: MasterDataWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       BranchesRoute.name,
                       path: '',
                       parent: BranchesWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       BranchCreateRoute.name,
                       path: 'create',
                       parent: BranchesWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       BranchEditRoute.name,
                       path: 'edit',
                       parent: BranchesWrapper.name,
                     ),
                   ],
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   UomsWrapper.name,
                   path: 'uoms',
                   parent: MasterDataWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       UomsRoute.name,
                       path: '',
                       parent: UomsWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       UomCreateRoute.name,
                       path: 'create',
                       parent: UomsWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       UomEditRoute.name,
                       path: 'edit',
                       parent: UomsWrapper.name,
                     ),
                   ],
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   PricelistWrapper.name,
                   path: 'pricelist',
                   parent: MasterDataWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       PricelistRoute.name,
                       path: '',
                       parent: PricelistWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       PricelistCreateRoute.name,
                       path: 'create',
                       parent: PricelistWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       PricelistRowRoute.name,
                       path: 'pricelist_row',
                       parent: PricelistWrapper.name,
                     ),
                   ],
                 ),
-                _i9.RouteConfig(
+                _i11.RouteConfig(
                   ItemWrapper.name,
                   path: 'items',
                   parent: MasterDataWrapperRoute.name,
                   children: [
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       ItemsRoute.name,
                       path: '',
                       parent: ItemWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       ItemCreatePage.name,
                       path: 'create',
                       parent: ItemWrapper.name,
                     ),
-                    _i9.RouteConfig(
+                    _i11.RouteConfig(
                       ItemEditPage.name,
                       path: 'edit',
                       parent: ItemWrapper.name,
+                    ),
+                  ],
+                ),
+                _i11.RouteConfig(
+                  PaymentTermWrapper.name,
+                  path: 'payment_term',
+                  parent: MasterDataWrapperRoute.name,
+                  children: [
+                    _i11.RouteConfig(
+                      PaymentTermsRoute.name,
+                      path: '',
+                      parent: PaymentTermWrapper.name,
+                    ),
+                    _i11.RouteConfig(
+                      PaymentTermFormRoute.name,
+                      path: 'form',
+                      parent: PaymentTermWrapper.name,
                     ),
                   ],
                 ),
@@ -756,7 +808,7 @@ class AppRouter extends _i9.RootStackRouter {
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginRoute extends _i9.PageRouteInfo<void> {
+class LoginRoute extends _i11.PageRouteInfo<void> {
   const LoginRoute()
       : super(
           LoginRoute.name,
@@ -768,8 +820,8 @@ class LoginRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.MainPage]
-class MainRoute extends _i9.PageRouteInfo<void> {
-  const MainRoute({List<_i9.PageRouteInfo>? children})
+class MainRoute extends _i11.PageRouteInfo<void> {
+  const MainRoute({List<_i11.PageRouteInfo>? children})
       : super(
           MainRoute.name,
           path: '/',
@@ -781,7 +833,7 @@ class MainRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.DashboardPage]
-class DashboardRoute extends _i9.PageRouteInfo<void> {
+class DashboardRoute extends _i11.PageRouteInfo<void> {
   const DashboardRoute()
       : super(
           DashboardRoute.name,
@@ -793,7 +845,7 @@ class DashboardRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.PurchasingMenuPage]
-class PurchasingMenuRoute extends _i9.PageRouteInfo<void> {
+class PurchasingMenuRoute extends _i11.PageRouteInfo<void> {
   const PurchasingMenuRoute()
       : super(
           PurchasingMenuRoute.name,
@@ -805,8 +857,8 @@ class PurchasingMenuRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.SalesMenuWrapperPage]
-class SalesMenuWrapperRoute extends _i9.PageRouteInfo<void> {
-  const SalesMenuWrapperRoute({List<_i9.PageRouteInfo>? children})
+class SalesMenuWrapperRoute extends _i11.PageRouteInfo<void> {
+  const SalesMenuWrapperRoute({List<_i11.PageRouteInfo>? children})
       : super(
           SalesMenuWrapperRoute.name,
           path: 'sales',
@@ -818,8 +870,8 @@ class SalesMenuWrapperRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.InventoryWrapperPage]
-class InventoryWrapperRoute extends _i9.PageRouteInfo<void> {
-  const InventoryWrapperRoute({List<_i9.PageRouteInfo>? children})
+class InventoryWrapperRoute extends _i11.PageRouteInfo<void> {
+  const InventoryWrapperRoute({List<_i11.PageRouteInfo>? children})
       : super(
           InventoryWrapperRoute.name,
           path: 'inventory',
@@ -831,8 +883,8 @@ class InventoryWrapperRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.MasterDataWrapperPage]
-class MasterDataWrapperRoute extends _i9.PageRouteInfo<void> {
-  const MasterDataWrapperRoute({List<_i9.PageRouteInfo>? children})
+class MasterDataWrapperRoute extends _i11.PageRouteInfo<void> {
+  const MasterDataWrapperRoute({List<_i11.PageRouteInfo>? children})
       : super(
           MasterDataWrapperRoute.name,
           path: 'master_data',
@@ -844,7 +896,7 @@ class MasterDataWrapperRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.SalesMenuPage]
-class SalesMenuRoute extends _i9.PageRouteInfo<void> {
+class SalesMenuRoute extends _i11.PageRouteInfo<void> {
   const SalesMenuRoute()
       : super(
           SalesMenuRoute.name,
@@ -856,77 +908,77 @@ class SalesMenuRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class SalesOrderWrapper extends _i9.PageRouteInfo<void> {
-  const SalesOrderWrapper({List<_i9.PageRouteInfo>? children})
+class PriceQuotationWrapper extends _i11.PageRouteInfo<void> {
+  const PriceQuotationWrapper({List<_i11.PageRouteInfo>? children})
       : super(
-          SalesOrderWrapper.name,
+          PriceQuotationWrapper.name,
           path: 'sales_order',
           initialChildren: children,
         );
 
-  static const String name = 'SalesOrderWrapper';
+  static const String name = 'PriceQuotationWrapper';
 }
 
 /// generated route for
-/// [_i5.SalesOrderPage]
-class SalesOrderRoute extends _i9.PageRouteInfo<void> {
-  const SalesOrderRoute()
+/// [_i5.PriceQuotationPage]
+class PriceQuotationRoute extends _i11.PageRouteInfo<void> {
+  const PriceQuotationRoute()
       : super(
-          SalesOrderRoute.name,
+          PriceQuotationRoute.name,
           path: '',
         );
 
-  static const String name = 'SalesOrderRoute';
+  static const String name = 'PriceQuotationRoute';
 }
 
 /// generated route for
-/// [_i6.SalesOrderHeaderDetailsPage]
-class SalesOrderHeaderDetailsRoute
-    extends _i9.PageRouteInfo<SalesOrderHeaderDetailsRouteArgs> {
-  SalesOrderHeaderDetailsRoute({
-    _i12.Key? key,
+/// [_i6.PriceQuotationHeaderDetailsPage]
+class PriceQuotationHeaderDetailsRoute
+    extends _i11.PageRouteInfo<PriceQuotationHeaderDetailsRouteArgs> {
+  PriceQuotationHeaderDetailsRoute({
+    _i14.Key? key,
     required String header,
-    required _i13.SalesOrderModel salesOrder,
+    required _i15.PriceQuotationModel priceQuotation,
     required void Function() onRefresh,
   }) : super(
-          SalesOrderHeaderDetailsRoute.name,
+          PriceQuotationHeaderDetailsRoute.name,
           path: '',
-          args: SalesOrderHeaderDetailsRouteArgs(
+          args: PriceQuotationHeaderDetailsRouteArgs(
             key: key,
             header: header,
-            salesOrder: salesOrder,
+            priceQuotation: priceQuotation,
             onRefresh: onRefresh,
           ),
         );
 
-  static const String name = 'SalesOrderHeaderDetailsRoute';
+  static const String name = 'PriceQuotationHeaderDetailsRoute';
 }
 
-class SalesOrderHeaderDetailsRouteArgs {
-  const SalesOrderHeaderDetailsRouteArgs({
+class PriceQuotationHeaderDetailsRouteArgs {
+  const PriceQuotationHeaderDetailsRouteArgs({
     this.key,
     required this.header,
-    required this.salesOrder,
+    required this.priceQuotation,
     required this.onRefresh,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.SalesOrderModel salesOrder;
+  final _i15.PriceQuotationModel priceQuotation;
 
   final void Function() onRefresh;
 
   @override
   String toString() {
-    return 'SalesOrderHeaderDetailsRouteArgs{key: $key, header: $header, salesOrder: $salesOrder, onRefresh: $onRefresh}';
+    return 'PriceQuotationHeaderDetailsRouteArgs{key: $key, header: $header, priceQuotation: $priceQuotation, onRefresh: $onRefresh}';
   }
 }
 
 /// generated route for
 /// [_i1.InventoryMenuPage]
-class InventoryMenuRoute extends _i9.PageRouteInfo<void> {
+class InventoryMenuRoute extends _i11.PageRouteInfo<void> {
   const InventoryMenuRoute()
       : super(
           InventoryMenuRoute.name,
@@ -938,8 +990,8 @@ class InventoryMenuRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class InvAdjInWrapper extends _i9.PageRouteInfo<void> {
-  const InvAdjInWrapper({List<_i9.PageRouteInfo>? children})
+class InvAdjInWrapper extends _i11.PageRouteInfo<void> {
+  const InvAdjInWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           InvAdjInWrapper.name,
           path: 'inv_adj_in',
@@ -951,8 +1003,8 @@ class InvAdjInWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class InvAdjOutWrapper extends _i9.PageRouteInfo<void> {
-  const InvAdjOutWrapper({List<_i9.PageRouteInfo>? children})
+class InvAdjOutWrapper extends _i11.PageRouteInfo<void> {
+  const InvAdjOutWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           InvAdjOutWrapper.name,
           path: 'inv_adj_out',
@@ -964,7 +1016,7 @@ class InvAdjOutWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.InvAdjustmentInPage]
-class InvAdjustmentInRoute extends _i9.PageRouteInfo<void> {
+class InvAdjustmentInRoute extends _i11.PageRouteInfo<void> {
   const InvAdjustmentInRoute()
       : super(
           InvAdjustmentInRoute.name,
@@ -977,11 +1029,11 @@ class InvAdjustmentInRoute extends _i9.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.InvAdjustmentInFormPage]
 class InvAdjustmentInCreateRoute
-    extends _i9.PageRouteInfo<InvAdjustmentInCreateRouteArgs> {
+    extends _i11.PageRouteInfo<InvAdjustmentInCreateRouteArgs> {
   InvAdjustmentInCreateRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    required _i14.InvAdjustmentInBloc invAdjInbloc,
+    required _i16.InvAdjustmentInBloc invAdjInbloc,
   }) : super(
           InvAdjustmentInCreateRoute.name,
           path: 'create',
@@ -1002,11 +1054,11 @@ class InvAdjustmentInCreateRouteArgs {
     required this.invAdjInbloc,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i14.InvAdjustmentInBloc invAdjInbloc;
+  final _i16.InvAdjustmentInBloc invAdjInbloc;
 
   @override
   String toString() {
@@ -1017,9 +1069,9 @@ class InvAdjustmentInCreateRouteArgs {
 /// generated route for
 /// [_i1.InvAdjustmentInDetailsPage]
 class InvAdjustmentInDetailsRoute
-    extends _i9.PageRouteInfo<InvAdjustmentInDetailsRouteArgs> {
+    extends _i11.PageRouteInfo<InvAdjustmentInDetailsRouteArgs> {
   InvAdjustmentInDetailsRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
     required int id,
   }) : super(
@@ -1042,7 +1094,7 @@ class InvAdjustmentInDetailsRouteArgs {
     required this.id,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
@@ -1056,7 +1108,7 @@ class InvAdjustmentInDetailsRouteArgs {
 
 /// generated route for
 /// [_i1.InvAdjustmentOutPage]
-class InvAdjustmentOutRoute extends _i9.PageRouteInfo<void> {
+class InvAdjustmentOutRoute extends _i11.PageRouteInfo<void> {
   const InvAdjustmentOutRoute()
       : super(
           InvAdjustmentOutRoute.name,
@@ -1069,11 +1121,11 @@ class InvAdjustmentOutRoute extends _i9.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.InvAdjustmentOutFormPage]
 class InvAdjustmentOutCreateRoute
-    extends _i9.PageRouteInfo<InvAdjustmentOutCreateRouteArgs> {
+    extends _i11.PageRouteInfo<InvAdjustmentOutCreateRouteArgs> {
   InvAdjustmentOutCreateRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    required _i15.InvAdjustmentOutBloc invAdjOutbloc,
+    required _i17.InvAdjustmentOutBloc invAdjOutbloc,
   }) : super(
           InvAdjustmentOutCreateRoute.name,
           path: 'create',
@@ -1094,11 +1146,11 @@ class InvAdjustmentOutCreateRouteArgs {
     required this.invAdjOutbloc,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i15.InvAdjustmentOutBloc invAdjOutbloc;
+  final _i17.InvAdjustmentOutBloc invAdjOutbloc;
 
   @override
   String toString() {
@@ -1109,9 +1161,9 @@ class InvAdjustmentOutCreateRouteArgs {
 /// generated route for
 /// [_i1.InvAdjustmentOutDetailsPage]
 class InvAdjustmentOutDetailsRoute
-    extends _i9.PageRouteInfo<InvAdjustmentOutDetailsRouteArgs> {
+    extends _i11.PageRouteInfo<InvAdjustmentOutDetailsRouteArgs> {
   InvAdjustmentOutDetailsRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
     required int id,
   }) : super(
@@ -1134,7 +1186,7 @@ class InvAdjustmentOutDetailsRouteArgs {
     required this.id,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
@@ -1148,7 +1200,7 @@ class InvAdjustmentOutDetailsRouteArgs {
 
 /// generated route for
 /// [_i1.MasterDataMenuPage]
-class MasterDataMenuRoute extends _i9.PageRouteInfo<void> {
+class MasterDataMenuRoute extends _i11.PageRouteInfo<void> {
   const MasterDataMenuRoute()
       : super(
           MasterDataMenuRoute.name,
@@ -1160,8 +1212,8 @@ class MasterDataMenuRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class SystemUsersWrapper extends _i9.PageRouteInfo<void> {
-  const SystemUsersWrapper({List<_i9.PageRouteInfo>? children})
+class SystemUsersWrapper extends _i11.PageRouteInfo<void> {
+  const SystemUsersWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           SystemUsersWrapper.name,
           path: 'systemUsers',
@@ -1173,8 +1225,8 @@ class SystemUsersWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class CustomerWrapper extends _i9.PageRouteInfo<void> {
-  const CustomerWrapper({List<_i9.PageRouteInfo>? children})
+class CustomerWrapper extends _i11.PageRouteInfo<void> {
+  const CustomerWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           CustomerWrapper.name,
           path: 'customer',
@@ -1186,8 +1238,8 @@ class CustomerWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class BranchesWrapper extends _i9.PageRouteInfo<void> {
-  const BranchesWrapper({List<_i9.PageRouteInfo>? children})
+class BranchesWrapper extends _i11.PageRouteInfo<void> {
+  const BranchesWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           BranchesWrapper.name,
           path: 'branches',
@@ -1199,8 +1251,8 @@ class BranchesWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class UomsWrapper extends _i9.PageRouteInfo<void> {
-  const UomsWrapper({List<_i9.PageRouteInfo>? children})
+class UomsWrapper extends _i11.PageRouteInfo<void> {
+  const UomsWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           UomsWrapper.name,
           path: 'uoms',
@@ -1212,8 +1264,8 @@ class UomsWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class PricelistWrapper extends _i9.PageRouteInfo<void> {
-  const PricelistWrapper({List<_i9.PageRouteInfo>? children})
+class PricelistWrapper extends _i11.PageRouteInfo<void> {
+  const PricelistWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           PricelistWrapper.name,
           path: 'pricelist',
@@ -1225,8 +1277,8 @@ class PricelistWrapper extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EmptyRouterPage]
-class ItemWrapper extends _i9.PageRouteInfo<void> {
-  const ItemWrapper({List<_i9.PageRouteInfo>? children})
+class ItemWrapper extends _i11.PageRouteInfo<void> {
+  const ItemWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           ItemWrapper.name,
           path: 'items',
@@ -1237,8 +1289,21 @@ class ItemWrapper extends _i9.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i4.EmptyRouterPage]
+class PaymentTermWrapper extends _i11.PageRouteInfo<void> {
+  const PaymentTermWrapper({List<_i11.PageRouteInfo>? children})
+      : super(
+          PaymentTermWrapper.name,
+          path: 'payment_term',
+          initialChildren: children,
+        );
+
+  static const String name = 'PaymentTermWrapper';
+}
+
+/// generated route for
 /// [_i1.SystemUsersPage]
-class SystemUsersRoute extends _i9.PageRouteInfo<void> {
+class SystemUsersRoute extends _i11.PageRouteInfo<void> {
   const SystemUsersRoute()
       : super(
           SystemUsersRoute.name,
@@ -1250,7 +1315,7 @@ class SystemUsersRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.SystemUserCreateFormPage]
-class SystemUserCreateFormRoute extends _i9.PageRouteInfo<void> {
+class SystemUserCreateFormRoute extends _i11.PageRouteInfo<void> {
   const SystemUserCreateFormRoute()
       : super(
           SystemUserCreateFormRoute.name,
@@ -1263,10 +1328,10 @@ class SystemUserCreateFormRoute extends _i9.PageRouteInfo<void> {
 /// generated route for
 /// [_i1.SystemUserUpdateFormPage]
 class SystemUserUpdateFormRoute
-    extends _i9.PageRouteInfo<SystemUserUpdateFormRouteArgs> {
+    extends _i11.PageRouteInfo<SystemUserUpdateFormRouteArgs> {
   SystemUserUpdateFormRoute({
-    _i12.Key? key,
-    _i13.SystemUserModel? selectedSystemUser,
+    _i14.Key? key,
+    _i15.SystemUserModel? selectedSystemUser,
   }) : super(
           SystemUserUpdateFormRoute.name,
           path: 'edit',
@@ -1285,9 +1350,9 @@ class SystemUserUpdateFormRouteArgs {
     this.selectedSystemUser,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
-  final _i13.SystemUserModel? selectedSystemUser;
+  final _i15.SystemUserModel? selectedSystemUser;
 
   @override
   String toString() {
@@ -1297,7 +1362,7 @@ class SystemUserUpdateFormRouteArgs {
 
 /// generated route for
 /// [_i7.CustomersPage]
-class CustomersRoute extends _i9.PageRouteInfo<void> {
+class CustomersRoute extends _i11.PageRouteInfo<void> {
   const CustomersRoute()
       : super(
           CustomersRoute.name,
@@ -1309,11 +1374,11 @@ class CustomersRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.CustomerFormPage]
-class CustomerFormRoute extends _i9.PageRouteInfo<CustomerFormRouteArgs> {
+class CustomerFormRoute extends _i11.PageRouteInfo<CustomerFormRouteArgs> {
   CustomerFormRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.CustomerModel? selectedCustomer,
+    _i15.CustomerModel? selectedCustomer,
     required void Function() onRefresh,
   }) : super(
           CustomerFormRoute.name,
@@ -1337,11 +1402,11 @@ class CustomerFormRouteArgs {
     required this.onRefresh,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.CustomerModel? selectedCustomer;
+  final _i15.CustomerModel? selectedCustomer;
 
   final void Function() onRefresh;
 
@@ -1353,7 +1418,7 @@ class CustomerFormRouteArgs {
 
 /// generated route for
 /// [_i1.BranchesPage]
-class BranchesRoute extends _i9.PageRouteInfo<void> {
+class BranchesRoute extends _i11.PageRouteInfo<void> {
   const BranchesRoute()
       : super(
           BranchesRoute.name,
@@ -1365,11 +1430,11 @@ class BranchesRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.BranchFormPage]
-class BranchCreateRoute extends _i9.PageRouteInfo<BranchCreateRouteArgs> {
+class BranchCreateRoute extends _i11.PageRouteInfo<BranchCreateRouteArgs> {
   BranchCreateRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.BranchModel? selectedBranch,
+    _i15.BranchModel? selectedBranch,
   }) : super(
           BranchCreateRoute.name,
           path: 'create',
@@ -1390,11 +1455,11 @@ class BranchCreateRouteArgs {
     this.selectedBranch,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.BranchModel? selectedBranch;
+  final _i15.BranchModel? selectedBranch;
 
   @override
   String toString() {
@@ -1404,11 +1469,11 @@ class BranchCreateRouteArgs {
 
 /// generated route for
 /// [_i1.BranchFormPage]
-class BranchEditRoute extends _i9.PageRouteInfo<BranchEditRouteArgs> {
+class BranchEditRoute extends _i11.PageRouteInfo<BranchEditRouteArgs> {
   BranchEditRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.BranchModel? selectedBranch,
+    _i15.BranchModel? selectedBranch,
   }) : super(
           BranchEditRoute.name,
           path: 'edit',
@@ -1429,11 +1494,11 @@ class BranchEditRouteArgs {
     this.selectedBranch,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.BranchModel? selectedBranch;
+  final _i15.BranchModel? selectedBranch;
 
   @override
   String toString() {
@@ -1443,7 +1508,7 @@ class BranchEditRouteArgs {
 
 /// generated route for
 /// [_i1.UomsPage]
-class UomsRoute extends _i9.PageRouteInfo<void> {
+class UomsRoute extends _i11.PageRouteInfo<void> {
   const UomsRoute()
       : super(
           UomsRoute.name,
@@ -1455,11 +1520,11 @@ class UomsRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.UomFormPage]
-class UomCreateRoute extends _i9.PageRouteInfo<UomCreateRouteArgs> {
+class UomCreateRoute extends _i11.PageRouteInfo<UomCreateRouteArgs> {
   UomCreateRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.UomModel? selectedUom,
+    _i15.UomModel? selectedUom,
   }) : super(
           UomCreateRoute.name,
           path: 'create',
@@ -1480,11 +1545,11 @@ class UomCreateRouteArgs {
     this.selectedUom,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.UomModel? selectedUom;
+  final _i15.UomModel? selectedUom;
 
   @override
   String toString() {
@@ -1494,11 +1559,11 @@ class UomCreateRouteArgs {
 
 /// generated route for
 /// [_i1.UomFormPage]
-class UomEditRoute extends _i9.PageRouteInfo<UomEditRouteArgs> {
+class UomEditRoute extends _i11.PageRouteInfo<UomEditRouteArgs> {
   UomEditRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.UomModel? selectedUom,
+    _i15.UomModel? selectedUom,
   }) : super(
           UomEditRoute.name,
           path: 'edit',
@@ -1519,11 +1584,11 @@ class UomEditRouteArgs {
     this.selectedUom,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.UomModel? selectedUom;
+  final _i15.UomModel? selectedUom;
 
   @override
   String toString() {
@@ -1533,7 +1598,7 @@ class UomEditRouteArgs {
 
 /// generated route for
 /// [_i1.PricelistPage]
-class PricelistRoute extends _i9.PageRouteInfo<void> {
+class PricelistRoute extends _i11.PageRouteInfo<void> {
   const PricelistRoute()
       : super(
           PricelistRoute.name,
@@ -1545,12 +1610,13 @@ class PricelistRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.PricelistFormPage]
-class PricelistCreateRoute extends _i9.PageRouteInfo<PricelistCreateRouteArgs> {
+class PricelistCreateRoute
+    extends _i11.PageRouteInfo<PricelistCreateRouteArgs> {
   PricelistCreateRoute({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.PricelistModel? selectedPricelist,
-    required _i16.Future<void> Function() refresh,
+    _i15.PricelistModel? selectedPricelist,
+    required _i18.Future<void> Function() refresh,
   }) : super(
           PricelistCreateRoute.name,
           path: 'create',
@@ -1573,13 +1639,13 @@ class PricelistCreateRouteArgs {
     required this.refresh,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.PricelistModel? selectedPricelist;
+  final _i15.PricelistModel? selectedPricelist;
 
-  final _i16.Future<void> Function() refresh;
+  final _i18.Future<void> Function() refresh;
 
   @override
   String toString() {
@@ -1589,11 +1655,11 @@ class PricelistCreateRouteArgs {
 
 /// generated route for
 /// [_i1.PricelistRowPage]
-class PricelistRowRoute extends _i9.PageRouteInfo<PricelistRowRouteArgs> {
+class PricelistRowRoute extends _i11.PageRouteInfo<PricelistRowRouteArgs> {
   PricelistRowRoute({
-    _i12.Key? key,
-    required _i13.PricelistModel pricelistModel,
-    required _i16.Future<void> Function() refresh,
+    _i14.Key? key,
+    required _i15.PricelistModel pricelistModel,
+    required _i18.Future<void> Function() refresh,
   }) : super(
           PricelistRowRoute.name,
           path: 'pricelist_row',
@@ -1614,11 +1680,11 @@ class PricelistRowRouteArgs {
     required this.refresh,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
-  final _i13.PricelistModel pricelistModel;
+  final _i15.PricelistModel pricelistModel;
 
-  final _i16.Future<void> Function() refresh;
+  final _i18.Future<void> Function() refresh;
 
   @override
   String toString() {
@@ -1628,7 +1694,7 @@ class PricelistRowRouteArgs {
 
 /// generated route for
 /// [_i1.ItemsPage]
-class ItemsRoute extends _i9.PageRouteInfo<void> {
+class ItemsRoute extends _i11.PageRouteInfo<void> {
   const ItemsRoute()
       : super(
           ItemsRoute.name,
@@ -1640,11 +1706,11 @@ class ItemsRoute extends _i9.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.ItemFormPage]
-class ItemCreatePage extends _i9.PageRouteInfo<ItemCreatePageArgs> {
+class ItemCreatePage extends _i11.PageRouteInfo<ItemCreatePageArgs> {
   ItemCreatePage({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.ProductModel? selectedItem,
+    _i15.ProductModel? selectedItem,
   }) : super(
           ItemCreatePage.name,
           path: 'create',
@@ -1665,11 +1731,11 @@ class ItemCreatePageArgs {
     this.selectedItem,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.ProductModel? selectedItem;
+  final _i15.ProductModel? selectedItem;
 
   @override
   String toString() {
@@ -1679,11 +1745,11 @@ class ItemCreatePageArgs {
 
 /// generated route for
 /// [_i1.ItemFormPage]
-class ItemEditPage extends _i9.PageRouteInfo<ItemEditPageArgs> {
+class ItemEditPage extends _i11.PageRouteInfo<ItemEditPageArgs> {
   ItemEditPage({
-    _i12.Key? key,
+    _i14.Key? key,
     required String header,
-    _i13.ProductModel? selectedItem,
+    _i15.ProductModel? selectedItem,
   }) : super(
           ItemEditPage.name,
           path: 'edit',
@@ -1704,14 +1770,71 @@ class ItemEditPageArgs {
     this.selectedItem,
   });
 
-  final _i12.Key? key;
+  final _i14.Key? key;
 
   final String header;
 
-  final _i13.ProductModel? selectedItem;
+  final _i15.ProductModel? selectedItem;
 
   @override
   String toString() {
     return 'ItemEditPageArgs{key: $key, header: $header, selectedItem: $selectedItem}';
+  }
+}
+
+/// generated route for
+/// [_i9.PaymentTermsPage]
+class PaymentTermsRoute extends _i11.PageRouteInfo<void> {
+  const PaymentTermsRoute()
+      : super(
+          PaymentTermsRoute.name,
+          path: '',
+        );
+
+  static const String name = 'PaymentTermsRoute';
+}
+
+/// generated route for
+/// [_i10.PaymentTermFormPage]
+class PaymentTermFormRoute
+    extends _i11.PageRouteInfo<PaymentTermFormRouteArgs> {
+  PaymentTermFormRoute({
+    _i14.Key? key,
+    required String header,
+    _i15.PaymentTermModel? selectedPayTermObj,
+    required void Function() onRefresh,
+  }) : super(
+          PaymentTermFormRoute.name,
+          path: 'form',
+          args: PaymentTermFormRouteArgs(
+            key: key,
+            header: header,
+            selectedPayTermObj: selectedPayTermObj,
+            onRefresh: onRefresh,
+          ),
+        );
+
+  static const String name = 'PaymentTermFormRoute';
+}
+
+class PaymentTermFormRouteArgs {
+  const PaymentTermFormRouteArgs({
+    this.key,
+    required this.header,
+    this.selectedPayTermObj,
+    required this.onRefresh,
+  });
+
+  final _i14.Key? key;
+
+  final String header;
+
+  final _i15.PaymentTermModel? selectedPayTermObj;
+
+  final void Function() onRefresh;
+
+  @override
+  String toString() {
+    return 'PaymentTermFormRouteArgs{key: $key, header: $header, selectedPayTermObj: $selectedPayTermObj, onRefresh: $onRefresh}';
   }
 }

@@ -53,7 +53,9 @@ def new_object_type(db):
             id=ObjectTypesEnum.purchase_receive, name="Purchase Order Receive"
         ),  # Item Receive PO
         ObjectType(id=ObjectTypesEnum.ap_invoice, name="AP Invoice"),  # Account Payable
-        ObjectType(id=ObjectTypesEnum.sales_order, name="Sales Order"),  # Sales Order
+        ObjectType(
+            id=ObjectTypesEnum.price_quotation, name="Sales Order"
+        ),  # Sales Order
         ObjectType(
             id=ObjectTypesEnum.sales_delivery, name="Delivery"
         ),  # Sales Delivery

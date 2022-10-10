@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
-import 'modules/sales_order/sales_orders.dart';
-import 'modules/sales_order/widgets/details/so_details.dart';
+import 'modules/price_quotation/price_quotation.dart';
+import 'modules/price_quotation/components/details/pq_details.dart';
 import 'sales_menu.dart';
 
 class SalesMenuWrapperPage extends StatelessWidget {
@@ -16,11 +16,11 @@ class SalesMenuWrapperPage extends StatelessWidget {
       AutoRoute(page: SalesMenuPage, path: "menu", initial: true),
       AutoRoute(
         page: EmptyRouterPage,
-        name: 'SalesOrderWrapper',
+        name: 'PriceQuotationWrapper',
         path: "sales_order",
         children: [
-          AutoRoute(page: SalesOrderPage, path: "", initial: true),
-          AutoRoute(page: SalesOrderHeaderDetailsPage, path: ""),
+          AutoRoute(page: PriceQuotationPage, path: "", initial: true),
+          AutoRoute(page: PriceQuotationHeaderDetailsPage, path: ""),
         ],
       )
     ],

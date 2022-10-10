@@ -4,8 +4,8 @@ import '../screens/login_screen/login_screen.dart';
 import '../screens/modules/Dashboard/dashboard.dart';
 import '../screens/modules/Master_Data/customer/create_customer/address_form.dart';
 import '../screens/modules/Master_Data/customer/create_customer/create_customer_screen.dart';
-import '../screens/modules/Sales_Order/create_sales_order/create_sales_order_screen.dart';
-import '../screens/modules/Sales_Order/sales_orders/sales_orders_screen.dart';
+import '../screens/modules/Price_Quotation/create_price_quotation/create_pq_screen.dart';
+import '../screens/modules/Price_Quotation/price_quotations/purch_quotations_screen.dart';
 import '../screens/modules/main_screen.dart';
 import '../screens/widgets/success_screen.dart';
 import 'router_guard.dart';
@@ -21,14 +21,14 @@ import 'router_guard.dart';
       children: [
         AutoRoute(page: DashboardScreen, path: "dashboard"),
         AutoRoute(
-            page: CreateSalesOrderScreen,
-            path: "create",
-            children: CreateSalesOrderScreen.childrenRoutes,
+            page: CreatePriceQuotationScreen,
+            path: "create_pq",
+            children: CreatePriceQuotationScreen.childrenRoutes,
             initial: true),
         AutoRoute(
-          page: SalesOrdersScreen,
-          path: "sales_orders",
-          children: SalesOrdersScreen.childrenRoutes,
+          page: PriceQuotationScreen,
+          path: "price_quotations",
+          children: PriceQuotationScreen.childrenRoutes,
         ),
         AutoRoute(page: CreateCustomerScreen, path: 'create_customer'),
       ],

@@ -9,7 +9,7 @@ import '../../../../router/router.gr.dart';
 import '../../../../utils/fetching_status.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
-import 'widgets/table.dart';
+import 'components/table.dart';
 
 class BranchesPage extends StatefulWidget {
   const BranchesPage({Key? key}) : super(key: key);

@@ -5,17 +5,17 @@ import '../http_services/backend_api/base_api.dart';
 import '../http_services/backend_api/utils/constant_url_path.dart';
 import '../models/models.dart';
 
-class SalesOrderRepo {
+class PriceQuotationRepo {
   SharedPreferences localStorage;
   final api = baseAPI;
-  final String _urlPath = ConstantURLPath.orderRepo;
+  final String _urlPath = ConstantURLPath.pqRepo;
 
-  SalesOrderRepo({
+  PriceQuotationRepo({
     required this.localStorage,
   });
 
-  List<SalesOrderModel> _datas = [];
-  List<SalesOrderModel> get datas => _datas;
+  List<PriceQuotationModel> _datas = [];
+  List<PriceQuotationModel> get datas => _datas;
 
   int _forPriceConf = 0;
   int _forCreditConf = 0;
@@ -37,9 +37,9 @@ class SalesOrderRepo {
       urlPath: _urlPath,
       params: params,
     );
-    _datas = List<SalesOrderModel>.from(
+    _datas = List<PriceQuotationModel>.from(
       response.data['data'].map(
-        (e) => SalesOrderModel.fromJson(e),
+        (e) => PriceQuotationModel.fromJson(e),
       ),
     ).toList();
     _forPriceConf = response.data["others"]["for_price_confirmation"];
@@ -67,8 +67,9 @@ class SalesOrderRepo {
       urlPath: "${_urlPath}by_owner",
       params: params,
     );
-    _datas = List<SalesOrderModel>.from(
-        response.data['data'].map((e) => SalesOrderModel.fromJson(e))).toList();
+    _datas = List<PriceQuotationModel>.from(
+            response.data['data'].map((e) => PriceQuotationModel.fromJson(e)))
+        .toList();
   }
 
   Future<String> update({

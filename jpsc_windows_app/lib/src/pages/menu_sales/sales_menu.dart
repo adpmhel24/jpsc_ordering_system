@@ -9,12 +9,12 @@ class SalesMenuPage extends StatefulWidget {
 
   static final _items = [
     MenuItems(
-      name: "Sales Order",
+      name: "Price Quotation",
       icon: const ImageIcon(
         AssetImage('assets/icons/ticket.png'),
         size: 40,
       ),
-      route: const SalesOrderWrapper(),
+      route: const PriceQuotationWrapper(),
     ),
   ];
 

@@ -8,6 +8,6 @@ class FormzDouble extends FormzInput<double?, FormzDoubleValidator> {
 
   @override
   FormzDoubleValidator? validator(double? value) {
-    return value != null && value > 0 ? null : FormzDoubleValidator.empty;
+    return value != null && value >= 0 ? null : FormzDoubleValidator.empty;
   }
 }

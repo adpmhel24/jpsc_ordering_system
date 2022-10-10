@@ -19,6 +19,11 @@ class UpdatedBase(SQLModel):
     updated_by: Optional[int] = Field(default=None, foreign_key="system_user.id")
 
 
+class ApprovedBase(SQLModel):
+    date_approved: Optional[datetime]
+    approved_by: Optional[int] = Field(default=None, foreign_key="system_user.id")
+
+
 class CanceledBase(SQLModel):
     date_canceled: Optional[datetime]
     canceled_by: Optional[int] = Field(default=None, foreign_key="system_user.id")

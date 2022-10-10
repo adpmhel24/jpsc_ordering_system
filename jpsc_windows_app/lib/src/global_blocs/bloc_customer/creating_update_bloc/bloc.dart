@@ -75,6 +75,7 @@ class CreateUpdateCustomerBloc
     on<CustIsActiveChanged>(_onCustIsActiveChanged);
     on<CustIsApprovedChanged>(_onCustIsApprovedChanged);
     on<CustAddressAdded>(_onCustAddressAdded);
+    on<CustAddressUpdated>(_onCustAddressUpdated);
     on<CustAddressRemoved>(_onCustAddressRemoved);
     on<NewCustomerSubmitted>(_onNewCustomerSubmitted);
     on<UpdateCustomerSubmitted>(_onUpdateCustomerSubmitted);
@@ -273,6 +274,26 @@ class CreateUpdateCustomerBloc
     addresses.addAll(state.addresses.value);
 
     addresses[event.index].isRemove = true;
+
+    emit(
+      state.copyWith(
+        addresses: FormzList.dirty(addresses),
+        status: Formz.validate([
+          state.custCode,
+          state.custPaymentTerm,
+          state.custBranch,
+        ]),
+      ),
+    );
+  }
+
+  void _onCustAddressUpdated(
+      CustAddressUpdated event, Emitter<CreateUpdateCustomerState> emit) {
+    List<CustomerAddressModel> addresses = [];
+
+    addresses.addAll(state.addresses.value);
+
+    addresses[event.index] = event.value;
 
     emit(
       state.copyWith(

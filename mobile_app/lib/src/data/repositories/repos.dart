@@ -11,5 +11,5 @@ export 'repo_sys_user_branch.dart';
 export 'menu_controller.dart';
 export 'repo_customer.dart';
 export 'ph_location_repo.dart';
-export 'repo_sales_order.dart';
+export 'repo_price_quotation.dart';
 export 'repo_payment_term.dart';

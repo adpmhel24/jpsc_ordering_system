@@ -67,6 +67,7 @@ class _PricelistTableState extends State<PricelistRowTable> {
               allowEditing: true,
               editingGestureType: EditingGestureType.doubleTap,
               allowSorting: true,
+              allowFiltering: true,
               allowMultiColumnSorting: true,
               selectionMode: SelectionMode.single,
               navigationMode: GridNavigationMode.cell,
@@ -277,7 +278,7 @@ class DataSource extends DataGridSource {
             : Alignment.centerLeft,
         padding: const EdgeInsets.all(16.0),
         child: dataGridCell.value.runtimeType == String
-            ? Text(dataGridCell.value.toString())
+            ? SelectableText(dataGridCell.value.toString())
             : dataGridCell.value.runtimeType == double
                 ? Text(formatStringToDecimal('${dataGridCell.value}'))
                 : dataGridCell.value,

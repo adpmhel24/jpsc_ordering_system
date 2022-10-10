@@ -6,6 +6,7 @@ import 'package:localization/localization.dart';
 import 'package:mobile_app/src/data/repositories/app_repo_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'src/data/repositories/repos.dart';
 import 'src/global_bloc/bloc_auth/bloc.dart';
@@ -15,6 +16,7 @@ import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await LocalStorageRepo().init();
   runApp(const MyApp());
 }
@@ -145,8 +147,8 @@ elevatedButtonTheme() {
     //   ),
     // ),
     style: ElevatedButton.styleFrom(
-      primary: const Color(0xFFb1c795),
-      onPrimary: Colors.white,
+      backgroundColor: const Color(0xFFb1c795),
+      foregroundColor: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 10),
     ),
   );

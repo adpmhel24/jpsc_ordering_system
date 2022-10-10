@@ -45,7 +45,7 @@ class LoginBody extends StatelessWidget {
                       ),
                     ),
                     Constant.heightSpacer,
-                    Text("J Poon And Sons System",
+                    Text("JPSC System",
                         style: Theme.of(context).textTheme.titleMedium),
                     Constant.heightSpacer,
                     const LoginForm(),

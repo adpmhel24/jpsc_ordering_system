@@ -69,7 +69,7 @@ class DataSource extends DataGridSource {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(horizontal: Constant.minPadding),
         child: dataGridCell.value.runtimeType != DropDownButton
-            ? Text(dataGridCell.value.toString())
+            ? SelectableText(dataGridCell.value.toString())
             : dataGridCell.value,
       );
     }).toList());

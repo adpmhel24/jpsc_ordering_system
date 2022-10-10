@@ -10,6 +10,6 @@ class ObjectTypesEnum(str, enum.Enum):
     purchase_order = 6
     purchase_receive = 7
     ap_invoice = 8
-    sales_order = 9
+    price_quotation = 9
     sales_delivery = 10
     sales_invoice = 11

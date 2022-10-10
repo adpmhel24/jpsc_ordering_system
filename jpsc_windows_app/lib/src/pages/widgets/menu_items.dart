@@ -7,10 +7,10 @@ class AppMenu {
       svgSrc: "assets/icons/chart.svg",
       title: "Dashboard",
     ),
-    _paneItemBuilder(
-      svgSrc: "assets/icons/menu_tran.svg",
-      title: "Purchasing",
-    ),
+    // _paneItemBuilder(
+    //   svgSrc: "assets/icons/menu_tran.svg",
+    //   title: "Purchasing",
+    // ),
     _paneItemBuilder(
       svgSrc: "assets/icons/menu_tag.svg",
       title: "Sales",

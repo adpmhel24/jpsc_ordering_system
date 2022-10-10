@@ -11,6 +11,7 @@ class CustomDateField extends StatelessWidget {
   final String labelText;
 
   final Function(DateTime)? onDateConfirm;
+  final DateTime? minTime;
 
   const CustomDateField({
     Key? key,
@@ -19,6 +20,7 @@ class CustomDateField extends StatelessWidget {
     required this.labelText,
     Widget? suffixIcon,
     this.onDateConfirm,
+    this.minTime,
   })  : _controller = controller,
         _dateFormat = dateFormat,
         _suffixIcon = suffixIcon,
@@ -35,7 +37,7 @@ class CustomDateField extends StatelessWidget {
         DatePicker.showDatePicker(
           context,
           showTitleActions: true,
-          minTime: DateTime.now(),
+          minTime: minTime,
           maxTime: DateTime(2100, 12, 31),
           onConfirm: (date) {
             _controller.text = _dateFormat.format(date);

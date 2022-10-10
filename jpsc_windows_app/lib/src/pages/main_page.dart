@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage> with WindowListener {
 
   final routes = [
     const DashboardRoute(),
-    const PurchasingMenuRoute(),
+    // const PurchasingMenuRoute(),
     const SalesMenuWrapperRoute(),
     // const InventoryWrapperRoute(),
     const MasterDataWrapperRoute(),

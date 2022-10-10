@@ -1,1 +1,5 @@
-from .sales_order import SalesOrderComment, SalesOrderHeader, SalesOrderRow
+from .price_quotation import (
+    PriceQuotationComment,
+    PriceQuotationHeader,
+    PriceQuotationRow,
+)

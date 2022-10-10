@@ -9,12 +9,12 @@ class DioSettings {
 
     if (kReleaseMode) {
       // release mode
-      url = "http://122.54.198.84:84";
+      url = "http://122.54.198.84:8801";
     } else {
       // debug mode
       // url = "http://192.168.1.4:8001";
-      // url = "http://192.168.1.5:8800";
       url = "http://localhost:8800";
+      // url = "http://122.54.198.84:8801";
     }
     return Dio(
       BaseOptions(

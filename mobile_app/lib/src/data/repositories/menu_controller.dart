@@ -5,10 +5,7 @@ class MenuController {
 
   GlobalKey<ScaffoldState> get scaffoldKey => _scaffoldKey;
 
-  late String currentMenu = "";
-
-  void controlMenu(String currentMenu) {
-    currentMenu = currentMenu;
+  void controlMenu() {
     if (!_scaffoldKey.currentState!.isDrawerOpen) {
       _scaffoldKey.currentState!.openDrawer();
     } else {

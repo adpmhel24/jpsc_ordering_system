@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../../../data/models/models.dart';
 import '../../../../../../global_blocs/bloc_customer/creating_update_bloc/bloc.dart';
 import '../../../../../widgets/custom_dialog.dart';
+import 'address_form_modal.dart';
 
 class CustomerFormAddressTable extends StatefulWidget {
   const CustomerFormAddressTable({Key? key, required this.addresses})
@@ -179,13 +180,14 @@ class DataSource extends DataGridSource {
               ),
               text: const Text('Edit Row'),
               onPressed: () {
-                // showDialog(
-                //   context: context,
-                //   builder: (cntx) => FormRowModal(
-                //     invAdjInBloc: context.read<InvAdjustmentInFormBloc>(),
-                //     invAdjInItemRow: data,
-                //   ),
-                // );
+                showDialog(
+                  context: cntx,
+                  builder: (_) => CustomerAddressFormModal(
+                    bloc: cntx.read<CreateUpdateCustomerBloc>(),
+                    currentIndex: dataRowIndex,
+                    selectedAddressObj: paginatedDatas[dataRowIndex],
+                  ),
+                );
               },
             ),
             MenuFlyoutItem(
@@ -212,7 +214,7 @@ class DataSource extends DataGridSource {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.all(16.0),
         child: dataGridCell.value.runtimeType == String
-            ? Text(dataGridCell.value)
+            ? SelectableText(dataGridCell.value)
             : dataGridCell.value,
       );
     }).toList());

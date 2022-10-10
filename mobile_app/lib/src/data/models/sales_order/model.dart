@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class SalesOrderModel {
+class PriceQuotationModel {
   int? id;
   String? transdate;
   String? customerCode;
@@ -16,7 +16,8 @@ class SalesOrderModel {
   String? customerNotes;
   String? reference;
   String? docstatus;
-  int? orderStatus;
+  int? sqNumber;
+  int? pqStatus;
   String? dateDispatched;
   String? paymentReference;
   double? subtotal;
@@ -35,41 +36,43 @@ class SalesOrderModel {
   String? canceledRemarks;
   List<SalesOrderRowModel>? rows;
 
-  SalesOrderModel(
-      {this.id,
-      this.transdate,
-      this.customerCode,
-      this.deliveryDate,
-      this.deliveryMethod,
-      this.paymentMethod,
-      this.remarks,
-      this.dispatchingBranch,
-      this.hashedId,
-      this.contactNumber,
-      this.address,
-      this.customerNotes,
-      this.reference,
-      this.docstatus,
-      this.orderStatus,
-      this.dateDispatched,
-      this.paymentReference,
-      this.subtotal,
-      this.gross,
-      this.delfee,
-      this.otherfee,
-      this.confirmedBy,
-      this.dateConfirmed,
-      this.dispatchedBy,
-      this.dateUpdated,
-      this.updatedBy,
-      this.dateCreated,
-      this.createdBy,
-      this.dateCanceled,
-      this.canceledBy,
-      this.canceledRemarks,
-      this.rows});
+  PriceQuotationModel({
+    this.id,
+    this.transdate,
+    this.customerCode,
+    this.deliveryDate,
+    this.deliveryMethod,
+    this.paymentMethod,
+    this.remarks,
+    this.dispatchingBranch,
+    this.hashedId,
+    this.contactNumber,
+    this.address,
+    this.customerNotes,
+    this.reference,
+    this.docstatus,
+    this.sqNumber,
+    this.pqStatus,
+    this.dateDispatched,
+    this.paymentReference,
+    this.subtotal,
+    this.gross,
+    this.delfee,
+    this.otherfee,
+    this.confirmedBy,
+    this.dateConfirmed,
+    this.dispatchedBy,
+    this.dateUpdated,
+    this.updatedBy,
+    this.dateCreated,
+    this.createdBy,
+    this.dateCanceled,
+    this.canceledBy,
+    this.canceledRemarks,
+    this.rows,
+  });
 
-  SalesOrderModel.fromJson(Map<String, dynamic> json) {
+  PriceQuotationModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     transdate = json['transdate'];
     customerCode = json['customer_code'];
@@ -84,7 +87,8 @@ class SalesOrderModel {
     customerNotes = json['customer_notes'];
     reference = json['reference'];
     docstatus = json['docstatus'];
-    orderStatus = json['order_status'];
+    sqNumber = json['sq_number'];
+    pqStatus = json['pq_status'];
     dateDispatched = json['date_dispatched'];
     paymentReference = json['payment_reference'];
     subtotal = json['subtotal'];
@@ -125,7 +129,8 @@ class SalesOrderModel {
     data['customer_notes'] = customerNotes;
     data['reference'] = reference;
     data['docstatus'] = docstatus;
-    data['order_status'] = orderStatus;
+    data['sq_number'] = sqNumber;
+    data['pq_status'] = pqStatus;
     data['date_dispatched'] = dateDispatched;
     data['payment_reference'] = paymentReference;
     data['subtotal'] = subtotal;

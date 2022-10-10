@@ -71,6 +71,7 @@ class _CustomersTableState extends State<CustomersTable> {
               key: widget.sfDataGridKey,
               source: _dataSource,
               allowSorting: true,
+              allowFiltering: true,
               allowMultiColumnSorting: true,
               selectionMode: SelectionMode.single,
               navigationMode: GridNavigationMode.cell,
@@ -224,7 +225,7 @@ class DataSource extends DataGridSource {
                   ),
                 ),
               ),
-              Flexible(child: Text(dataGridCell.value)),
+              Flexible(child: SelectableText(dataGridCell.value)),
             ],
           ),
         );
@@ -233,7 +234,7 @@ class DataSource extends DataGridSource {
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.all(16.0),
         child: dataGridCell.value.runtimeType != Icon
-            ? Text(dataGridCell.value.toString())
+            ? SelectableText(dataGridCell.value.toString())
             : dataGridCell.value,
       );
     }).toList());
@@ -245,9 +246,9 @@ class TableSettings {
     "code": {"name": "Customer Code", "width": double.nan},
     "firstName": {"name": "First Name", "width": double.nan},
     "lastName": {"name": "Last Name", "width": double.nan},
-    "fullName": {"name": "Full Name", "width": Constant.minPadding * 15},
-    "location": {"name": "Location", "width": Constant.minPadding * 15},
-    "paymentTerm": {"name": "Payment term", "width": Constant.minPadding * 15},
+    "fullName": {"name": "Full Name", "width": double.nan},
+    "location": {"name": "Location", "width": double.nan},
+    "paymentTerm": {"name": "Payment term", "width": double.nan},
     "isActive": {"name": "Is Active", "width": Constant.minPadding * 15},
   };
 
