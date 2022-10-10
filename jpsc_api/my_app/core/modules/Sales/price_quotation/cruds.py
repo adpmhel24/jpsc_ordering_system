@@ -148,9 +148,9 @@ class CRUDPriceQuotation(
                     or_(pq_status == None, self.model.pq_status == pq_status),
                     or_(
                         from_date == "",
-                        cast(self.model.delivery_date, DATE) >= from_date,
+                        cast(self.model.transdate, DATE) >= from_date,
                     ),
-                    or_(to_date == "", cast(self.model.delivery_date, DATE) <= to_date),
+                    or_(to_date == "", cast(self.model.transdate, DATE) <= to_date),
                     self.model.created_by == user_id,
                 ),
             )
@@ -238,7 +238,7 @@ class CRUDPriceQuotation(
             db.session.bulk_update_mappings(PriceQuotationRow, rows_dict)
             db.session.commit()
 
-            return "Successfully update."
+            return "Updated successfully."
         except SQLAlchemyError as err:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

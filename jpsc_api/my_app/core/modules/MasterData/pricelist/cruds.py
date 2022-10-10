@@ -105,7 +105,7 @@ class CRUDPricelist(
         db.session.bulk_update_mappings(PricelistRow, list_object_dict)
         db.session.commit()
 
-        return "Successfully update."
+        return "Updated successfully."
 
 
 crud_pricelist = CRUDPricelist(model=PricelistHeader)

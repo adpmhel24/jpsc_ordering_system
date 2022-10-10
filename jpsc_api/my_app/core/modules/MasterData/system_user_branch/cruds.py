@@ -104,7 +104,7 @@ class CRUDSystemBranch(
         list_object_dict = [i.dict() for i in obj_in]
         db.session.bulk_update_mappings(SystemUserBranch, list_object_dict)
         db.session.commit()
-        return "Successfully update."
+        return "Updated successfully."
 
 
 crud_sys_user_branch = CRUDSystemBranch(SystemUserBranch)

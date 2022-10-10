@@ -55,4 +55,4 @@ async def update_assigned_branch(
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
     result = crud_sys_user_branch.update_assigned_branch(obj_in=schema)
-    return SuccessMessage(message="Successfully updated!")
+    return SuccessMessage(message="Updated successfully.")
