@@ -43,7 +43,7 @@ class CustomerModel {
 
   String? location;
 
-  @JsonKey(name: "payment_term")
+  @JsonKey(name: "payment_terms")
   String? paymentTerm;
 
   @JsonKey(name: "credit_limit")

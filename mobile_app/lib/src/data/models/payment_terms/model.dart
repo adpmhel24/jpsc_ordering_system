@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'model.g.dart';
 
 @JsonSerializable()
-class PaymentTermModel {
+class PaymentTermsModel {
   String code;
 
   String? description;
@@ -20,7 +20,7 @@ class PaymentTermModel {
   @JsonKey(name: "created_by")
   int? createdBy;
 
-  PaymentTermModel(
+  PaymentTermsModel(
       {required this.code,
       this.description,
       this.createdBy,
@@ -28,8 +28,8 @@ class PaymentTermModel {
       this.dateUpdated,
       this.updatedBy});
 
-  factory PaymentTermModel.fromJson(Map<String, dynamic> json) =>
-      _$PaymentTermModelFromJson(json);
+  factory PaymentTermsModel.fromJson(Map<String, dynamic> json) =>
+      _$PaymentTermsModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PaymentTermModelToJson(this);
+  Map<String, dynamic> toJson() => _$PaymentTermsModelToJson(this);
 }

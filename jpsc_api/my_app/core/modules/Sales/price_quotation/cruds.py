@@ -198,7 +198,10 @@ class CRUDPriceQuotation(
             price_quotation_h_obj = db.session.query(self.model).filter_by(id=schema.id)
 
             if schema.pq_status == 1:
-                if price_quotation_h_obj.first().pq_status != 0:
+                if (
+                    price_quotation_h_obj.first().pq_status != 0
+                    and price_quotation_h_obj.first().pq_status != schema.pq_status
+                ):
                     raise HTTPException(
                         status_code=403, detail="You can't select 'Price Confirmed'!"
                     )

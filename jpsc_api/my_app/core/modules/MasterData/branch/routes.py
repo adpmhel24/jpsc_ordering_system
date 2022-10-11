@@ -58,7 +58,7 @@ async def update(
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
     result = crud_branch.update(update_schema=schema, fk=branch_code)
-    return SuccessMessage(message="Update successfully", data=result)
+    return SuccessMessage(message="Updated successfully", data=result)
 
 
 @router.delete("/{branch_code}", response_model=SuccessMessage)

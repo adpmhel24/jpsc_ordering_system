@@ -178,7 +178,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
     return SizedBox(
       width: _kTextBoxWidth,
       child: InfoLabel(
-        label: "Payment Term",
+        label: "Payment Terms",
         child: paymentTermField(),
       ),
     );
@@ -199,7 +199,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
           if (value.isEmpty) {
             value = "0";
           }
-          bloc.add(CustCreditLimitChanged(double.parse(value)));
+          bloc.add(CustCreditLimitChanged(double.parse(value.trim())));
         },
       ),
     );
@@ -215,7 +215,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         keyboardType: TextInputType.emailAddress,
         prefix: const Icon(FluentIcons.edit_mail),
         onChanged: (value) {
-          bloc.add(CustEmailChanged(value));
+          bloc.add(CustEmailChanged(value.trim()));
         },
         validator: (_) =>
             bloc.state.custEmail.invalid ? "Invalid email address" : null,
@@ -232,7 +232,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         keyboardType: TextInputType.phone,
         prefix: const Icon(FluentIcons.phone),
         onChanged: (value) {
-          bloc.add(CustContactNumberChanged(value));
+          bloc.add(CustContactNumberChanged(value.trim()));
         },
       ),
     );
@@ -246,7 +246,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         controller: _lastNameController,
         prefix: const Icon(FluentIcons.account_management),
         onChanged: (value) {
-          bloc.add(CustLastNameChanged(value));
+          bloc.add(CustLastNameChanged(value.trim()));
         },
       ),
     );
@@ -260,7 +260,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         controller: _firstNameController,
         prefix: const Icon(FluentIcons.user_window),
         onChanged: (value) {
-          bloc.add(CustFirstNameChanged(value));
+          bloc.add(CustFirstNameChanged(value.trim()));
         },
       ),
     );
@@ -275,7 +275,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         controller: _codeController,
         prefix: const Icon(FluentIcons.user_followed),
         onChanged: (value) {
-          bloc.add(CustCodeChanged(value));
+          bloc.add(CustCodeChanged(value.trim()));
         },
         validator: (_) =>
             bloc.state.custCode.invalid ? "Required field!" : null,
@@ -321,7 +321,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
       builder: (context, data, wt) {
         return ComboboxFormField<String>(
           autovalidateMode: AutovalidateMode.always,
-          placeholder: const Text('Payment Term *'),
+          placeholder: const Text('Payment Terms'),
           isExpanded: true,
           value: selectedPaymentTerm,
           items: data
@@ -335,8 +335,6 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
           onChanged: (value) {
             bloc.add(CustPaymentTermChanged(value!));
           },
-          validator: (_) =>
-              bloc.state.custPaymentTerm.invalid ? "Required field" : null,
         );
       },
     );

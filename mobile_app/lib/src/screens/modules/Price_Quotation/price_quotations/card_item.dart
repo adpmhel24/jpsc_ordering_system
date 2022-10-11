@@ -34,8 +34,8 @@ class PriceQuotationCardItem extends StatelessWidget {
                 height: 5.0,
               ),
               WithLabel(
-                labelText: 'Delivery date:',
-                textData: dateFormat.format(DateTime.parse(pq.deliveryDate!)),
+                labelText: 'Transaction date:',
+                textData: dateFormat.format(DateTime.parse(pq.transdate!)),
               ),
               const SizedBox(
                 height: 5.0,
@@ -51,31 +51,9 @@ class PriceQuotationCardItem extends StatelessWidget {
                 labelText: 'SQ Number:',
                 textData: "${pq.sqNumber}",
               ),
-            ],
-          ),
-          collapsed: Wrap(
-            spacing: 5.0,
-            children: [
-              Text(
-                "Remarks:",
-                style: Theme.of(context).textTheme.bodyText2,
+              const SizedBox(
+                height: 5.0,
               ),
-              Text(
-                "${pq.remarks}",
-                style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    color: const Color(0xFF632626),
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold),
-                softWrap: true,
-                maxLines: 5,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-          expanded: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
               Wrap(
                 spacing: 5.0,
                 children: [
@@ -90,10 +68,24 @@ class PriceQuotationCardItem extends StatelessWidget {
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold),
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 5,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
+              ),
+            ],
+          ),
+          collapsed: WithLabel(
+            labelText: 'Subtotal:',
+            textData: "${pq.gross}",
+          ),
+          expanded: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              WithLabel(
+                labelText: 'Subtotal:',
+                textData: "${pq.gross}",
               ),
               const Divider(thickness: 2),
               ListView.separated(

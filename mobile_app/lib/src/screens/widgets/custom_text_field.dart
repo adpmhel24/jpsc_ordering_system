@@ -24,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     bool? obscureText,
     List<TextInputFormatter>? inputFormatters,
     String? initialValue,
+    Widget? prefix,
   })  : _controller = controller,
         _labelText = labelText,
         _prefixIcon = prefixIcon,
@@ -43,6 +44,7 @@ class CustomTextField extends StatelessWidget {
         _obscureText = obscureText,
         _inputFormatters = inputFormatters,
         _initialValue = initialValue,
+        _prefix = prefix,
         super(key: key);
 
   final TextEditingController? _controller;
@@ -64,6 +66,7 @@ class CustomTextField extends StatelessWidget {
   final bool? _obscureText;
   final List<TextInputFormatter>? _inputFormatters;
   final String? _initialValue;
+  final Widget? _prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +98,7 @@ class CustomTextField extends StatelessWidget {
         fillColor: const Color(0xFFeeeee4),
         labelText: _labelText,
         prefixIcon: _prefixIcon,
+        prefix: _prefix,
         suffixIcon: _suffixIcon,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

@@ -6,8 +6,8 @@ part of 'model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PaymentTermModel _$PaymentTermModelFromJson(Map<String, dynamic> json) =>
-    PaymentTermModel(
+PaymentTermsModel _$PaymentTermsModelFromJson(Map<String, dynamic> json) =>
+    PaymentTermsModel(
       code: json['code'] as String,
       description: json['description'] as String?,
       createdBy: json['created_by'] as int?,
@@ -20,7 +20,7 @@ PaymentTermModel _$PaymentTermModelFromJson(Map<String, dynamic> json) =>
       updatedBy: json['updated_by'] as int?,
     );
 
-Map<String, dynamic> _$PaymentTermModelToJson(PaymentTermModel instance) =>
+Map<String, dynamic> _$PaymentTermsModelToJson(PaymentTermsModel instance) =>
     <String, dynamic>{
       'code': instance.code,
       'description': instance.description,

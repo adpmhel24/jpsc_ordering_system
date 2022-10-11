@@ -65,7 +65,7 @@ class _BodyState extends State<Body> {
 
   void onSelectedCustomerChanged() {
     CustomerAddressModel? address;
-    if (selectedCustomer != null) {
+    if (selectedCustomer != null && selectedCustomer!.addresses.isNotEmpty) {
       address = selectedCustomer?.addresses.firstWhere((e) => e!.isDefault);
     }
     customerCodeController.text = selectedCustomer?.code ?? "";
@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
     contactNumberController.text = selectedCustomer?.contactNumber ?? "";
     addressController.text = """${address?.streetAddress ?? ''}
 ${address?.brgy == null ? '' : 'Brgy. ${address?.brgy}'}
-${address?.cityMunicipality ?? ''}, ${address?.province ?? ''}
+${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
 """;
 
     bloc.add(AddressChanged(addressController.text));
@@ -84,28 +84,30 @@ ${address?.cityMunicipality ?? ''}, ${address?.province ?? ''}
   Widget build(BuildContext context) {
     return BlocBuilder<CreatePriceQuotationBloc, CreateSalesOrderState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Customer Selection",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Constant.heightSpacer,
-              _branchSelectionField(context),
-              Constant.heightSpacer,
-              _customerSelectionField(state),
-              Constant.heightSpacer,
-              _firstNameField(),
-              Constant.heightSpacer,
-              _lastNameField(),
-              Constant.heightSpacer,
-              _contactNumberField(),
-              Constant.heightSpacer,
-              customerAddressField(),
-            ],
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Customer Selection",
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Constant.heightSpacer,
+                _branchSelectionField(context),
+                Constant.heightSpacer,
+                _customerSelectionField(state),
+                Constant.heightSpacer,
+                _firstNameField(),
+                Constant.heightSpacer,
+                _lastNameField(),
+                Constant.heightSpacer,
+                _contactNumberField(),
+                Constant.heightSpacer,
+                customerAddressField(),
+              ],
+            ),
           ),
         );
       },

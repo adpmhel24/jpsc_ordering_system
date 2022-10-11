@@ -3,21 +3,21 @@ from typing import Any, Dict, List, Optional, Union
 from sqlmodel import or_, func, and_
 from fastapi_sqlalchemy import db
 from my_app.shared.crud import CRUDBase
-from .models import PaymentTerm
-from .schemas import PaymentTermCreate, PaymentTermRead, PaymentTermUpdate
+from .models import PaymentTerms
+from .schemas import PaymentTermsCreate, PaymentTermsRead, PaymentTermsUpdate
 
 
-class CRUDPaymentTerm(
-    CRUDBase[PaymentTerm, PaymentTermCreate, PaymentTermRead, PaymentTermUpdate]
+class CRUDPaymentTerms(
+    CRUDBase[PaymentTerms, PaymentTermsCreate, PaymentTermsRead, PaymentTermsUpdate]
 ):
     def create(
         self,
         *,
-        create_schema: PaymentTermCreate,
+        create_schema: PaymentTermsCreate,
         user_id: int,
     ) -> Any:
 
-        # Check if new payment_term code is already exist
+        # Check if new payment_terms code is already exist
         payment_term_obj = (
             db.session.query(self.model)
             .filter(func.lower(self.model.code) == create_schema.code.lower())
@@ -31,7 +31,7 @@ class CRUDPaymentTerm(
         # create schema model to dict
         c_dict = create_schema.dict()
 
-        db_obj = PaymentTerm(**c_dict)
+        db_obj = PaymentTerms(**c_dict)
         db_obj.created_by = user_id
 
         db.session.add(db_obj)
@@ -49,7 +49,7 @@ class CRUDPaymentTerm(
         self,
         fk: str,
         *,
-        update_schema: Union[PaymentTermRead, Dict[str, Any]],
+        update_schema: Union[PaymentTermsRead, Dict[str, Any]],
     ) -> Any:
         db_obj = self.get(fk=fk)
         if not db_obj:
@@ -79,4 +79,4 @@ class CRUDPaymentTerm(
         return super().update(db_obj=db_obj, obj_in=update_data)
 
 
-crud_payment_term = CRUDPaymentTerm(PaymentTerm)
+crud_payment_term = CRUDPaymentTerms(PaymentTerms)

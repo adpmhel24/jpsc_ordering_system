@@ -10,7 +10,7 @@ import '../../../../global_blocs/bloc_customer/fetching_bloc/bloc.dart';
 import '../../../../utils/fetching_status.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
-import 'widgets/customers_table.dart';
+import 'components/customers_table.dart';
 
 class CustomersPage extends StatefulWidget {
   const CustomersPage({Key? key}) : super(key: key);

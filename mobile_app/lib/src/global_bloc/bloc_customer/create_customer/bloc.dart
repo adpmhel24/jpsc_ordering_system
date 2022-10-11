@@ -39,9 +39,7 @@ class CreateCustomerBloc
         custCode: custCode,
         status: Formz.validate([
           custCode,
-          state.custPaymentTerm,
           state.custBranch,
-          state.custPaymentTerm,
         ]),
       ),
     );
@@ -56,7 +54,6 @@ class CreateCustomerBloc
         custFirstName: custFirstName,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -72,7 +69,6 @@ class CreateCustomerBloc
         custLastName: custLastName,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -88,7 +84,6 @@ class CreateCustomerBloc
         custBranch: custBranch,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           custBranch,
         ]),
       ),
@@ -104,7 +99,6 @@ class CreateCustomerBloc
         custContactNumber: custContactNumber,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -120,7 +114,6 @@ class CreateCustomerBloc
         custEmail: custEmail,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -136,7 +129,6 @@ class CreateCustomerBloc
         custCreditLimit: custCreditLimit,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -153,7 +145,6 @@ class CreateCustomerBloc
         status: Formz.validate([
           state.custCode,
           state.custBranch,
-          custPaymentTerm,
         ]),
       ),
     );
@@ -177,7 +168,6 @@ class CreateCustomerBloc
         addresses: FormzList.dirty(addresses),
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -196,7 +186,6 @@ class CreateCustomerBloc
         addresses: FormzList.dirty(addresses),
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -208,14 +197,14 @@ class CreateCustomerBloc
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     Map<String, dynamic> data = {
       "customer_schema": {
-        "code": state.custCode.value,
+        "code": "C_${state.custCode.value}",
         "first_name": state.custFirstName.value,
         "last_name": state.custLastName.value,
         "contact_number": state.custContactNumber.value,
         if (state.custEmail.value.isNotEmpty) "email": state.custEmail.value,
         "location": state.custBranch.value,
         if (state.custPaymentTerm.value.isNotEmpty)
-          "payment_term": state.custPaymentTerm.value,
+          "payment_terms": state.custPaymentTerm.value,
         "credit_limit": state.custCreditLimit.value,
       },
       "addresses_schema": state.addresses.value,

@@ -21,7 +21,7 @@ export 'purchase_quotation/model.dart';
 export 'purchase_quotation/row_model.dart';
 export 'customer_address/model.dart';
 export 'customer/model.dart';
-export 'payment_term/model.dart';
+export 'payment_terms/model.dart';
 export 'ph_location/brgy/brgy_model.dart';
 export 'ph_location/city_municipality/city_municipality_model.dart';
 export 'ph_location/municipality/municipality_model.dart';

@@ -97,7 +97,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
   final TextEditingController _emailController = TextEditingController();
 
   BranchModel? selectedBranch;
-  PaymentTermModel? selectedPaymentTerm;
+  PaymentTermsModel? selectedPaymentTerm;
 
   @override
   void dispose() {
@@ -203,7 +203,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
     return CustomTextField(
       autovalidateMode: AutovalidateMode.always,
       controller: _emailController,
-      labelText: "Email Address ",
+      labelText: "Email Address",
       keyboardType: TextInputType.emailAddress,
       prefixIcon: const Icon(Icons.email),
       onChanged: (_) {
@@ -221,10 +221,8 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
       keyboardType: TextInputType.phone,
       labelText: "Contact Number",
       prefixIcon: const Icon(Icons.phone_android),
-      onChanged: (_) => createCustomerBloc.add(
-        CustContactNumberChanged(
-          _contactNumberController.text,
-        ),
+      onChanged: (v) => createCustomerBloc.add(
+        CustContactNumberChanged(v.trim()),
       ),
     );
   }
@@ -251,8 +249,8 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
       controller: _lastNameController,
       labelText: "Customer Last Name",
       prefixIcon: const Icon(Icons.person),
-      onChanged: (_) {
-        createCustomerBloc.add(CustLastNameChanged(_lastNameController.text));
+      onChanged: (v) {
+        createCustomerBloc.add(CustLastNameChanged(v.trim()));
       },
     );
   }
@@ -262,8 +260,8 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
       controller: _firstNameController,
       labelText: "Customer First Name",
       prefixIcon: const Icon(Icons.person),
-      onChanged: (_) {
-        createCustomerBloc.add(CustFirstNameChanged(_firstNameController.text));
+      onChanged: (v) {
+        createCustomerBloc.add(CustFirstNameChanged(v.trim()));
       },
     );
   }
@@ -272,19 +270,20 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
     return CustomTextField(
       autovalidateMode: AutovalidateMode.always,
       controller: _codeController,
-      labelText: "Customer Code",
+      labelText: "Customer Code *",
       prefixIcon: const Icon(Icons.person),
-      onChanged: (_) {
-        createCustomerBloc.add(CustCodeChanged(_codeController.text));
+      prefix: const Text("C_"),
+      onChanged: (v) {
+        createCustomerBloc.add(CustCodeChanged(v.trim()));
       },
       validator: (_) =>
           createCustomerBloc.state.custCode.invalid ? "Requierd field" : null,
     );
   }
 
-  MyCustomDropdownSearch<PaymentTermModel> _paymentTermField(
+  MyCustomDropdownSearch<PaymentTermsModel> _paymentTermField(
       BuildContext context, CreateCustomerBloc createCustomerBloc) {
-    return MyCustomDropdownSearch<PaymentTermModel>(
+    return MyCustomDropdownSearch<PaymentTermsModel>(
       autoValidateMode: AutovalidateMode.always,
       labelText: "Payment Term",
       selectedItem: selectedPaymentTerm,
@@ -301,7 +300,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
           subtitle: Text("Description: ${data.description}"),
         ),
       ),
-      onChanged: (PaymentTermModel? data) {
+      onChanged: (PaymentTermsModel? data) {
         selectedPaymentTerm = data;
         createCustomerBloc.add(CustPaymentTermChanged(data?.code ?? ""));
       },
@@ -315,7 +314,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
       BuildContext context, CreateCustomerBloc createCustomerBloc) {
     return MyCustomDropdownSearch<BranchModel>(
       autoValidateMode: AutovalidateMode.always,
-      labelText: "Group Location",
+      labelText: "Group Location *",
       selectedItem: selectedBranch,
       itemAsString: (data) => data!.code,
       prefixIcon: const Icon(Icons.location_on),

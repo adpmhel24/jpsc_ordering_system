@@ -64,4 +64,4 @@ async def update(
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
     result = crud_uom_grp.update(update_schema=schema, fk=uom_grp_name)
-    return SuccessMessage(message="Update successfully", data=result)
+    return SuccessMessage(message="Updated successfully", data=result)

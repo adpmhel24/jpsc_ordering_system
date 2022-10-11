@@ -26,8 +26,8 @@ class CustomerBase(SQLModel):
         index=True,
     )
 
-    payment_term: Optional[str] = Field(
-        foreign_key="payment_term.code", fk_kwargs={"onupdate": "CASCADE"}
+    payment_terms: Optional[str] = Field(
+        foreign_key="payment_terms.code", fk_kwargs={"onupdate": "CASCADE"}
     )
     credit_limit: Optional[condecimal(max_digits=20, decimal_places=2)] = Field(
         default=0

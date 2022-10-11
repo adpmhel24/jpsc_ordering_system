@@ -25,7 +25,7 @@ import '../pages/menu_inventory/menus/inv_adj_in/bloc/inv_adj_in_bloc.dart'
 import '../pages/menu_inventory/menus/inv_adj_out/bloc/inv_adj_out_bloc.dart'
     as _i17;
 import '../pages/menu_master_data/menus/customers/customers.dart' as _i7;
-import '../pages/menu_master_data/menus/customers/widgets/form/customer_form.dart'
+import '../pages/menu_master_data/menus/customers/components/form/customer_form.dart'
     as _i8;
 import '../pages/menu_master_data/menus/payment_terms/components/form.dart'
     as _i10;
@@ -784,7 +784,7 @@ class AppRouter extends _i11.RootStackRouter {
                 ),
                 _i11.RouteConfig(
                   PaymentTermWrapper.name,
-                  path: 'payment_term',
+                  path: 'payment_terms',
                   parent: MasterDataWrapperRoute.name,
                   children: [
                     _i11.RouteConfig(
@@ -1294,7 +1294,7 @@ class PaymentTermWrapper extends _i11.PageRouteInfo<void> {
   const PaymentTermWrapper({List<_i11.PageRouteInfo>? children})
       : super(
           PaymentTermWrapper.name,
-          path: 'payment_term',
+          path: 'payment_terms',
           initialChildren: children,
         );
 

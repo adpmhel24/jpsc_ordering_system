@@ -117,7 +117,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
               _brgyField(),
               Constant.heightSpacer,
               CustomTextField(
-                labelText: "Street address",
+                labelText: "Street address *",
                 controller: _streetController,
                 minLines: 3,
                 maxLines: 6,

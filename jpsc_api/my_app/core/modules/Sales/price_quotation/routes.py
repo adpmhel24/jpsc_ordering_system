@@ -107,11 +107,11 @@ async def udpatePriceQuotation(
     schema: PriceQuotationHeaderUpdate,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_pq.update(
+    message = crud_pq.update(
         schema=schema,
         user_id=current_user.id,
     )
-    return {"data": result}
+    return {"message": message}
 
 
 @router.put("/cancel/{id}", response_model=SuccessMessage)

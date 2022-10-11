@@ -28,7 +28,7 @@ class _CheckOutFormState extends State<CheckOutForm> {
 
   List<String> deliveryMethods = ["Pickup", "Delivery"];
 
-  final ValueNotifier<List<PaymentTermModel>> _terms = ValueNotifier([]);
+  final ValueNotifier<List<PaymentTermsModel>> _terms = ValueNotifier([]);
 
   @override
   void initState() {
@@ -97,9 +97,9 @@ class _CheckOutFormState extends State<CheckOutForm> {
     );
   }
 
-  ValueListenableBuilder<List<PaymentTermModel>> _paymentTermField(
+  ValueListenableBuilder<List<PaymentTermsModel>> _paymentTermField(
       CreatePriceQuotationBloc bloc) {
-    return ValueListenableBuilder<List<PaymentTermModel>>(
+    return ValueListenableBuilder<List<PaymentTermsModel>>(
         valueListenable: _terms,
         builder: (_, terms, __) {
           return MyCustomDropdownSearch<String>(

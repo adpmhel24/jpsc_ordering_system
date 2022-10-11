@@ -24,6 +24,7 @@ class PriceQuotationUpdateBloc
     on<PriceQuotationRemarksChanged>(_onPriceQuotationRemarksChanged);
     on<PriceQuotationRowsChanged>(_onPriceQuotationRowsChanged);
     on<PriceQuotationUpdateSubmitted>(_onPriceQuotationUpdateSubmitted);
+    on<PaymentTermsChanged>(_onPaymentTermsChanged);
   }
 
   void _onDispatchBranchChanged(
@@ -47,6 +48,14 @@ class PriceQuotationUpdateBloc
     PriceQuotationModel priceQuotation =
         PriceQuotationModel.fromJson(state.priceQuotation.toJson());
     priceQuotation.pqStatus = event.pqStatus;
+    emit(state.copyWith(priceQuotation: priceQuotation));
+  }
+
+  void _onPaymentTermsChanged(
+      PaymentTermsChanged event, Emitter<PriceQuotationUpdateState> emit) {
+    PriceQuotationModel priceQuotation =
+        PriceQuotationModel.fromJson(state.priceQuotation.toJson());
+    priceQuotation.paymentTerms = event.value;
     emit(state.copyWith(priceQuotation: priceQuotation));
   }
 

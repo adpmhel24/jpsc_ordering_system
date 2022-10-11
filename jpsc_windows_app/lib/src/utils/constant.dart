@@ -7,4 +7,7 @@ class Constant {
   static const double minPadding = 10.0;
   static const SizedBox heightSpacer = SizedBox(height: 10);
   static const SizedBox widthSpacer = SizedBox(width: 10);
+  static const Color overSRPColor = Color(0xFFFD841F);
+  static const Color belowSRPColor = Color(0xFFDBC8AC);
+  static const double calendarWidth = 180.0;
 }

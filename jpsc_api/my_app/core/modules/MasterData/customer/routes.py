@@ -84,7 +84,7 @@ async def update(
     result = crud_customer.update(
         update_dict_data=schema, fk=customer_code, user_id=current_user.id
     )
-    return SuccessMessage(message="Update successfully", data=result)
+    return SuccessMessage(message="Updated successfully", data=result)
 
 
 @router.delete("/{customer_code}", response_model=SuccessMessage)

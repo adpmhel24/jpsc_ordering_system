@@ -78,4 +78,4 @@ async def pricelist_rows_bulk_update(
     result = crud_pricelist.update_rows(
         pricelistRows=pricelistRows, user_id=current_user.id
     )
-    return SuccessMessage(message="Update successfully")
+    return SuccessMessage(message="Updated successfully")

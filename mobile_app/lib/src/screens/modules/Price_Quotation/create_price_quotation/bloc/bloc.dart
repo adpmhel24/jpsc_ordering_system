@@ -38,7 +38,7 @@ class CreatePriceQuotationBloc
       event.customer?.contactNumber ?? "",
     );
     final paymentTerm = FormzString.dirty(
-      event.customer?.paymentTerm ?? "",
+      event.customer?.paymentTerms ?? "",
     );
 
     emit(
@@ -293,7 +293,7 @@ class CreatePriceQuotationBloc
         "customer_code": state.customerCode.value,
         "delivery_date": state.deliveryDate.value,
         "delivery_method": state.deliveryMethod.value,
-        "payment_term":
+        "payment_terms":
             state.paymentTerm.value.isEmpty ? null : state.paymentTerm.value,
         "remarks": state.remarks.value,
         "dispatching_branch": state.dispatchingBranch.value,

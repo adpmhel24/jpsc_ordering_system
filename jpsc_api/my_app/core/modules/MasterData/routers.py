@@ -11,7 +11,7 @@ from .branch.routes import router as branch_router
 from .system_user_branch.routes import router as system_user_branch
 from .customer.routes import router as customer_router
 from .pricelist import router as pricelist_router
-from .payment_term import router as payment_router
+from .payment_terms import router as payment_router
 
 
 master_data_router = APIRouter(prefix="/master_data")
@@ -42,5 +42,5 @@ master_data_router.include_router(
     pricelist_router, prefix="/pricelist", tags=["Pricelist"]
 )
 master_data_router.include_router(
-    payment_router, prefix="/payment_term", tags=["Payment Term"]
+    payment_router, prefix="/payment_terms", tags=["Payment Term"]
 )

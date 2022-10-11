@@ -37,12 +37,15 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         height: widget.height,
         width: widget.width,
         child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SelectableText(
-              widget.date != null ? widget.dateFormat.format(widget.date!) : "",
-              toolbarOptions: const ToolbarOptions(copy: true, selectAll: true),
+            Expanded(
+              child: SelectableText(
+                widget.date != null
+                    ? widget.dateFormat.format(widget.date!)
+                    : "",
+                toolbarOptions:
+                    const ToolbarOptions(copy: true, selectAll: true),
+              ),
             ),
             IconButton(
               icon: const Icon(FluentIcons.calendar),

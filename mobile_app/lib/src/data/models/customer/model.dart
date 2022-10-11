@@ -43,8 +43,8 @@ class CustomerModel {
 
   String? location;
 
-  @JsonKey(name: "payment_term")
-  String? paymentTerm;
+  @JsonKey(name: "payment_terms")
+  String? paymentTerms;
 
   @JsonKey(name: "is_approved")
   bool? isApproved;
@@ -73,7 +73,7 @@ class CustomerModel {
     this.email,
     this.isActive,
     this.location,
-    this.paymentTerm,
+    this.paymentTerms,
     this.isApproved,
     this.createdBy,
     this.dateCreated,

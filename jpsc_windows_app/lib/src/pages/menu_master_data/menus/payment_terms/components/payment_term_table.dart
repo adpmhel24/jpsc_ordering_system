@@ -195,7 +195,7 @@ class DataSource extends DataGridSource {
                       PaymentTermWrapper(
                         children: [
                           PaymentTermFormRoute(
-                              header: "Payment Term Edit Form",
+                              header: "Payment Terms Edit Form",
                               onRefresh: handleRefresh,
                               selectedPayTermObj: paginatedDatas[dataRowIndex]),
                         ],

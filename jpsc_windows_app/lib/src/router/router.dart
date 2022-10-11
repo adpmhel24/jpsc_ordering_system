@@ -3,7 +3,7 @@ import 'package:auto_route/empty_router_widgets.dart';
 import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/customers/customers.dart';
 
 import '../pages/exports.dart';
-import '../pages/menu_master_data/menus/customers/widgets/form/customer_form.dart';
+import '../pages/menu_master_data/menus/customers/components/form/customer_form.dart';
 import '../pages/menu_master_data/menus/payment_terms/components/form.dart';
 import '../pages/menu_master_data/menus/payment_terms/payment_terms.dart';
 import '../pages/menu_sales/main.dart';
@@ -122,7 +122,7 @@ import 'router_guard.dart';
             AutoRoute(
               page: EmptyRouterPage,
               name: "PaymentTermWrapper",
-              path: "payment_term",
+              path: "payment_terms",
               children: [
                 AutoRoute(page: PaymentTermsPage, path: "", initial: true),
                 AutoRoute(

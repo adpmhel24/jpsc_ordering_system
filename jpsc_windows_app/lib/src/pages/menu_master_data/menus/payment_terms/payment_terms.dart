@@ -47,7 +47,7 @@ class _PaymentTermsPageState extends State<PaymentTermsPage> {
               PaymentTermWrapper(
                 children: [
                   PaymentTermFormRoute(
-                    header: "Payment Term Create Form",
+                    header: "Payment Terms Create Form",
                     onRefresh: sfDataGridKey.currentState!.refresh,
                   ),
                 ],

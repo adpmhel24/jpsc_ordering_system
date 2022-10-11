@@ -76,7 +76,7 @@ class _PaymentTermFormBodyState extends State<PaymentTermFormBody> {
   Flexible _codeField() {
     return Flexible(
       child: TextFormBox(
-        header: "Payment Term Code *",
+        header: "Payment Terms Code *",
         autovalidateMode: AutovalidateMode.always,
         controller: _codeController,
         onChanged: (_) {
@@ -92,7 +92,7 @@ class _PaymentTermFormBodyState extends State<PaymentTermFormBody> {
   Flexible _descriptField() {
     return Flexible(
       child: TextFormBox(
-        header: "Payment Term Description",
+        header: "Payment Terms Description",
         controller: _descriptionController,
         onChanged: (_) {
           formBloc.add(PayTermDescriptionChanged(_descriptionController.text));

@@ -9,14 +9,14 @@ import '../models/models.dart';
 class PaymentTermRepo {
   SharedPreferences localStorage;
   final api = baseAPI;
-  final String _urlPath = ConstantURLPath.paymentTerm;
+  final String _urlPath = ConstantURLPath.paymentTerms;
 
   PaymentTermRepo({
     required this.localStorage,
   });
 
-  List<PaymentTermModel> _datas = [];
-  List<PaymentTermModel> get datas => _datas;
+  List<PaymentTermsModel> _datas = [];
+  List<PaymentTermsModel> get datas => _datas;
 
   get _token {
     return "${localStorage.getString('access_token')}";
@@ -30,8 +30,8 @@ class PaymentTermRepo {
       pathUrl: _urlPath,
       params: params,
     );
-    _datas = List<PaymentTermModel>.from(
-            response.data['data'].map((e) => PaymentTermModel.fromJson(e)))
+    _datas = List<PaymentTermsModel>.from(
+            response.data['data'].map((e) => PaymentTermsModel.fromJson(e)))
         .toList();
   }
 
@@ -42,8 +42,8 @@ class PaymentTermRepo {
       _token,
       pathUrl: "$_urlPath$location",
     );
-    _datas = List<PaymentTermModel>.from(
-            response.data['data'].map((e) => PaymentTermModel.fromJson(e)))
+    _datas = List<PaymentTermsModel>.from(
+            response.data['data'].map((e) => PaymentTermsModel.fromJson(e)))
         .toList();
   }
 
@@ -73,7 +73,7 @@ class PaymentTermRepo {
     return response.data['message'];
   }
 
-  Future<List<PaymentTermModel>> offlineSearch(String? keyword) async {
+  Future<List<PaymentTermsModel>> offlineSearch(String? keyword) async {
     Future.delayed(const Duration(seconds: 5));
     if (_datas.isEmpty) {
       await getAll();

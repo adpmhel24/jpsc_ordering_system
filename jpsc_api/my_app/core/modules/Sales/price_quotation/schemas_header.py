@@ -24,8 +24,8 @@ class PriceQuotationHeaderBase(SQLModel):
     )
     delivery_date: datetime = Field(default=datetime.now())
     delivery_method: Optional[str] = Field(index=True)
-    payment_term: Optional[str] = Field(
-        index=True, foreign_key="payment_term.code", fk_kwargs={"onupdate": "CASCADE"}
+    payment_terms: Optional[str] = Field(
+        index=True, foreign_key="payment_terms.code", fk_kwargs={"onupdate": "CASCADE"}
     )
     remarks: Optional[str]
     dispatching_branch: str = Field(

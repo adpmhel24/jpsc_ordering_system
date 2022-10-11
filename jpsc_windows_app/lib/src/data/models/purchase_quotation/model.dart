@@ -25,8 +25,8 @@ class PriceQuotationModel {
   @JsonKey(name: "delivery_method")
   String? deliveryMethod;
 
-  @JsonKey(name: "payment_term")
-  String? paymentTerm;
+  @JsonKey(name: "payment_terms")
+  String? paymentTerms;
 
   String? remarks;
 
@@ -124,7 +124,7 @@ class PriceQuotationModel {
     required this.customerCode,
     required this.deliveryDate,
     this.deliveryMethod,
-    this.paymentTerm,
+    this.paymentTerms,
     this.remarks,
     this.dispatchingBranch,
     required this.hashedId,

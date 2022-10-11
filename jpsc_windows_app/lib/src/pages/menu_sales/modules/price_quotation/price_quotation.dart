@@ -104,16 +104,11 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flex(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    direction: Axis.horizontal,
+                  Row(
                     children: [
-                      const Spacer(),
                       _fromDatePicker(),
-                      const Divider(
-                        size: 20,
-                      ),
+                      Constant.widthSpacer,
+                      Constant.widthSpacer,
                       _toDatePicker(),
                     ],
                   ),
@@ -351,7 +346,8 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
 
   CustomDatePicker _toDatePicker() {
     return CustomDatePicker(
-      label: "Delivery Date",
+      label: "Transaction Date",
+      width: Constant.calendarWidth,
       date: toDate,
       isRemoveShow: true,
       dateFormat: dateFormat,
@@ -365,7 +361,8 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
 
   CustomDatePicker _fromDatePicker() {
     return CustomDatePicker(
-      label: "Delivery Date",
+      label: "Transaction Date",
+      width: Constant.calendarWidth,
       date: fromDate,
       isRemoveShow: true,
       dateFormat: dateFormat,
@@ -393,7 +390,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
           ),
         ],
       ),
-      title: const Text("Price Quotation"),
+      title: const Text("Price Quotations"),
     );
   }
 }

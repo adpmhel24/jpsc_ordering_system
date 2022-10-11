@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
@@ -84,11 +86,13 @@ class PriceQuotationHeaderDetailsBody extends StatefulWidget {
 class _PriceQuotationHeaderDetailsBodyState
     extends State<PriceQuotationHeaderDetailsBody> {
   final ValueNotifier<List<BranchModel>> _branches = ValueNotifier([]);
+  final ValueNotifier<List<PaymentTermModel>> _paymentTerms = ValueNotifier([]);
   final TextEditingController _remarksController = TextEditingController();
   final TextEditingController _sqNumberController = TextEditingController();
 
   String? selectedBranch;
   String? selectedOrderStatus;
+  String? selectedPaymentTerms;
   final List<String> _pqStatus = [
     "Price Confirmed",
     "With SAP SQ",
@@ -100,6 +104,7 @@ class _PriceQuotationHeaderDetailsBodyState
   void initState() {
     _remarksController.text = widget.priceQuotation.remarks ?? "";
     selectedBranch = widget.priceQuotation.dispatchingBranch;
+    selectedPaymentTerms = widget.priceQuotation.paymentTerms;
     _sqNumberController.text = widget.priceQuotation.sqNumber?.toString() ?? "";
     selectedOrderStatus = widget.priceQuotation.pqStatus == 1
         ? "Price Confirmed"
@@ -109,7 +114,8 @@ class _PriceQuotationHeaderDetailsBodyState
 
     // check if "C" or "N" contains the docstatus
     isDisable = "CN".contains(widget.priceQuotation.docstatus);
-    _fetchBranchForDispatch();
+
+    _initialLoad();
     super.initState();
   }
 
@@ -118,14 +124,23 @@ class _PriceQuotationHeaderDetailsBodyState
     _branches.dispose();
     _sqNumberController.dispose();
     _remarksController.dispose();
-
+    _paymentTerms.dispose();
     super.dispose();
   }
 
-  void _fetchBranchForDispatch() async {
-    final branchRepo = context.read<BranchRepo>();
-    await branchRepo.getAll();
-    _branches.value = branchRepo.datas;
+  void _initialLoad() async {
+    context.loaderOverlay.show();
+    try {
+      final branchRepo = context.read<BranchRepo>();
+      final payTermrepo = context.read<PaymentTermRepo>();
+      await payTermrepo.getAll();
+      await branchRepo.getAll();
+      _branches.value = branchRepo.datas;
+      _paymentTerms.value = payTermrepo.datas;
+    } on HttpException catch (e) {
+      CustomDialogBox.errorMessage(context, message: e.message);
+    }
+    context.loaderOverlay.hide();
   }
 
   @override
@@ -276,9 +291,38 @@ class _PriceQuotationHeaderDetailsBodyState
                               ),
                             ),
                             Constant.heightSpacer,
-                            wrapLabelSelectableText(
-                              label: "Payment Term :",
-                              value: widget.priceQuotation.paymentTerm ?? "",
+                            _wrapLabelWidget(
+                              label: "Payment Terms:",
+                              child: ValueListenableBuilder<
+                                  List<PaymentTermModel>>(
+                                valueListenable: _paymentTerms,
+                                builder: (context, datas, _) {
+                                  return ComboBox<String>(
+                                      value: selectedPaymentTerms,
+                                      items: datas
+                                          .map(
+                                            (e) => ComboBoxItem(
+                                              value: e.code,
+                                              child: Text(e.description ?? ""),
+                                            ),
+                                          )
+                                          .toList(),
+                                      onChanged: isDisable
+                                          ? null
+                                          : (value) {
+                                              setState(() {
+                                                selectedPaymentTerms = value;
+                                              });
+                                              context
+                                                  .read<
+                                                      PriceQuotationUpdateBloc>()
+                                                  .add(
+                                                    PaymentTermsChanged(
+                                                        value ?? ""),
+                                                  );
+                                            });
+                                },
+                              ),
                             ),
                             Constant.heightSpacer,
                             _wrapLabelWidget(
@@ -387,7 +431,7 @@ class _PriceQuotationHeaderDetailsBodyState
             Container(
               width: 10,
               height: 10,
-              color: const Color(0xFFA8E890),
+              color: Constant.overSRPColor,
             ),
             const Text("Over SRP")
           ],
@@ -398,7 +442,7 @@ class _PriceQuotationHeaderDetailsBodyState
             Container(
               width: 10,
               height: 10,
-              color: const Color(0xFFC8DBBE),
+              color: Constant.belowSRPColor,
             ),
             const Text("Below SRP")
           ],

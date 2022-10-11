@@ -33,7 +33,9 @@ class _DetailsTableState extends State<DetailsTable> {
   void initState() {
     _dataSource = DataSource(
       context,
-      itemRows: widget.itemRows,
+      itemRows: widget.itemRows
+          .map((e) => PriceQuotationRowModel.fromJson(e.toJson()))
+          .toList(),
       startIndex: _startIndex,
       endIndex: _endIndex,
       rowsPerPage: _rowsPerPage,

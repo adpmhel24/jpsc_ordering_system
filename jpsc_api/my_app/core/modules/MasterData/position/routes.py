@@ -15,24 +15,35 @@ from my_app.dependencies import (
 router = APIRouter()
 
 
-@router.post("/", response_model=SuccessMessage,
-             status_code=status.HTTP_201_CREATED,)
-async def new(*, schema: PositionCreate, current_user: SystemUserRead = Depends(get_current_active_user)):
-    result = crud_position.create(
-        create_schema=schema, user_id=current_user.id)
+@router.post(
+    "/",
+    response_model=SuccessMessage,
+    status_code=status.HTTP_201_CREATED,
+)
+async def new(
+    *,
+    schema: PositionCreate,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result = crud_position.create(create_schema=schema, user_id=current_user.id)
     return SuccessMessage(message="Successfully added!", data=result)
 
 
 @router.get("/", response_model=SuccessMessage[List[PositionRead]])
-async def get_all(*, current_user: SystemUserRead = Depends(get_current_active_user),):
+async def get_all(
+    *,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
     result = crud_position.get_all()
     return {"data": result}
 
 
 @router.get("/{position_code}", response_model=SuccessMessage[PositionRead])
-async def get_by_code(*,
-                      position_code: str,
-                      current_user: SystemUserRead = Depends(get_current_active_user),):
+async def get_by_code(
+    *,
+    position_code: str,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
     result = crud_position.get(fk=position_code)
     return SuccessMessage(data=result)
 
@@ -45,4 +56,4 @@ async def update(
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
     result = crud_position.update(update_schema=schema, fk=position_code)
-    return SuccessMessage(message="Update successfully", data=result)
+    return SuccessMessage(message="Updated successfully", data=result)

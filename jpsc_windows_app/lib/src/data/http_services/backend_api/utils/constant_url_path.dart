@@ -14,6 +14,6 @@ class ConstantURLPath {
   static const String invTransferReq =
       '/api/v1/inventory/inv_transfer_request/';
   static const String pricelist = '/api/v1/master_data/pricelist/';
-  static const String paymentTerm = '/api/v1/master_data/payment_term/';
+  static const String paymentTerm = '/api/v1/master_data/payment_terms/';
   static const String pqRepo = '/api/v1/sales/pq/';
 }

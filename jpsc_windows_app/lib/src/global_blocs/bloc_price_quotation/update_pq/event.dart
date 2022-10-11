@@ -13,6 +13,13 @@ class DispatchBranchChanged extends PriceQuotationUpdateEvent {
   List<Object?> get props => [dispatchingBranch];
 }
 
+class PaymentTermsChanged extends PriceQuotationUpdateEvent {
+  final String value;
+  const PaymentTermsChanged(this.value);
+  @override
+  List<Object?> get props => [value];
+}
+
 class OrderStatusChanged extends PriceQuotationUpdateEvent {
   final int pqStatus;
   const OrderStatusChanged(this.pqStatus);

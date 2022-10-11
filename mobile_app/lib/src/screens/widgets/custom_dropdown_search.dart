@@ -21,6 +21,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
     this.labelText,
     this.itemBuilder,
     this.prefixIcon,
+    this.prefix,
   }) : super(key: key);
 
   /// (item) => item!.name
@@ -44,6 +45,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
   final String? labelText;
   final Widget Function(BuildContext, T, bool)? itemBuilder;
   final Widget? prefixIcon;
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +110,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
               fillColor: const Color(0xFFeeeee4),
               labelText: labelText,
               prefixIcon: prefixIcon,
+              prefix: prefix,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             ),

@@ -90,9 +90,7 @@ class CreateUpdateCustomerBloc
         custCode: custCode,
         status: Formz.validate([
           custCode,
-          state.custPaymentTerm,
           state.custBranch,
-          state.custPaymentTerm,
         ]),
       ),
     );
@@ -107,7 +105,6 @@ class CreateUpdateCustomerBloc
         custFirstName: custFirstName,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -123,7 +120,6 @@ class CreateUpdateCustomerBloc
         custLastName: custLastName,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -139,7 +135,6 @@ class CreateUpdateCustomerBloc
         custBranch: custBranch,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           custBranch,
         ]),
       ),
@@ -155,7 +150,6 @@ class CreateUpdateCustomerBloc
         custContactNumber: custContactNumber,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -171,7 +165,6 @@ class CreateUpdateCustomerBloc
         custEmail: custEmail,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -187,7 +180,6 @@ class CreateUpdateCustomerBloc
         custCreditLimit: custCreditLimit,
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -204,7 +196,6 @@ class CreateUpdateCustomerBloc
         status: Formz.validate([
           state.custCode,
           state.custBranch,
-          custPaymentTerm,
         ]),
       ),
     );
@@ -220,7 +211,6 @@ class CreateUpdateCustomerBloc
         status: Formz.validate([
           state.custCode,
           state.custBranch,
-          state.custPaymentTerm,
         ]),
       ),
     );
@@ -236,7 +226,6 @@ class CreateUpdateCustomerBloc
         status: Formz.validate([
           state.custCode,
           state.custBranch,
-          state.custPaymentTerm,
         ]),
       ),
     );
@@ -260,7 +249,6 @@ class CreateUpdateCustomerBloc
         addresses: FormzList.dirty(addresses),
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -280,7 +268,6 @@ class CreateUpdateCustomerBloc
         addresses: FormzList.dirty(addresses),
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -300,7 +287,6 @@ class CreateUpdateCustomerBloc
         addresses: FormzList.dirty(addresses),
         status: Formz.validate([
           state.custCode,
-          state.custPaymentTerm,
           state.custBranch,
         ]),
       ),
@@ -319,7 +305,7 @@ class CreateUpdateCustomerBloc
         "email": state.custEmail.invalid ? null : state.custEmail.value,
         "credit_limit": state.custCreditLimit.value,
         "location": state.custBranch.value,
-        "payment_term": state.custPaymentTerm.value,
+        "payment_terms": state.custPaymentTerm.value,
       },
       "addresses_schema": state.addresses.value,
     };
@@ -354,7 +340,8 @@ class CreateUpdateCustomerBloc
         "email": state.custEmail.invalid ? null : state.custEmail.value,
         "credit_limit": state.custCreditLimit.value,
         "location": state.custBranch.value,
-        "payment_term": state.custPaymentTerm.value,
+        if (state.custPaymentTerm.value.isNotEmpty)
+          "payment_terms": state.custPaymentTerm.value,
         "is_active": state.isActive.value,
         "is_approved": state.isApproved.value,
       },

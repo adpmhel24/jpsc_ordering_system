@@ -57,9 +57,9 @@ class MasterDataMenuPage extends StatefulWidget {
       route: const UomsWrapper(),
     ),
     MenuItems(
-      name: "Payment Term",
+      name: "Payment Terms",
       icon: const ImageIcon(
-        AssetImage('assets/icons/payment_term.png'),
+        AssetImage('assets/icons/payment_terms.png'),
         size: 40,
       ),
       route: const PaymentTermWrapper(),

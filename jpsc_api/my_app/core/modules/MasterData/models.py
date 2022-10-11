@@ -12,4 +12,4 @@ from .system_user_branch.models import SystemUserBranch
 from .customer.models import Customer
 from .customer_address import CustomerAddress
 from .pricelist.models import PricelistHeader, PricelistRow
-from .payment_term.models import PaymentTerm
+from .payment_terms.models import PaymentTerms
