@@ -22,17 +22,17 @@ class DescriptionChanged extends ItemFormEvent {
 }
 
 class ItemGroupChanged extends ItemFormEvent {
-  final TextEditingController itemGrp;
-  const ItemGroupChanged(this.itemGrp);
+  final String value;
+  const ItemGroupChanged(this.value);
   @override
-  List<Object> get props => [itemGrp];
+  List<Object> get props => [value];
 }
 
 class SaleUomChanged extends ItemFormEvent {
-  final TextEditingController saleUom;
-  const SaleUomChanged(this.saleUom);
+  final String value;
+  const SaleUomChanged(this.value);
   @override
-  List<Object> get props => [saleUom];
+  List<Object> get props => [value];
 }
 
 class IsActiveChanged extends ItemFormEvent {
@@ -42,6 +42,4 @@ class IsActiveChanged extends ItemFormEvent {
   List<Object> get props => [isActive];
 }
 
-class CreateButtonSubmitted extends ItemFormEvent {}
-
-class UpdateButtonSubmitted extends ItemFormEvent {}
+class ButtonSubmitted extends ItemFormEvent {}

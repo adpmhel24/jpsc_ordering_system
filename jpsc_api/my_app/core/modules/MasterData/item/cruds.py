@@ -97,7 +97,7 @@ class CRUDItem(CRUDBase[Item, ItemCreate, ItemUpdate, ItemRead]):
     ) -> Any:
 
         # Get the object first
-        db_obj = self.get(db=db, fk=fk)
+        db_obj = self.get(fk=fk)
 
         if not db_obj:
             raise HTTPException(

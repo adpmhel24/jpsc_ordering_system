@@ -20,15 +20,30 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
   ItemFormBloc({
     required this.itemRepo,
     this.selectedItem,
-  }) : super(const ItemFormState()) {
+  }) : super(selectedItem != null
+            ? ItemFormState(
+                code: FormzString.dirty(selectedItem.code),
+                formzDescription:
+                    FormzString.dirty(selectedItem.description ?? ""),
+                formzItemGroup:
+                    FormzString.dirty(selectedItem.itemGroupCode ?? ""),
+                formzSaleUom: FormzString.dirty(selectedItem.saleUomCode ?? ""),
+                formzIsActive: FormzBool.dirty(selectedItem.isActive),
+                status: Formz.validate(
+                  [
+                    FormzString.dirty(selectedItem.code),
+                    FormzString.dirty(selectedItem.itemGroupCode ?? ""),
+                    FormzString.dirty(selectedItem.saleUomCode ?? ""),
+                  ],
+                ),
+              )
+            : const ItemFormState()) {
     on<CodeChanged>(_onCodeChanged);
     on<DescriptionChanged>(_onDescriptionChanged);
     on<ItemGroupChanged>(_onItemGroupChanged);
-
     on<SaleUomChanged>(_onSaleUomChanged);
-
     on<IsActiveChanged>(_onIsActiveChanged);
-    on<CreateButtonSubmitted>(_onCreateButtonSubmitted);
+    on<ButtonSubmitted>(_onButtonSubmitted);
   }
 
   void _onCodeChanged(CodeChanged event, Emitter<ItemFormState> emit) {
@@ -40,6 +55,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           [
             code,
             state.formzItemGroup,
+            state.formzSaleUom,
             state.formzIsActive,
           ],
         ),
@@ -57,6 +73,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           [
             state.code,
             state.formzItemGroup,
+            state.formzSaleUom,
             state.formzIsActive,
           ],
         ),
@@ -66,7 +83,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
 
   void _onItemGroupChanged(
       ItemGroupChanged event, Emitter<ItemFormState> emit) {
-    final formzItemGroup = FormzString.dirty(event.itemGrp.text);
+    final formzItemGroup = FormzString.dirty(event.value);
 
     emit(
       state.copyWith(
@@ -75,6 +92,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           [
             state.code,
             formzItemGroup,
+            state.formzSaleUom,
             state.formzIsActive,
           ],
         ),
@@ -83,7 +101,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
   }
 
   void _onSaleUomChanged(SaleUomChanged event, Emitter<ItemFormState> emit) {
-    final formzSaleUom = FormzString.dirty(event.saleUom.text);
+    final formzSaleUom = FormzString.dirty(event.value);
     emit(
       state.copyWith(
         formzSaleUom: formzSaleUom,
@@ -91,6 +109,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           [
             state.code,
             state.formzItemGroup,
+            formzSaleUom,
             state.formzIsActive,
           ],
         ),
@@ -107,6 +126,7 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
           [
             state.code,
             state.formzItemGroup,
+            state.formzSaleUom,
             state.formzIsActive,
           ],
         ),
@@ -114,8 +134,9 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     );
   }
 
-  void _onCreateButtonSubmitted(
-      CreateButtonSubmitted event, Emitter<ItemFormState> emit) async {
+  void _onButtonSubmitted(
+      ButtonSubmitted event, Emitter<ItemFormState> emit) async {
+    String message;
     Map<String, dynamic> data = {
       "code": state.code.value,
       "description": state.formzDescription.value,
@@ -125,7 +146,11 @@ class ItemFormBloc extends Bloc<ItemFormEvent, ItemFormState> {
     };
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      var message = await itemRepo.create(data);
+      if (selectedItem != null) {
+        message = await itemRepo.update(fk: selectedItem!.code, data: data);
+      } else {
+        message = await itemRepo.create(data);
+      }
       emit(state.copyWith(
           status: FormzStatus.submissionSuccess, message: message));
     } on HttpException catch (err) {

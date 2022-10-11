@@ -1,15 +1,18 @@
+import 'dart:io';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter/material.dart' as m;
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
 import '../../../../widgets/custom_dialog.dart';
-import '../../../../widgets/custom_dropdown_search.dart';
 import 'bloc/itemform_bloc.dart';
 
 class ItemFormBody extends StatefulWidget {
@@ -35,10 +38,10 @@ class _ItemFormBodyState extends State<ItemFormBody> {
   late ItemFormBloc formBloc;
 
   /// will hold the selected item group
-  ItemGroupModel? _selectedItemGroup;
 
   /// Uom Choices depends on selected uom Group
   final ValueNotifier<List<UomModel>> _uoms = ValueNotifier([]);
+  final ValueNotifier<List<ItemGroupModel>> _itemGroups = ValueNotifier([]);
   bool _isActive = true;
 
   @override
@@ -50,18 +53,26 @@ class _ItemFormBodyState extends State<ItemFormBody> {
       _descriptionController.text = selectedItem.description ?? "";
       _itemGrpController.text = selectedItem.itemGroupCode ?? "";
       _saleUomController.text = selectedItem.saleUomCode ?? "";
-      _selectedItemGroup = selectedItem.itemGroup;
       _isActive = selectedItem.isActive;
     }
-    _fetchAllUom();
+    _loadInitialdata();
     formBloc.add(IsActiveChanged(_isActive));
     super.initState();
   }
 
-  void _fetchAllUom() async {
-    await context.read<UomRepo>().getAll();
-    if (mounted) {
-      _uoms.value = context.read<UomRepo>().datas;
+  void _loadInitialdata() async {
+    final uomRepo = context.read<UomRepo>();
+    final itemGroupRepo = context.read<ItemGroupRepo>();
+    context.loaderOverlay.show();
+    try {
+      await uomRepo.getAll();
+      await itemGroupRepo.getAll();
+      _uoms.value = uomRepo.datas;
+      _itemGroups.value = itemGroupRepo.datas;
+      context.loaderOverlay.hide();
+    } on HttpException catch (e) {
+      context.loaderOverlay.hide();
+      CustomDialogBox.errorMessage(context, message: e.message);
     }
   }
 
@@ -75,6 +86,7 @@ class _ItemFormBodyState extends State<ItemFormBody> {
     _purchasingUomController.dispose();
     _invUomController.dispose();
     _uoms.dispose();
+    _itemGroups.dispose();
     super.dispose();
   }
 
@@ -167,24 +179,41 @@ class _ItemFormBodyState extends State<ItemFormBody> {
     return Flexible(
       child: InfoLabel(
         label: "Item Group",
-        child: m.Material(
-          child: MyCustomDropdownSearch<ItemGroupModel>(
-            autoValidateMode: AutovalidateMode.always,
-            selectedItem: _selectedItemGroup,
-            itemAsString: (itemGroup) => itemGroup!.code,
-            onFind: (String? filter) =>
-                context.read<ItemGroupRepo>().offlineSearch(filter!),
-            compareFn: (item, selectedItem) => item!.code == selectedItem!.code,
-            onChanged: (ItemGroupModel? data) {
-              _itemGrpController.text = data?.code ?? "";
-              formBloc.add(
-                ItemGroupChanged(_itemGrpController),
-              );
-            },
-            validator: (_) => formBloc.state.formzItemGroup.invalid
-                ? "Provide item group."
-                : null,
-          ),
+        child: ValueListenableBuilder<List<ItemGroupModel>>(
+          valueListenable: _itemGroups,
+          builder: (context, datas, _) {
+            return AutoSuggestBox.form(
+              autovalidateMode: AutovalidateMode.always,
+              controller: _itemGrpController,
+              items: datas
+                  .map<AutoSuggestBoxItem>(
+                    (e) => AutoSuggestBoxItem(
+                      value: e.code,
+                      child: Text(e.code),
+                      onSelected: () {
+                        _itemGrpController.text = e.code;
+                        formBloc.add(
+                          ItemGroupChanged(_itemGrpController.text),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value, reason) {
+                String? itemGroupCode = datas
+                    .firstWhereOrNull((element) => element.code == value)
+                    ?.code;
+                formBloc.add(
+                  ItemGroupChanged(itemGroupCode ?? ""),
+                );
+              },
+              validator: (_) {
+                return formBloc.state.formzItemGroup.invalid
+                    ? "Invalid item group code"
+                    : null;
+              },
+            );
+          },
         ),
       ),
     );
@@ -198,16 +227,35 @@ class _ItemFormBodyState extends State<ItemFormBody> {
           child: ValueListenableBuilder<List<UomModel>>(
               valueListenable: _uoms,
               builder: (context, datas, _) {
-                return MyCustomDropdownSearch<String>(
-                  selectedItem: _saleUomController.text,
-                  itemAsString: (data) => data!,
-                  items: datas.map((e) => e.code).toList(),
-                  compareFn: (data, selectedData) => data == selectedData,
-                  onChanged: (String? data) {
-                    _saleUomController.text = data ?? "";
+                return AutoSuggestBox.form(
+                  autovalidateMode: AutovalidateMode.always,
+                  controller: _saleUomController,
+                  items: datas
+                      .map<AutoSuggestBoxItem>(
+                        (e) => AutoSuggestBoxItem(
+                          value: e.code,
+                          child: Text(e.code),
+                          onSelected: () {
+                            _saleUomController.text = e.code;
+                            formBloc.add(
+                              SaleUomChanged(_saleUomController.text),
+                            );
+                          },
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value, reason) {
+                    String? uomCode = datas
+                        .firstWhereOrNull((element) => element.code == value)
+                        ?.code;
                     formBloc.add(
-                      SaleUomChanged(_saleUomController),
+                      SaleUomChanged(uomCode ?? ""),
                     );
+                  },
+                  validator: (_) {
+                    return formBloc.state.formzSaleUom.invalid
+                        ? "Invalid pricelist code"
+                        : null;
                   },
                 );
               }),
@@ -226,15 +274,7 @@ class _ItemFormBodyState extends State<ItemFormBody> {
                   context,
                   message: "Are you sure you want to proceed?",
                   onPositiveClick: (cntx) {
-                    if (widget.selectedItem != null) {
-                      // formBloc.add(
-                      //   CreateButtonSubmitted(),
-                      // );
-                    } else {
-                      formBloc.add(
-                        CreateButtonSubmitted(),
-                      );
-                    }
+                    formBloc.add(ButtonSubmitted());
                     cntx.router.pop();
                   },
                 );

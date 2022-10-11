@@ -158,7 +158,7 @@ class AppRouter extends _i13.RootStackRouter {
               '#redirect',
               path: '',
               parent: MainScreenRoute.name,
-              redirectTo: 'create_pq',
+              redirectTo: 'dashboard',
               fullMatch: true,
             ),
             _i13.RouteConfig(

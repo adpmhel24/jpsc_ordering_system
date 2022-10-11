@@ -3,7 +3,7 @@ part of 'bloc.dart';
 class DrawerMenuState extends Equatable {
   final String currentMenu;
 
-  const DrawerMenuState({this.currentMenu = "Create Price Quotation"});
+  const DrawerMenuState({this.currentMenu = "Dashboard"});
 
   DrawerMenuState copyWith({
     String? currentMenu,

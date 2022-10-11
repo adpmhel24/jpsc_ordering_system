@@ -16,6 +16,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       isActive: json['is_active'] as bool?,
       location: json['location'] as String?,
+      paymentTerms: json['payment_terms'] as String?,
       isApproved: json['is_approved'] as bool?,
       createdBy: json['created_by'] as int?,
       dateCreated: json['date_created'] == null
@@ -27,7 +28,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['date_updated'] as String),
       addresses:
           CustomerModel.customerAddressFromJson(json['addresses'] as List),
-    )..paymentTerms = json['payment_terms'] as String?;
+    );
 
 Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
     <String, dynamic>{
