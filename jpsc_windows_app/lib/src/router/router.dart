@@ -11,6 +11,8 @@ import 'router_guard.dart';
 
 @CustomAutoRouter(
   replaceInRouteName: 'Page,Route',
+  transitionsBuilder: TransitionsBuilders.noTransition,
+  durationInMilliseconds: 400,
   routes: <AutoRoute>[
     AutoRoute(page: LoginPage, path: '/login'),
     AutoRoute(
@@ -34,8 +36,7 @@ import 'router_guard.dart';
               path: "systemUsers",
               children: [
                 AutoRoute(page: SystemUsersPage, path: "", initial: true),
-                AutoRoute(page: SystemUserCreateFormPage, path: "create"),
-                AutoRoute(page: SystemUserUpdateFormPage, path: "edit"),
+                AutoRoute(page: SystemUserFormPage, path: "form"),
               ],
             ),
             AutoRoute(

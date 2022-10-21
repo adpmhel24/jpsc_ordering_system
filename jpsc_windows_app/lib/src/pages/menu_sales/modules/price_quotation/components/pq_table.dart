@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' as m;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:jpsc_windows_app/src/utils/fetching_status.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
@@ -52,36 +53,45 @@ class _PriceQuotationHeaderTableState extends State<PriceQuotationHeaderTable> {
       child: BlocBuilder<FetchingPriceQuotationHeaderBloc,
           FetchingPriceQuotationHeaderState>(
         bloc: context.read<FetchingPriceQuotationHeaderBloc>(),
-        buildWhen: (prev, curr) => prev.datas != curr.datas,
+        buildWhen: (prev, curr) =>
+            curr.status == FetchingStatus.unauthorized ||
+            curr.status == FetchingStatus.success,
         builder: (context, state) {
-          _dataSource = DataSource(
-            context,
-            onRefresh: () {
-              context.read<FetchingPriceQuotationHeaderBloc>().add(
-                    FetchAllPriceQuotationHeader(
-                      docStatus: widget.docStatus,
-                      pqStatus: widget.pqStatus,
-                      fromDate: widget.fromDate,
-                      toDate: widget.toDate,
-                    ),
-                  );
-            },
-            datas: state.datas,
-            startIndex: _startIndex,
-            endIndex: _endIndex,
-            rowsPerPage: _rowsPerPage,
-          );
-          return LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tableBody(constraint),
-                  tableFooter(state.datas.length),
-                ],
-              );
-            },
-          );
+          if (state.status == FetchingStatus.unauthorized) {
+            return Center(
+              child: Text(state.message),
+            );
+          } else if (state.status == FetchingStatus.success) {
+            _dataSource = DataSource(
+              context,
+              onRefresh: () {
+                context.read<FetchingPriceQuotationHeaderBloc>().add(
+                      FetchAllPriceQuotationHeader(
+                        docStatus: widget.docStatus,
+                        pqStatus: widget.pqStatus,
+                        fromDate: widget.fromDate,
+                        toDate: widget.toDate,
+                      ),
+                    );
+              },
+              datas: state.datas,
+              startIndex: _startIndex,
+              endIndex: _endIndex,
+              rowsPerPage: _rowsPerPage,
+            );
+            return LayoutBuilder(
+              builder: (context, constraint) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tableBody(constraint),
+                    tableFooter(state.datas.length),
+                  ],
+                );
+              },
+            );
+          }
+          return const SizedBox.expand();
         },
       ),
     );

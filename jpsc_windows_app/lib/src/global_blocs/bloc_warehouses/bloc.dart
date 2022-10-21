@@ -13,9 +13,13 @@ part 'state.dart';
 
 class WarehousesBloc extends Bloc<WarehousesBlocEvent, WarehousesBlocState> {
   final WarehouseRepo warehouseRepo;
-  WarehousesBloc(
-    this.warehouseRepo,
-  ) : super(const WarehousesBlocState()) {
+  final CurrentUserRepo currUserRepo;
+  final ObjectTypeRepo objectTypeRepo;
+  WarehousesBloc({
+    required this.warehouseRepo,
+    required this.currUserRepo,
+    required this.objectTypeRepo,
+  }) : super(const WarehousesBlocState()) {
     on<LoadWarehouses>(_onLoadWarehouses);
   }
 
@@ -24,18 +28,39 @@ class WarehousesBloc extends Bloc<WarehousesBlocEvent, WarehousesBlocState> {
     emit(state.copyWith(status: FetchingStatus.loading));
 
     try {
-      await warehouseRepo.getAll();
-      emit(
-        state.copyWith(
-          warehouses: warehouseRepo.datas,
-          status: FetchingStatus.success,
-        ),
+      int objType = await objectTypeRepo.getObjectTypeByName("Warehouse");
+      bool isAuthorized = currUserRepo.checkIfUserAuthorized(
+        objtype: objType,
+        auths: {"full": true, "create": true},
       );
+      if (!isAuthorized) {
+        emit(
+          state.copyWith(
+            status: FetchingStatus.unauthorized,
+            errorMessage: "Unauthorized user.",
+          ),
+        );
+      } else {
+        await warehouseRepo.getAll();
+        emit(
+          state.copyWith(
+            warehouses: warehouseRepo.datas,
+            status: FetchingStatus.success,
+          ),
+        );
+      }
     } on HttpException catch (err) {
       emit(
         state.copyWith(
           status: FetchingStatus.error,
           errorMessage: err.message,
+        ),
+      );
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          status: FetchingStatus.error,
+          errorMessage: e.toString(),
         ),
       );
     }

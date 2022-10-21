@@ -152,44 +152,42 @@ class _BranchFormBodyState extends State<BranchFormBody> {
 
   Flexible _pricelistField() {
     return Flexible(
-      child: InfoLabel(
-        label: "Pricelist",
-        child: ValueListenableBuilder<List<PricelistModel>>(
-            valueListenable: _pricelists,
-            builder: (_, pricelists, __) {
-              return AutoSuggestBox.form(
-                autovalidateMode: AutovalidateMode.always,
-                controller: _pricelistController,
-                items: pricelists
-                    .map<AutoSuggestBoxItem>(
-                      (e) => AutoSuggestBoxItem(
-                        value: e.code!,
-                        child: Text(e.code!),
-                        onSelected: () {
-                          _selectedPricelist = e.code;
-                          formBloc.add(
-                            BranchPricelistChanged(_selectedPricelist ?? ""),
-                          );
-                        },
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value, reason) {
-                  _selectedPricelist = value;
-                  if (reason == TextChangedReason.cleared) {
-                    formBloc.add(
-                      BranchPricelistChanged(_selectedPricelist ?? ""),
-                    );
-                  }
-                },
-                validator: (_) {
-                  return formBloc.state.pricelistCode.invalid
-                      ? "Invalid pricelist code"
-                      : null;
-                },
-              );
-            }),
-      ),
+      child: ValueListenableBuilder<List<PricelistModel>>(
+          valueListenable: _pricelists,
+          builder: (_, pricelists, __) {
+            return AutoSuggestBox.form(
+              autovalidateMode: AutovalidateMode.always,
+              controller: _pricelistController,
+              items: pricelists
+                  .map<AutoSuggestBoxItem>(
+                    (e) => AutoSuggestBoxItem(
+                      label: "Pricelist",
+                      value: e.code!,
+                      child: Text(e.code!),
+                      onSelected: () {
+                        _selectedPricelist = e.code;
+                        formBloc.add(
+                          BranchPricelistChanged(_selectedPricelist ?? ""),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value, reason) {
+                _selectedPricelist = value;
+                if (reason == TextChangedReason.cleared) {
+                  formBloc.add(
+                    BranchPricelistChanged(_selectedPricelist ?? ""),
+                  );
+                }
+              },
+              validator: (_) {
+                return formBloc.state.pricelistCode.invalid
+                    ? "Invalid pricelist code"
+                    : null;
+              },
+            );
+          }),
     );
   }
 

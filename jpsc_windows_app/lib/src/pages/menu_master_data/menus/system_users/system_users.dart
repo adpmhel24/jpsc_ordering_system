@@ -10,7 +10,7 @@ import '../../../../router/router.gr.dart';
 import '../../../../utils/fetching_status.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
-import 'widgets/table.dart';
+import 'components/table.dart';
 
 class SystemUsersPage extends StatefulWidget {
   const SystemUsersPage({Key? key}) : super(key: key);
@@ -31,6 +31,7 @@ class _SystemUsersPageState extends State<SystemUsersPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SystemUsersBloc, SystemUsersBlocState>(
+      listenWhen: (prev, curr) => prev.status != prev.status,
       listener: (context, state) {
         if (state.status == FetchingStatus.loading) {
           context.loaderOverlay.show();
@@ -39,16 +40,18 @@ class _SystemUsersPageState extends State<SystemUsersPage> {
           CustomDialogBox.errorMessage(context, message: state.message);
         } else if (state.status == FetchingStatus.success) {
           context.loaderOverlay.hide();
+        } else if (state.status == FetchingStatus.unauthorized) {
+          context.loaderOverlay.hide();
         }
       },
       child: BaseMasterDataScaffold(
         title: "System Users",
         onNewButton: () {
-          context.router.navigate(const SystemUsersWrapper(
-              children: [SystemUserCreateFormRoute()]));
+          context.router
+              .navigate(SystemUsersWrapper(children: [SystemUserFormRoute()]));
         },
         onRefreshButton: () {
-          sfDataGridKey.currentState!.refresh();
+          context.read<SystemUsersBloc>().add(LoadSystemUsers());
         },
         onSearchChanged: (value) {},
         child: SystemUsersTable(

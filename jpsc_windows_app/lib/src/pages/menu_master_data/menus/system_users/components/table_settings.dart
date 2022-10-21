@@ -12,7 +12,11 @@ class SystemUsersTableSettings {
     "position": {"name": "Position", "width": double.nan},
     "assignedBranch": {
       "name": "Assigned Branch",
-      "width": Constant.minPadding * 10
+      "width": Constant.minPadding * 20
+    },
+    "authorizations": {
+      "name": "Authorizations",
+      "width": Constant.minPadding * 20
     },
     "isActive": {"name": "Active", "width": Constant.minPadding * 15},
   };
@@ -21,7 +25,7 @@ class SystemUsersTableSettings {
     return DataGridRow(
       cells: [
         DataGridCell(
-            columnName: columnName["email"]["name"], value: systemUser),
+            columnName: columnName["email"]["name"], value: systemUser.email),
         DataGridCell(
           columnName: columnName["firstName"]["name"],
           value: systemUser.firstName,
@@ -37,6 +41,10 @@ class SystemUsersTableSettings {
         DataGridCell(
           columnName: columnName["assignedBranch"]["name"],
           value: systemUser.assignedBranch,
+        ),
+        DataGridCell(
+          columnName: columnName["authorizations"]["name"],
+          value: systemUser.authorizations,
         ),
         DataGridCell(
           columnName: columnName["isActive"]["name"],

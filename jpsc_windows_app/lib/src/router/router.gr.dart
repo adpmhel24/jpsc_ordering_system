@@ -24,9 +24,9 @@ import '../pages/menu_inventory/menus/inv_adj_in/bloc/inv_adj_in_bloc.dart'
     as _i16;
 import '../pages/menu_inventory/menus/inv_adj_out/bloc/inv_adj_out_bloc.dart'
     as _i17;
-import '../pages/menu_master_data/menus/customers/customers.dart' as _i7;
 import '../pages/menu_master_data/menus/customers/components/form/customer_form.dart'
     as _i8;
+import '../pages/menu_master_data/menus/customers/customers.dart' as _i7;
 import '../pages/menu_master_data/menus/payment_terms/components/form.dart'
     as _i10;
 import '../pages/menu_master_data/menus/payment_terms/payment_terms.dart'
@@ -53,6 +53,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -61,6 +63,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MainPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -69,6 +73,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.DashboardPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -77,6 +83,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.PurchasingMenuPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -85,6 +93,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.SalesMenuWrapperPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -93,6 +103,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InventoryWrapperPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -101,6 +113,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MasterDataWrapperPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -109,6 +123,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i3.SalesMenuPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -117,6 +133,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -125,6 +143,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.PriceQuotationPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -139,6 +159,8 @@ class AppRouter extends _i11.RootStackRouter {
           priceQuotation: args.priceQuotation,
           onRefresh: args.onRefresh,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -147,6 +169,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InventoryMenuPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -155,6 +179,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -163,6 +189,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -171,6 +199,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InvAdjustmentInPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -184,6 +214,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           invAdjInbloc: args.invAdjInbloc,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -197,6 +229,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           id: args.id,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -205,6 +239,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.InvAdjustmentOutPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -218,6 +254,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           invAdjOutbloc: args.invAdjOutbloc,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -231,6 +269,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           id: args.id,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -239,6 +279,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MasterDataMenuPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -247,6 +289,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -255,6 +299,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -263,6 +309,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -271,6 +319,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -279,6 +329,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -287,6 +339,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -295,6 +349,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.EmptyRouterPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -303,27 +359,23 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.SystemUsersPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
     },
-    SystemUserCreateFormRoute.name: (routeData) {
+    SystemUserFormRoute.name: (routeData) {
+      final args = routeData.argsAs<SystemUserFormRouteArgs>(
+          orElse: () => const SystemUserFormRouteArgs());
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i1.SystemUserCreateFormPage(),
-        opaque: true,
-        barrierDismissible: false,
-      );
-    },
-    SystemUserUpdateFormRoute.name: (routeData) {
-      final args = routeData.argsAs<SystemUserUpdateFormRouteArgs>(
-          orElse: () => const SystemUserUpdateFormRouteArgs());
-      return _i11.CustomPage<dynamic>(
-        routeData: routeData,
-        child: _i1.SystemUserUpdateFormPage(
+        child: _i1.SystemUserFormPage(
           key: args.key,
           selectedSystemUser: args.selectedSystemUser,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -332,6 +384,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i7.CustomersPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -346,6 +400,8 @@ class AppRouter extends _i11.RootStackRouter {
           selectedCustomer: args.selectedCustomer,
           onRefresh: args.onRefresh,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -354,6 +410,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.BranchesPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -367,6 +425,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           selectedBranch: args.selectedBranch,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -380,6 +440,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           selectedBranch: args.selectedBranch,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -388,6 +450,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.UomsPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -401,6 +465,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           selectedUom: args.selectedUom,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -414,6 +480,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           selectedUom: args.selectedUom,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -422,6 +490,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.PricelistPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -436,6 +506,8 @@ class AppRouter extends _i11.RootStackRouter {
           selectedPricelist: args.selectedPricelist,
           refresh: args.refresh,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -449,6 +521,8 @@ class AppRouter extends _i11.RootStackRouter {
           pricelistModel: args.pricelistModel,
           refresh: args.refresh,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -457,6 +531,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.ItemsPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -470,6 +546,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           selectedItem: args.selectedItem,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -483,6 +561,8 @@ class AppRouter extends _i11.RootStackRouter {
           header: args.header,
           selectedItem: args.selectedItem,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -491,6 +571,8 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i9.PaymentTermsPage(),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -505,6 +587,8 @@ class AppRouter extends _i11.RootStackRouter {
           selectedPayTermObj: args.selectedPayTermObj,
           onRefresh: args.onRefresh,
         ),
+        transitionsBuilder: _i11.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 400,
         opaque: true,
         barrierDismissible: false,
       );
@@ -666,13 +750,8 @@ class AppRouter extends _i11.RootStackRouter {
                       parent: SystemUsersWrapper.name,
                     ),
                     _i11.RouteConfig(
-                      SystemUserCreateFormRoute.name,
-                      path: 'create',
-                      parent: SystemUsersWrapper.name,
-                    ),
-                    _i11.RouteConfig(
-                      SystemUserUpdateFormRoute.name,
-                      path: 'edit',
+                      SystemUserFormRoute.name,
+                      path: 'form',
                       parent: SystemUsersWrapper.name,
                     ),
                   ],
@@ -1314,38 +1393,25 @@ class SystemUsersRoute extends _i11.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i1.SystemUserCreateFormPage]
-class SystemUserCreateFormRoute extends _i11.PageRouteInfo<void> {
-  const SystemUserCreateFormRoute()
-      : super(
-          SystemUserCreateFormRoute.name,
-          path: 'create',
-        );
-
-  static const String name = 'SystemUserCreateFormRoute';
-}
-
-/// generated route for
-/// [_i1.SystemUserUpdateFormPage]
-class SystemUserUpdateFormRoute
-    extends _i11.PageRouteInfo<SystemUserUpdateFormRouteArgs> {
-  SystemUserUpdateFormRoute({
+/// [_i1.SystemUserFormPage]
+class SystemUserFormRoute extends _i11.PageRouteInfo<SystemUserFormRouteArgs> {
+  SystemUserFormRoute({
     _i14.Key? key,
     _i15.SystemUserModel? selectedSystemUser,
   }) : super(
-          SystemUserUpdateFormRoute.name,
-          path: 'edit',
-          args: SystemUserUpdateFormRouteArgs(
+          SystemUserFormRoute.name,
+          path: 'form',
+          args: SystemUserFormRouteArgs(
             key: key,
             selectedSystemUser: selectedSystemUser,
           ),
         );
 
-  static const String name = 'SystemUserUpdateFormRoute';
+  static const String name = 'SystemUserFormRoute';
 }
 
-class SystemUserUpdateFormRouteArgs {
-  const SystemUserUpdateFormRouteArgs({
+class SystemUserFormRouteArgs {
+  const SystemUserFormRouteArgs({
     this.key,
     this.selectedSystemUser,
   });
@@ -1356,7 +1422,7 @@ class SystemUserUpdateFormRouteArgs {
 
   @override
   String toString() {
-    return 'SystemUserUpdateFormRouteArgs{key: $key, selectedSystemUser: $selectedSystemUser}';
+    return 'SystemUserFormRouteArgs{key: $key, selectedSystemUser: $selectedSystemUser}';
   }
 }
 

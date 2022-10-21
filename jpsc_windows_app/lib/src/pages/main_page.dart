@@ -100,7 +100,7 @@ class _MainPageState extends State<MainPage> with WindowListener {
               ),
             ],
           ),
-          content: const AutoRouter(
+          paneBodyBuilder: (viewWidget) => const AutoRouter(
             key: GlobalObjectKey("main_router"),
           ),
         ),

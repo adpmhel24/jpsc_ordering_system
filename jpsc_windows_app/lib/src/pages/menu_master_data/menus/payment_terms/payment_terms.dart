@@ -26,10 +26,13 @@ class _PaymentTermsPageState extends State<PaymentTermsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          FetchingPaymentTermsBloc(context.read<PaymentTermRepo>())
-            ..add(LoadPaymentTerms()),
-      child: BlocListener<BranchesBloc, BranchesBlocState>(
+      create: (context) => FetchingPaymentTermsBloc(
+        paymentTermRepo: context.read<PaymentTermRepo>(),
+        currUserRepo: context.read<CurrentUserRepo>(),
+        objectTypeRepo: context.read<ObjectTypeRepo>(),
+      )..add(LoadPaymentTerms()),
+      child: BlocListener<FetchingPaymentTermsBloc, FetchingPaymentTermsState>(
+        listenWhen: (prev, curr) => prev.status != prev.status,
         listener: (context, state) {
           if (state.status == FetchingStatus.loading) {
             context.loaderOverlay.show();
@@ -38,30 +41,34 @@ class _PaymentTermsPageState extends State<PaymentTermsPage> {
             CustomDialogBox.errorMessage(context, message: state.message);
           } else if (state.status == FetchingStatus.success) {
             context.loaderOverlay.hide();
+          } else if (state.status == FetchingStatus.unauthorized) {
+            context.loaderOverlay.hide();
           }
         },
-        child: BaseMasterDataScaffold(
-          title: "Payment Terms",
-          onNewButton: () {
-            context.router.navigate(
-              PaymentTermWrapper(
-                children: [
-                  PaymentTermFormRoute(
-                    header: "Payment Terms Create Form",
-                    onRefresh: sfDataGridKey.currentState!.refresh,
-                  ),
-                ],
-              ),
-            );
-          },
-          onRefreshButton: () {
-            sfDataGridKey.currentState!.refresh();
-          },
-          onSearchChanged: (value) {},
-          child: PaymentTermTable(
-            sfDataGridKey: sfDataGridKey,
-          ),
-        ),
+        child: Builder(builder: (context) {
+          return BaseMasterDataScaffold(
+            title: "Payment Terms",
+            onNewButton: () {
+              context.router.navigate(
+                PaymentTermWrapper(
+                  children: [
+                    PaymentTermFormRoute(
+                      header: "Payment Terms Create Form",
+                      onRefresh: sfDataGridKey.currentState!.refresh,
+                    ),
+                  ],
+                ),
+              );
+            },
+            onRefreshButton: () {
+              context.read<FetchingPaymentTermsBloc>().add(LoadPaymentTerms());
+            },
+            onSearchChanged: (value) {},
+            child: PaymentTermTable(
+              sfDataGridKey: sfDataGridKey,
+            ),
+          );
+        }),
       ),
     );
   }

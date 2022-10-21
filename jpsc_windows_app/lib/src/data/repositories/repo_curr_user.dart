@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +9,7 @@ import '../http_services/backend_api/login.dart';
 import '../models/models.dart';
 import 'repos.dart';
 
-class AuthRepo extends ChangeNotifier {
+class CurrentUserRepo extends ChangeNotifier {
   late LoginAPI loginApi = LoginAPI();
   late SharedPreferences localStorage = LocalStorageRepo().localStorage;
 
@@ -35,6 +36,27 @@ class AuthRepo extends ChangeNotifier {
       _isAuthenticated = true;
       notifyListeners();
     }
+  }
+
+  bool checkIfUserAuthorized({
+    required int objtype,
+    required Map<String, dynamic> auths,
+  }) {
+    bool authorized = false;
+    AuthorizationModel? authorization = currentUser.authorizations
+        .firstWhereOrNull((e) => e.objtype == objtype);
+
+    if (authorization != null) {
+      auths.forEach(
+        (key, value) {
+          if (authorization.toJson()[key] && value) {
+            authorized = true;
+          }
+        },
+      );
+    }
+
+    return authorized;
   }
 
   Future<void> loginWithCredentials(Map<String, dynamic> data) async {
@@ -67,14 +89,10 @@ class AuthRepo extends ChangeNotifier {
   }
 
   ///Singleton factory
-  static final AuthRepo _instance = AuthRepo._internal();
-  AuthRepo._internal();
+  static final CurrentUserRepo _instance = CurrentUserRepo._internal();
+  CurrentUserRepo._internal();
 
-  factory AuthRepo(
-      // {required SharedPreferences localStorage, required LoginAPI loginApi}
-      ) {
-    // _instance.localStorage = localStorage;
-    // _instance.loginApi = loginApi;
+  factory CurrentUserRepo() {
     return _instance;
   }
 }

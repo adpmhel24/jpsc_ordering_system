@@ -10,32 +10,44 @@ class GlobalBlocs {
     return [
       BlocProvider<BranchesBloc>(
         create: (_) => BranchesBloc(
-          context.read<BranchRepo>(),
+          branchRepo: context.read<BranchRepo>(),
+          currUserRepo: context.read<CurrentUserRepo>(),
+          objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
       BlocProvider<SystemUsersBloc>(
         create: (_) => SystemUsersBloc(
-          context.read<SystemUserRepo>(),
+          systemUserRepo: context.read<SystemUserRepo>(),
+          currUserRepo: context.read<CurrentUserRepo>(),
+          objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
       BlocProvider<WarehousesBloc>(
         create: (_) => WarehousesBloc(
-          context.read<WarehouseRepo>(),
+          warehouseRepo: context.read<WarehouseRepo>(),
+          currUserRepo: context.read<CurrentUserRepo>(),
+          objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
       BlocProvider<UomsBloc>(
         create: (_) => UomsBloc(
-          context.read<UomRepo>(),
+          uomRepo: context.read<UomRepo>(),
+          currUserRepo: context.read<CurrentUserRepo>(),
+          objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
       BlocProvider<ItemGroupsBloc>(
         create: (_) => ItemGroupsBloc(
-          context.read<ItemGroupRepo>(),
+          itemGroupRepo: context.read<ItemGroupRepo>(),
+          currUserRepo: context.read<CurrentUserRepo>(),
+          objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
       BlocProvider<ItemsBloc>(
         create: (_) => ItemsBloc(
-          context.read<ProductRepo>(),
+          itemRepo: context.read<ProductRepo>(),
+          currUserRepo: context.read<CurrentUserRepo>(),
+          objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
     ];

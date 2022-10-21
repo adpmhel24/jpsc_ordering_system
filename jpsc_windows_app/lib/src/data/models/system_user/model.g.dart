@@ -19,6 +19,9 @@ SystemUserModel _$SystemUserModelFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       isActive: json['is_active'] as bool,
+      isSuperAdmin: json['is_super_admin'] as bool,
+      authorizations:
+          SystemUserModel._authFromJson(json['authorizations'] as List),
     );
 
 Map<String, dynamic> _$SystemUserModelToJson(SystemUserModel instance) =>
@@ -28,6 +31,8 @@ Map<String, dynamic> _$SystemUserModelToJson(SystemUserModel instance) =>
       'first_name': instance.firstName,
       'last_name': instance.lastName,
       'is_active': instance.isActive,
+      'is_super_admin': instance.isSuperAdmin,
       'position_code': instance.positionCode,
       'assigned_branch': instance.assignedBranch,
+      'authorizations': SystemUserModel._authToJson(instance.authorizations),
     };

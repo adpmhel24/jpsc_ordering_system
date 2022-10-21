@@ -47,7 +47,9 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
       providers: [
         BlocProvider(
           create: (_) => FetchingPriceQuotationHeaderBloc(
-            context.read<PriceQuotationRepo>(),
+            priceQuotationRepo: context.read<PriceQuotationRepo>(),
+            currUserRepo: context.read<CurrentUserRepo>(),
+            objectTypeRepo: context.read<ObjectTypeRepo>(),
           )..add(
               FetchAllPriceQuotationHeader(
                 docStatus: docStatus,
@@ -66,6 +68,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
       child: MultiBlocListener(
         listeners: [
           BlocListener<PriceQuotationCancelBloc, PriceQuotationCancelState>(
+            listenWhen: (prev, curr) => prev.status != curr.status,
             listener: (context, state) {
               if (state.status == FetchingStatus.loading) {
                 context.loaderOverlay.show();
@@ -84,6 +87,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
           ),
           BlocListener<FetchingPriceQuotationHeaderBloc,
               FetchingPriceQuotationHeaderState>(
+            listenWhen: (prev, curr) => prev.status != curr.status,
             listener: (_, state) {
               if (state.status == FetchingStatus.loading) {
                 context.loaderOverlay.show();
@@ -91,6 +95,8 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
                 context.loaderOverlay.hide();
                 CustomDialogBox.errorMessage(context, message: state.message);
               } else if (state.status == FetchingStatus.success) {
+                context.loaderOverlay.hide();
+              } else if (state.status == FetchingStatus.unauthorized) {
                 context.loaderOverlay.hide();
               }
             },
@@ -317,7 +323,15 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
               icon: const Icon(FluentIcons.refresh),
               label: const Text("Refresh"),
               onPressed: () {
-                sfDataGridKey.currentState!.refresh();
+                bloc.add(
+                  FetchAllPriceQuotationHeader(
+                    docStatus: docStatus,
+                    pqStatus: pqStatus,
+                    fromDate:
+                        fromDate == null ? "" : dateFormat.format(fromDate!),
+                    toDate: toDate == null ? "" : dateFormat.format(toDate!),
+                  ),
+                );
               },
             ),
           ),

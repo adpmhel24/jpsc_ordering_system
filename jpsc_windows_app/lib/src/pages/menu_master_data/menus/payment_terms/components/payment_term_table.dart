@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../../data/models/models.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
+import '../../../../../utils/fetching_status.dart';
 import '../bloc/fetching_bloc/bloc.dart';
 
 class PaymentTermTable extends StatefulWidget {
@@ -33,25 +34,35 @@ class _PaymentTermTableState extends State<PaymentTermTable> {
   Widget build(BuildContext context) {
     return Card(
       child: BlocBuilder<FetchingPaymentTermsBloc, FetchingPaymentTermsState>(
+        buildWhen: (prev, curr) =>
+            curr.status == FetchingStatus.unauthorized ||
+            curr.status == FetchingStatus.success,
         builder: (context, state) {
-          _dataSource = DataSource(
-            context,
-            datas: state.datas,
-            startIndex: _startIndex,
-            endIndex: _endIndex,
-            rowsPerPage: _rowsPerPage,
-          );
-          return LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tableBody(constraint),
-                  tableFooter(state.datas.length),
-                ],
-              );
-            },
-          );
+          if (state.status == FetchingStatus.unauthorized) {
+            return Center(
+              child: Text(state.message),
+            );
+          } else if (state.status == FetchingStatus.success) {
+            _dataSource = DataSource(
+              context,
+              datas: state.datas,
+              startIndex: _startIndex,
+              endIndex: _endIndex,
+              rowsPerPage: _rowsPerPage,
+            );
+            return LayoutBuilder(
+              builder: (context, constraint) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tableBody(constraint),
+                    tableFooter(state.datas.length),
+                  ],
+                );
+              },
+            );
+          }
+          return const SizedBox.expand();
         },
       ),
     );

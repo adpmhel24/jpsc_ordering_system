@@ -6,7 +6,7 @@ abstract class PricelistFetchingEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchAllPricelist extends PricelistFetchingEvent {}
+class LoadPricelist extends PricelistFetchingEvent {}
 
 class FilterPricelist extends PricelistFetchingEvent {
   final String keyword;

@@ -14,6 +14,10 @@ AuthUserModel _$AuthUserModelFromJson(Map<String, dynamic> json) =>
       assignedBranch: (json['assigned_branch'] as List<dynamic>)
           .map((e) => SystemUserBranchModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isSuperAdmin: json['is_super_admin'] as bool? ?? false,
+      authorizations: json['authorizations'] == null
+          ? const []
+          : AuthUserModel._authFromJson(json['authorizations'] as List),
     );
 
 Map<String, dynamic> _$AuthUserModelToJson(AuthUserModel instance) =>
@@ -21,5 +25,7 @@ Map<String, dynamic> _$AuthUserModelToJson(AuthUserModel instance) =>
       'id': instance.id,
       'full_name': instance.fullName,
       'is_active': instance.isActive,
+      'is_super_admin': instance.isSuperAdmin,
       'assigned_branch': instance.assignedBranch,
+      'authorizations': AuthUserModel._authToJson(instance.authorizations),
     };

@@ -177,89 +177,85 @@ class _ItemFormBodyState extends State<ItemFormBody> {
 
   Flexible _itemGroupField() {
     return Flexible(
-      child: InfoLabel(
-        label: "Item Group",
-        child: ValueListenableBuilder<List<ItemGroupModel>>(
-          valueListenable: _itemGroups,
-          builder: (context, datas, _) {
-            return AutoSuggestBox.form(
-              autovalidateMode: AutovalidateMode.always,
-              controller: _itemGrpController,
-              items: datas
-                  .map<AutoSuggestBoxItem>(
-                    (e) => AutoSuggestBoxItem(
-                      value: e.code,
-                      child: Text(e.code),
-                      onSelected: () {
-                        _itemGrpController.text = e.code;
-                        formBloc.add(
-                          ItemGroupChanged(_itemGrpController.text),
-                        );
-                      },
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value, reason) {
-                String? itemGroupCode = datas
-                    .firstWhereOrNull((element) => element.code == value)
-                    ?.code;
-                formBloc.add(
-                  ItemGroupChanged(itemGroupCode ?? ""),
-                );
-              },
-              validator: (_) {
-                return formBloc.state.formzItemGroup.invalid
-                    ? "Invalid item group code"
-                    : null;
-              },
-            );
-          },
-        ),
+      child: ValueListenableBuilder<List<ItemGroupModel>>(
+        valueListenable: _itemGroups,
+        builder: (context, datas, _) {
+          return AutoSuggestBox.form(
+            autovalidateMode: AutovalidateMode.always,
+            controller: _itemGrpController,
+            items: datas
+                .map<AutoSuggestBoxItem>(
+                  (e) => AutoSuggestBoxItem(
+                    label: "Item Group",
+                    value: e.code,
+                    child: Text(e.code),
+                    onSelected: () {
+                      _itemGrpController.text = e.code;
+                      formBloc.add(
+                        ItemGroupChanged(_itemGrpController.text),
+                      );
+                    },
+                  ),
+                )
+                .toList(),
+            onChanged: (value, reason) {
+              String? itemGroupCode = datas
+                  .firstWhereOrNull((element) => element.code == value)
+                  ?.code;
+              formBloc.add(
+                ItemGroupChanged(itemGroupCode ?? ""),
+              );
+            },
+            validator: (_) {
+              return formBloc.state.formzItemGroup.invalid
+                  ? "Invalid item group code"
+                  : null;
+            },
+          );
+        },
       ),
     );
   }
 
   Flexible _saleUomField() {
     return Flexible(
-      child: InfoLabel(
-        label: "Sale Uom",
-        child: m.Material(
-          child: ValueListenableBuilder<List<UomModel>>(
-              valueListenable: _uoms,
-              builder: (context, datas, _) {
-                return AutoSuggestBox.form(
-                  autovalidateMode: AutovalidateMode.always,
-                  controller: _saleUomController,
-                  items: datas
-                      .map<AutoSuggestBoxItem>(
-                        (e) => AutoSuggestBoxItem(
-                          value: e.code,
-                          child: Text(e.code),
-                          onSelected: () {
-                            _saleUomController.text = e.code;
-                            formBloc.add(
-                              SaleUomChanged(_saleUomController.text),
-                            );
-                          },
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value, reason) {
-                    String? uomCode = datas
-                        .firstWhereOrNull((element) => element.code == value)
-                        ?.code;
-                    formBloc.add(
-                      SaleUomChanged(uomCode ?? ""),
-                    );
-                  },
-                  validator: (_) {
-                    return formBloc.state.formzSaleUom.invalid
-                        ? "Invalid pricelist code"
-                        : null;
-                  },
-                );
-              }),
-        ),
+      child: m.Material(
+        child: ValueListenableBuilder<List<UomModel>>(
+            valueListenable: _uoms,
+            builder: (context, datas, _) {
+              return AutoSuggestBox.form(
+                autovalidateMode: AutovalidateMode.always,
+                controller: _saleUomController,
+                items: datas
+                    .map<AutoSuggestBoxItem>(
+                      (e) => AutoSuggestBoxItem(
+                        label: "Sale Uom",
+                        value: e.code,
+                        child: Text(e.code),
+                        onSelected: () {
+                          _saleUomController.text = e.code;
+                          formBloc.add(
+                            SaleUomChanged(_saleUomController.text),
+                          );
+                        },
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value, reason) {
+                  String? uomCode = datas
+                      .firstWhereOrNull((element) => element.code == value)
+                      ?.code;
+                  formBloc.add(
+                    SaleUomChanged(uomCode ?? ""),
+                  );
+                },
+                validator: (_) {
+                  return formBloc.state.formzSaleUom.invalid
+                      ? "Invalid pricelist code"
+                      : null;
+                },
+              );
+            }),
       ),
     );
   }

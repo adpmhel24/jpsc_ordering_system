@@ -3,13 +3,16 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:jpsc_windows_app/src/data/repositories/repos.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../global_blocs/blocs.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
-import 'assigned_branch.dart';
+import '../../../../../utils/fetching_status.dart';
+import 'assign_branch_form.dart';
+import 'assign_auth_form.dart';
 import 'table_settings.dart';
 
 class SystemUsersTable extends StatefulWidget {
@@ -40,25 +43,35 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
   Widget build(BuildContext context) {
     return Card(
       child: BlocBuilder<SystemUsersBloc, SystemUsersBlocState>(
+        buildWhen: (prev, curr) =>
+            curr.status == FetchingStatus.unauthorized ||
+            curr.status == FetchingStatus.success,
         builder: (context, state) {
-          _dataSource = DataSource(
-            context,
-            systemUsers: state.systemUsers,
-            startIndex: _startIndex,
-            endIndex: _endIndex,
-            rowsPerPage: _rowsPerPage,
-          );
-          return LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tableBody(constraint),
-                  tableFooter(state),
-                ],
-              );
-            },
-          );
+          if (state.status == FetchingStatus.unauthorized) {
+            return Center(
+              child: Text(state.message),
+            );
+          } else if (state.status == FetchingStatus.success) {
+            _dataSource = DataSource(
+              context,
+              systemUsers: state.systemUsers,
+              startIndex: _startIndex,
+              endIndex: _endIndex,
+              rowsPerPage: _rowsPerPage,
+            );
+            return LayoutBuilder(
+              builder: (context, constraint) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tableBody(constraint),
+                    tableFooter(state),
+                  ],
+                );
+              },
+            );
+          }
+          return const SizedBox.expand();
         },
       ),
     );
@@ -92,13 +105,6 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
                 });
 
                 return true;
-              },
-              onCellDoubleTap: (
-                details,
-              ) async {
-                // DataGridRow selectedRow = _dataSource.effectiveRows
-                //     .elementAt(details.rowColumnIndex.rowIndex - 1);
-                // print(selectedRow.getCells()[0].value.email);
               },
             ),
           );
@@ -197,6 +203,8 @@ class DataSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((dataGridCell) {
+        final int dataRowIndex = dataGridRows.indexOf(row);
+
         if (dataGridCell.columnName == 'Email') {
           return Container(
             alignment: Alignment.centerLeft,
@@ -209,8 +217,9 @@ class DataSource extends DataGridSource {
                       cntx.router.navigate(
                         SystemUsersWrapper(
                           children: [
-                            SystemUserUpdateFormRoute(
-                              selectedSystemUser: dataGridCell.value,
+                            SystemUserFormRoute(
+                              selectedSystemUser:
+                                  paginatedSystemUsers[dataRowIndex],
                             )
                           ],
                         ),
@@ -222,7 +231,7 @@ class DataSource extends DataGridSource {
                     ),
                   ),
                 ),
-                Flexible(child: SelectableText(dataGridCell.value.email)),
+                Flexible(child: SelectableText(dataGridCell.value)),
               ],
             ),
           );
@@ -245,6 +254,32 @@ class DataSource extends DataGridSource {
                     builder: (_) => AssignedBranchModal(
                       assignedBranches: dataGridCell.value!,
                       handleRefresh: handleRefresh,
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        } else if (dataGridCell.columnName == 'Authorizations') {
+          return DropDownButton(
+            leading: const Icon(
+              FluentIcons.settings,
+              size: 15,
+            ),
+            items: [
+              MenuFlyoutItem(
+                leading: const Icon(
+                  FluentIcons.edit,
+                  size: 15,
+                ),
+                text: const Text('Update'),
+                onPressed: () {
+                  showDialog(
+                    context: cntx,
+                    builder: (_) => SystemUserAuthDialog(
+                      sysAuthsObj: dataGridCell.value,
+                      onRefresh: handleRefresh,
+                      authorizationRepo: cntx.read<AuthorizationRepo>(),
                     ),
                   );
                 },

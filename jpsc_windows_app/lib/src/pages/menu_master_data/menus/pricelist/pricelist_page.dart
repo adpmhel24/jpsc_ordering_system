@@ -25,10 +25,14 @@ class _PricelistPageState extends State<PricelistPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => PricelistFetchingBloc(context.read<PricelistRepo>())
-        ..add(FetchAllPricelist()),
+      create: (_) => PricelistFetchingBloc(
+        pricelistRepo: context.read<PricelistRepo>(),
+        currUserRepo: context.read<CurrentUserRepo>(),
+        objectTypeRepo: context.read<ObjectTypeRepo>(),
+      )..add(LoadPricelist()),
       child: BlocListener<PricelistFetchingBloc, PricelistFetchingState>(
-        listener: (_, state) {
+        listenWhen: (prev, curr) => prev.status != prev.status,
+        listener: (context, state) {
           if (state.status == FetchingStatus.loading) {
             context.loaderOverlay.show();
           } else if (state.status == FetchingStatus.error) {
@@ -36,30 +40,34 @@ class _PricelistPageState extends State<PricelistPage> {
             CustomDialogBox.errorMessage(context, message: state.errorMessage);
           } else if (state.status == FetchingStatus.success) {
             context.loaderOverlay.hide();
+          } else if (state.status == FetchingStatus.unauthorized) {
+            context.loaderOverlay.hide();
           }
         },
-        child: BaseMasterDataScaffold(
-          title: "Pricelist",
-          onNewButton: () {
-            context.router.navigate(
-              PricelistWrapper(
-                children: [
-                  PricelistCreateRoute(
-                    header: "Pricelist Create Form",
-                    refresh: sfDataGridKey.currentState!.refresh,
-                  ),
-                ],
-              ),
-            );
-          },
-          onRefreshButton: () {
-            sfDataGridKey.currentState!.refresh();
-          },
-          onSearchChanged: (value) {},
-          child: PricelistHeaderTable(
-            sfDataGridKey: sfDataGridKey,
-          ),
-        ),
+        child: Builder(builder: (context) {
+          return BaseMasterDataScaffold(
+            title: "Pricelist",
+            onNewButton: () {
+              context.router.navigate(
+                PricelistWrapper(
+                  children: [
+                    PricelistCreateRoute(
+                      header: "Pricelist Create Form",
+                      refresh: sfDataGridKey.currentState!.refresh,
+                    ),
+                  ],
+                ),
+              );
+            },
+            onRefreshButton: () {
+              context.read<PricelistFetchingBloc>().add(LoadPricelist());
+            },
+            onSearchChanged: (value) {},
+            child: PricelistHeaderTable(
+              sfDataGridKey: sfDataGridKey,
+            ),
+          );
+        }),
       ),
     );
   }

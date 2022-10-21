@@ -99,8 +99,15 @@ class _MyAppState extends State<MyApp> {
       providers: AppRepoProvider.repoProviders,
       child: BlocProvider(
         create: (context) => AuthBloc(),
-        child: ChangeNotifierProvider(
-          create: (_) => AppTheme(),
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => AppTheme(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => CurrentUserRepo(),
+            )
+          ],
           builder: (context, _) {
             final appTheme = context.watch<AppTheme>();
             return GlobalLoaderOverlay(

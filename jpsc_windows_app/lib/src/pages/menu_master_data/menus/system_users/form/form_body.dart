@@ -1,14 +1,17 @@
+import 'dart:io';
+
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as m;
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
 import '../../../../widgets/custom_dialog.dart';
-import '../../../../widgets/custom_dropdown_search.dart';
 import 'bloc/bloc.dart';
 
 class SystemUserFormBody extends StatefulWidget {
@@ -30,12 +33,21 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _positionCodeController = TextEditingController();
   late SystemUserFormBloc formBloc;
+  late CurrentUserRepo currUserRepo;
 
   bool isPasswordHidden = true;
+
+  bool isActive = true;
+  bool isSuperAdmin = false;
+  bool isFieldEnable = true;
+
+  final ValueNotifier<List<SystemUserPositionModel>> systemUserPositions =
+      ValueNotifier([]);
 
   @override
   void initState() {
     formBloc = context.read<SystemUserFormBloc>();
+    currUserRepo = context.read<CurrentUserRepo>();
 
     if (widget.selectedSystemUser != null) {
       var systemUser = widget.selectedSystemUser!;
@@ -43,7 +55,11 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
       _lastNameController.text = systemUser.lastName;
       _emailController.text = systemUser.email;
       _positionCodeController.text = systemUser.positionCode ?? "";
+      isActive = systemUser.isActive;
+      isSuperAdmin = systemUser.isSuperAdmin;
     }
+    loadInitialData();
+    isFieldEnable = currUserRepo.currentUser.isSuperAdmin;
     super.initState();
   }
 
@@ -54,7 +70,21 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
     _emailController.dispose();
     _passwordController.dispose();
     _positionCodeController.dispose();
+    systemUserPositions.dispose();
     super.dispose();
+  }
+
+  void loadInitialData() async {
+    context.loaderOverlay.show();
+    final repo = context.read<SystemUserPositionRepo>();
+    try {
+      await repo.getAll();
+      systemUserPositions.value = repo.datas;
+      context.loaderOverlay.hide();
+    } on HttpException catch (e) {
+      CustomDialogBox.errorMessage(context, message: e.message);
+      context.loaderOverlay.hide();
+    }
   }
 
   @override
@@ -70,6 +100,7 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
             children: [
               Flex(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 direction: Responsive.isMobile(context)
                     ? Axis.vertical
                     : Axis.horizontal,
@@ -82,6 +113,7 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
               Constant.heightSpacer,
               Flex(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 direction: Responsive.isMobile(context)
                     ? Axis.vertical
                     : Axis.horizontal,
@@ -92,7 +124,38 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
                 ],
               ),
               Constant.heightSpacer,
-              _positionCodeField(context),
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.end,
+                spacing: 20,
+                children: [
+                  _positionField(),
+                  Checkbox(
+                    checked: isActive,
+                    onChanged: isFieldEnable
+                        ? (v) {
+                            setState(() {
+                              isActive = v!;
+                            });
+                            formBloc.add(IsActiveChanged(isActive));
+                          }
+                        : null,
+                    content: Text(isActive ? "Active" : "Inactive"),
+                  ),
+                  Checkbox(
+                    checked: isSuperAdmin,
+                    onChanged: currUserRepo.currentUser.isSuperAdmin
+                        ? (v) {
+                            setState(() {
+                              isSuperAdmin = v!;
+                            });
+                            formBloc.add(IsSuperAdminChanged(isSuperAdmin));
+                          }
+                        : null,
+                    content: const Text("SuperAdmin"),
+                  ),
+                ],
+              ),
+              Constant.heightSpacer,
               const SizedBox(
                 height: kPageDefaultVerticalPadding,
               ),
@@ -104,24 +167,46 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
     );
   }
 
-  InfoLabel _positionCodeField(BuildContext context) {
-    return InfoLabel(
-      label: "Position Code",
-      child: m.Material(
-        child: MyCustomDropdownSearch<SystemUserPositionModel>(
-          autoValidateMode: AutovalidateMode.always,
-          itemAsString: (position) => position!.code,
-          onFind: (String? filter) =>
-              context.read<SystemUserPositionRepo>().offlineSearch(filter!),
-          compareFn: (position, selectedPosition) =>
-              position!.code == selectedPosition!.code,
-          onChanged: (SystemUserPositionModel? data) {
-            _positionCodeController.text = data?.code ?? "";
-            formBloc.add(
-              PositionCodeChanged(_positionCodeController),
-            );
-          },
-        ),
+  SizedBox _positionField() {
+    return SizedBox(
+      width: 200,
+      child: ValueListenableBuilder<List<SystemUserPositionModel>>(
+        valueListenable: systemUserPositions,
+        builder: (context, datas, _) {
+          return AutoSuggestBox.form(
+            autovalidateMode: AutovalidateMode.always,
+            controller: _positionCodeController,
+            enabled: isFieldEnable,
+            items: datas
+                .map<AutoSuggestBoxItem>(
+                  (e) => AutoSuggestBoxItem(
+                    label: "Position *",
+                    value: e.code,
+                    child: Text(e.code),
+                    onSelected: () {
+                      _positionCodeController.text = e.code;
+                      formBloc.add(
+                        PositionCodeChanged(_positionCodeController.text),
+                      );
+                    },
+                  ),
+                )
+                .toList(),
+            onChanged: (value, reason) {
+              String? positionCode = datas
+                  .firstWhereOrNull((element) => element.code == value)
+                  ?.code;
+              formBloc.add(
+                PositionCodeChanged(positionCode ?? ""),
+              );
+            },
+            validator: (_) {
+              return formBloc.state.positionCode.invalid
+                  ? "Invalid item position code"
+                  : null;
+            },
+          );
+        },
       ),
     );
   }
@@ -130,20 +215,22 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: FilledButton(
-        onPressed: context.watch<SystemUserFormBloc>().state.status.isValidated
-            ? () {
-                CustomDialogBox.warningMessage(
-                  context,
-                  message: "Are you sure you want to proceed?",
-                  onPositiveClick: (cntx) {
-                    formBloc.add(
-                      CreateButtonSubmitted(),
+        onPressed:
+            context.watch<SystemUserFormBloc>().state.status.isValidated &&
+                    isFieldEnable
+                ? () {
+                    CustomDialogBox.warningMessage(
+                      context,
+                      message: "Are you sure you want to proceed?",
+                      onPositiveClick: (cntx) {
+                        formBloc.add(
+                          ButtonSubmitted(),
+                        );
+                        Navigator.of(cntx).pop();
+                      },
                     );
-                    Navigator.of(cntx).pop();
-                  },
-                );
-              }
-            : null,
+                  }
+                : null,
         child: widget.selectedSystemUser != null
             ? const Text("Update")
             : const Text("Create"),
@@ -154,13 +241,14 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
   Flexible _passwordField() {
     return Flexible(
       child: TextFormBox(
-        header: "Password",
+        header: "Password *",
         autovalidateMode: AutovalidateMode.always,
         controller: _passwordController,
         obscureText: isPasswordHidden,
+        enabled: isFieldEnable,
         onChanged: (_) {
           formBloc.add(
-            PasswordChanged(_passwordController),
+            PasswordChanged(_passwordController.text),
           );
         },
         validator: (_) {
@@ -179,12 +267,13 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
   Flexible _emailField() {
     return Flexible(
       child: TextFormBox(
-        header: "Email",
+        header: "Email *",
         autovalidateMode: AutovalidateMode.always,
         controller: _emailController,
+        enabled: isFieldEnable,
         onChanged: (_) {
           formBloc.add(
-            EmailChanged(_emailController),
+            EmailChanged(_emailController.text),
           );
         },
         validator: (_) {
@@ -197,12 +286,13 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
   Flexible _lastNameField() {
     return Flexible(
       child: TextFormBox(
-        header: "Last Name",
+        header: "Last Name *",
         autovalidateMode: AutovalidateMode.always,
         controller: _lastNameController,
+        enabled: isFieldEnable,
         onChanged: (_) {
           formBloc.add(
-            LastNameChanged(_lastNameController),
+            LastNameChanged(_lastNameController.text),
           );
         },
         validator: (_) {
@@ -215,12 +305,13 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
   Flexible _firstNameField() {
     return Flexible(
       child: TextFormBox(
-        header: "First Name",
+        header: "First Name *",
         autovalidateMode: AutovalidateMode.always,
         controller: _firstNameController,
+        enabled: isFieldEnable,
         onChanged: (_) {
           formBloc.add(
-            FirstNameChanged(_firstNameController),
+            FirstNameChanged(_firstNameController.text),
           );
         },
         validator: (_) {

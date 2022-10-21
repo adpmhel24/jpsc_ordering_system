@@ -9,8 +9,8 @@ class AppRepoProvider {
       lazy: false,
       create: (context) => LocalStorageRepo()..init(),
     ),
-    RepositoryProvider<AuthRepo>(
-      create: (context) => AuthRepo(),
+    RepositoryProvider<CurrentUserRepo>(
+      create: (context) => CurrentUserRepo()..checkIfLoggedIn(),
     ),
     ...salesProviders,
     ...masterDataProviders,
@@ -71,6 +71,21 @@ List<RepositoryProvider> masterDataProviders = [
   ),
   RepositoryProvider<PaymentTermRepo>(
     create: (context) => PaymentTermRepo(
+      localStorage: context.read<LocalStorageRepo>().localStorage,
+    ),
+  ),
+  RepositoryProvider<ObjectTypeRepo>(
+    create: (context) => ObjectTypeRepo(
+      localStorage: context.read<LocalStorageRepo>().localStorage,
+    ),
+  ),
+  RepositoryProvider<MenuGroupRepo>(
+    create: (context) => MenuGroupRepo(
+      localStorage: context.read<LocalStorageRepo>().localStorage,
+    ),
+  ),
+  RepositoryProvider<AuthorizationRepo>(
+    create: (context) => AuthorizationRepo(
       localStorage: context.read<LocalStorageRepo>().localStorage,
     ),
   ),

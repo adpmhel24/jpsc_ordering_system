@@ -11,50 +11,49 @@ part 'event.dart';
 part 'state.dart';
 
 class BranchesBloc extends Bloc<BranchesBlocEvent, BranchesBlocState> {
-  final BranchRepo _branchRepo;
+  final BranchRepo branchRepo;
+  final CurrentUserRepo currUserRepo;
+  final ObjectTypeRepo objectTypeRepo;
 
-  BranchesBloc(this._branchRepo) : super(const BranchesBlocState()) {
+  BranchesBloc({
+    required this.branchRepo,
+    required this.currUserRepo,
+    required this.objectTypeRepo,
+  }) : super(const BranchesBlocState()) {
     on<LoadBranches>(_onLoadBranches);
-    // on<BranchesFetchingReq>(_onBranchesFetchingReq);
-    // on<BranchesPauseFetchingReq>(_onBranchesPauseFetchingReq);
   }
-
-  // void _onBranchesFetchingReq(
-  //     BranchesFetchingReq event, Emitter<BranchesBlocState> emit) {
-  //   emit(state.copyWith(status: FetchingStatus.loading));
-  //   if (_periodicSubscription == null) {
-  //     _periodicSubscription =
-  //         Stream.periodic(Duration(seconds: initialDuration), (x) => x).listen(
-  //       (event) => add(
-  //         LoadBranches(),
-  //       ),
-  //     );
-  //   } else {
-  //     _periodicSubscription?.resume();
-  //   }
-  // }
-
-  // void _onBranchesPauseFetchingReq(
-  //     BranchesPauseFetchingReq event, Emitter<BranchesBlocState> emit) {
-  //   _periodicSubscription?.pause();
-  // }
 
   void _onLoadBranches(
       LoadBranches event, Emitter<BranchesBlocState> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
     try {
-      await _branchRepo.getAll();
-      emit(state.copyWith(
-          status: FetchingStatus.success, branches: _branchRepo.datas));
+      // Check if authorized
+      int objType = await objectTypeRepo.getObjectTypeByName("Branch");
+      bool isAuthorized = currUserRepo.checkIfUserAuthorized(
+        objtype: objType,
+        auths: {"full": true, "create": true},
+      );
+      if (!isAuthorized) {
+        emit(
+          state.copyWith(
+            status: FetchingStatus.unauthorized,
+            message: "Unauthorized user.",
+          ),
+        );
+      } else {
+        await branchRepo.getAll();
+        emit(state.copyWith(
+            status: FetchingStatus.success, branches: branchRepo.datas));
+      }
     } on HttpException catch (e) {
-      // _periodicSubscription?.pause();
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          status: FetchingStatus.error,
+          message: e.toString(),
+        ),
+      );
     }
   }
-
-  // @override
-  // Future<void> close() {
-  //   _periodicSubscription?.cancel();
-  //   return super.close();
-  // }
 }

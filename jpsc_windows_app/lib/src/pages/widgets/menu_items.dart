@@ -37,5 +37,6 @@ PaneItem _paneItemBuilder({
       height: 15,
     ),
     title: Text(title),
+    body: const SizedBox.expand(),
   );
 }

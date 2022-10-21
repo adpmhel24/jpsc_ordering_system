@@ -9,6 +9,7 @@ import 'package:flutter/material.dart' as m;
 import '../../../../../global_blocs/bloc_customer/fetching_bloc/bloc.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
+import '../../../../../utils/fetching_status.dart';
 
 class CustomersTable extends StatefulWidget {
   const CustomersTable({
@@ -34,28 +35,38 @@ class _CustomersTableState extends State<CustomersTable> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CustomerFetchingBloc, CustomerFetchingState>(
+      buildWhen: (prev, curr) =>
+          curr.status == FetchingStatus.unauthorized ||
+          curr.status == FetchingStatus.success,
       builder: (context, state) {
-        _dataSource = DataSource(
-          context,
-          datas: state.datas,
-          startIndex: _startIndex,
-          endIndex: _endIndex,
-          rowsPerPage: _rowsPerPage,
-          onRefresh: widget.onRefresh,
-        );
-        return Card(
-          child: LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tableBody(constraint),
-                  tableFooter(state.datas.length),
-                ],
-              );
-            },
-          ),
-        );
+        if (state.status == FetchingStatus.unauthorized) {
+          return Center(
+            child: Text(state.message),
+          );
+        } else if (state.status == FetchingStatus.success) {
+          _dataSource = DataSource(
+            context,
+            datas: state.datas,
+            startIndex: _startIndex,
+            endIndex: _endIndex,
+            rowsPerPage: _rowsPerPage,
+            onRefresh: widget.onRefresh,
+          );
+          return Card(
+            child: LayoutBuilder(
+              builder: (context, constraint) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tableBody(constraint),
+                    tableFooter(state.datas.length),
+                  ],
+                );
+              },
+            ),
+          );
+        }
+        return const SizedBox.expand();
       },
     );
   }

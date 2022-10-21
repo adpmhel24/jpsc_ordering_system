@@ -3,6 +3,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jpsc_windows_app/src/utils/fetching_status.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
@@ -38,25 +39,35 @@ class _ItemsTableState extends State<ItemsTable> {
   Widget build(BuildContext context) {
     return Card(
       child: BlocBuilder<ItemsBloc, ItemsBlocState>(
+        buildWhen: (prev, curr) =>
+            curr.status == FetchingStatus.unauthorized ||
+            curr.status == FetchingStatus.success,
         builder: (context, state) {
-          _dataSource = DataSource(
-            context,
-            datas: state.datas,
-            startIndex: _startIndex,
-            endIndex: _endIndex,
-            rowsPerPage: _rowsPerPage,
-          );
-          return LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tableBody(constraint),
-                  tableFooter(state),
-                ],
-              );
-            },
-          );
+          if (state.status == FetchingStatus.unauthorized) {
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          } else if (state.status == FetchingStatus.success) {
+            _dataSource = DataSource(
+              context,
+              datas: state.datas,
+              startIndex: _startIndex,
+              endIndex: _endIndex,
+              rowsPerPage: _rowsPerPage,
+            );
+            return LayoutBuilder(
+              builder: (context, constraint) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tableBody(constraint),
+                    tableFooter(state),
+                  ],
+                );
+              },
+            );
+          }
+          return const SizedBox.expand();
         },
       ),
     );

@@ -10,7 +10,7 @@ part 'event.dart';
 part 'state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepo _authRepo = AuthRepo();
+  final CurrentUserRepo _currUserRepo = CurrentUserRepo();
   AuthBloc() : super(const AuthState()) {
     on<LoginSubmitted>(_onLoginSubmitted);
     on<LogoutSubmitted>(_onLogoutSubmitted);
@@ -20,7 +20,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(state.copyWith(status: AuthStateStatus.loading));
 
-      await _authRepo.loginWithCredentials(
+      await _currUserRepo.loginWithCredentials(
           {"username": event.username, "password": event.password});
       emit(state.copyWith(status: AuthStateStatus.loggedIn));
     } on HttpException catch (err) {
@@ -33,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onLogoutSubmitted(
       LogoutSubmitted event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: AuthStateStatus.loading));
-    await _authRepo.logout();
+    await _currUserRepo.logout();
     emit(state.copyWith(status: AuthStateStatus.loggedOut));
   }
 }

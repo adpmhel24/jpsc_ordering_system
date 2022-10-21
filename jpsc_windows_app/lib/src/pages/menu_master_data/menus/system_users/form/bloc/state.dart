@@ -7,6 +7,7 @@ class SystemUserFormState extends Equatable {
   final FormzEmail email;
   final FormzString password;
   final FormzBool isActive;
+  final FormzBool isSuperAdmin;
   final FormzString positionCode;
   final String message;
 
@@ -18,6 +19,7 @@ class SystemUserFormState extends Equatable {
     this.password = const FormzString.pure(),
     this.positionCode = const FormzString.pure(),
     this.isActive = const FormzBool.dirty(true),
+    this.isSuperAdmin = const FormzBool.dirty(false),
     this.message = "",
   });
 
@@ -28,6 +30,8 @@ class SystemUserFormState extends Equatable {
     FormzEmail? email,
     FormzString? password,
     FormzString? positionCode,
+    FormzBool? isActive,
+    FormzBool? isSuperAdmin,
     String? message,
   }) {
     return SystemUserFormState(
@@ -37,6 +41,8 @@ class SystemUserFormState extends Equatable {
       email: email ?? this.email,
       password: password ?? this.password,
       positionCode: positionCode ?? this.positionCode,
+      isActive: isActive ?? this.isActive,
+      isSuperAdmin: isSuperAdmin ?? this.isSuperAdmin,
       message: message ?? this.message,
     );
   }
@@ -50,6 +56,7 @@ class SystemUserFormState extends Equatable {
         password,
         positionCode,
         isActive,
+        isSuperAdmin,
         message,
       ];
 }

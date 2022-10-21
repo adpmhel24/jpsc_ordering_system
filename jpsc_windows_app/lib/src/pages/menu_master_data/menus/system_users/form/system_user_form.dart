@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:jpsc_windows_app/src/data/models/system_user/model.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/repositories/repos.dart';
@@ -10,22 +11,21 @@ import '../../../../widgets/custom_dialog.dart';
 import 'bloc/bloc.dart';
 import 'form_body.dart';
 
-class SystemUserCreateFormPage extends StatelessWidget {
-  const SystemUserCreateFormPage({
-    Key? key,
-  }) : super(key: key);
+class SystemUserFormPage extends StatelessWidget {
+  const SystemUserFormPage({Key? key, this.selectedSystemUser})
+      : super(key: key);
+
+  final SystemUserModel? selectedSystemUser;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SystemUserFormBloc(
         systemUserRepo: context.read<SystemUserRepo>(),
+        selectedSystemUser: selectedSystemUser,
       ),
       child: BlocListener<SystemUserFormBloc, SystemUserFormState>(
-        listenWhen: (previous, current) =>
-            current.status.isSubmissionFailure ||
-            current.status.isSubmissionInProgress ||
-            current.status.isSubmissionSuccess,
+        listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           if (state.status.isSubmissionInProgress) {
             context.loaderOverlay.show();
@@ -62,10 +62,12 @@ class SystemUserCreateFormPage extends StatelessWidget {
                 ),
               ],
             ),
-            title: const Text("System User Create Form"),
+            title: const Text("System User Form"),
           ),
-          content: const SingleChildScrollView(
-            child: SystemUserFormBody(),
+          content: SingleChildScrollView(
+            child: SystemUserFormBody(
+              selectedSystemUser: selectedSystemUser,
+            ),
           ),
         ),
       ),

@@ -31,6 +31,7 @@ class _UomsPageState extends State<UomsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<UomsBloc, UomsBlocState>(
+      listenWhen: (prev, curr) => prev.status != prev.status,
       listener: (context, state) {
         if (state.status == FetchingStatus.loading) {
           context.loaderOverlay.show();
@@ -38,6 +39,8 @@ class _UomsPageState extends State<UomsPage> {
           context.loaderOverlay.hide();
           CustomDialogBox.errorMessage(context, message: state.errorMessage);
         } else if (state.status == FetchingStatus.success) {
+          context.loaderOverlay.hide();
+        } else if (state.status == FetchingStatus.unauthorized) {
           context.loaderOverlay.hide();
         }
       },
@@ -55,7 +58,7 @@ class _UomsPageState extends State<UomsPage> {
           );
         },
         onRefreshButton: () {
-          sfDataGridKey.currentState!.refresh();
+          context.read<UomsBloc>().add(LoadUoms());
         },
         onSearchChanged: (value) {},
         child: UomsTable(

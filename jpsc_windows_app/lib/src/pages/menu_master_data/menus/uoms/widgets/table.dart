@@ -9,6 +9,7 @@ import '../../../../../data/models/models.dart';
 import '../../../../../global_blocs/blocs.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
+import '../../../../../utils/fetching_status.dart';
 import '../../../../../utils/responsive.dart';
 import 'table_settings.dart';
 
@@ -39,25 +40,35 @@ class _UomsTableState extends State<UomsTable> {
   Widget build(BuildContext context) {
     return Card(
       child: BlocBuilder<UomsBloc, UomsBlocState>(
+        buildWhen: (prev, curr) =>
+            curr.status == FetchingStatus.unauthorized ||
+            curr.status == FetchingStatus.success,
         builder: (context, state) {
-          _dataSource = DataSource(
-            context,
-            datas: state.uoms,
-            startIndex: _startIndex,
-            endIndex: _endIndex,
-            rowsPerPage: _rowsPerPage,
-          );
-          return LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tableBody(constraint),
-                  tableFooter(state),
-                ],
-              );
-            },
-          );
+          if (state.status == FetchingStatus.unauthorized) {
+            return Center(
+              child: Text(state.errorMessage),
+            );
+          } else if (state.status == FetchingStatus.success) {
+            _dataSource = DataSource(
+              context,
+              datas: state.uoms,
+              startIndex: _startIndex,
+              endIndex: _endIndex,
+              rowsPerPage: _rowsPerPage,
+            );
+            return LayoutBuilder(
+              builder: (context, constraint) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tableBody(constraint),
+                    tableFooter(state),
+                  ],
+                );
+              },
+            );
+          }
+          return const SizedBox.expand();
         },
       ),
     );

@@ -3,9 +3,9 @@ import '../data/repositories/repos.dart';
 import './router.gr.dart';
 
 class RouteGuard extends AutoRedirectGuard {
-  AuthRepo authRepo = AuthRepo()..checkIfLoggedIn();
+  CurrentUserRepo currUserRepo = CurrentUserRepo();
   RouteGuard() {
-    authRepo.addListener(reevaluate);
+    currUserRepo.addListener(reevaluate);
   }
 
   @override
@@ -20,6 +20,6 @@ class RouteGuard extends AutoRedirectGuard {
 
   @override
   Future<bool> canNavigate(RouteMatch route) async {
-    return authRepo.isAuthenticated;
+    return currUserRepo.isAuthenticated;
   }
 }

@@ -30,6 +30,7 @@ class _ItemsPageState extends State<ItemsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ItemsBloc, ItemsBlocState>(
+      listenWhen: (prev, curr) => prev.status != prev.status,
       listener: (context, state) {
         if (state.status == FetchingStatus.loading) {
           context.loaderOverlay.show();
@@ -37,6 +38,8 @@ class _ItemsPageState extends State<ItemsPage> {
           context.loaderOverlay.hide();
           CustomDialogBox.errorMessage(context, message: state.errorMessage);
         } else if (state.status == FetchingStatus.success) {
+          context.loaderOverlay.hide();
+        } else if (state.status == FetchingStatus.unauthorized) {
           context.loaderOverlay.hide();
         }
       },
@@ -54,7 +57,7 @@ class _ItemsPageState extends State<ItemsPage> {
           );
         },
         onRefreshButton: () {
-          sfDataGridKey.currentState!.refresh();
+          context.read<ItemsBloc>().add(LoadItems());
         },
         onSearchChanged: (value) {},
         child: ItemsTable(

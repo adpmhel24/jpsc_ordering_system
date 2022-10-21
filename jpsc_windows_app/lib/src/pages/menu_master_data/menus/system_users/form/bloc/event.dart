@@ -7,41 +7,53 @@ abstract class SystemUserFormEvent extends Equatable {
 }
 
 class FirstNameChanged extends SystemUserFormEvent {
-  final TextEditingController firstNameController;
-  const FirstNameChanged(this.firstNameController);
+  final String value;
+  const FirstNameChanged(this.value);
   @override
-  List<Object> get props => [firstNameController];
+  List<Object> get props => [value];
 }
 
 class LastNameChanged extends SystemUserFormEvent {
-  final TextEditingController lastNameController;
-  const LastNameChanged(this.lastNameController);
+  final String value;
+  const LastNameChanged(this.value);
   @override
-  List<Object> get props => [lastNameController];
+  List<Object> get props => [value];
 }
 
 class EmailChanged extends SystemUserFormEvent {
-  final TextEditingController emailController;
-  const EmailChanged(this.emailController);
+  final String value;
+  const EmailChanged(this.value);
   @override
-  List<Object> get props => [emailController];
+  List<Object> get props => [value];
 }
 
 class PasswordChanged extends SystemUserFormEvent {
-  final TextEditingController passwordController;
-  const PasswordChanged(this.passwordController);
+  final String value;
+  const PasswordChanged(this.value);
   @override
-  List<Object> get props => [passwordController];
+  List<Object> get props => [value];
 }
 
 class PositionCodeChanged extends SystemUserFormEvent {
-  final TextEditingController positionCode;
-  const PositionCodeChanged(this.positionCode);
+  final String value;
+  const PositionCodeChanged(this.value);
 
   @override
-  List<Object> get props => [positionCode];
+  List<Object> get props => [value];
 }
 
-class CreateButtonSubmitted extends SystemUserFormEvent {}
+class IsActiveChanged extends SystemUserFormEvent {
+  final bool value;
+  const IsActiveChanged(this.value);
+  @override
+  List<Object> get props => [value];
+}
 
-class UpdateButtonSubmitted extends SystemUserFormEvent {}
+class IsSuperAdminChanged extends SystemUserFormEvent {
+  final bool value;
+  const IsSuperAdminChanged(this.value);
+  @override
+  List<Object> get props => [value];
+}
+
+class ButtonSubmitted extends SystemUserFormEvent {}

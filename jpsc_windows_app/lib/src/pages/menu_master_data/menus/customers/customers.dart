@@ -29,8 +29,11 @@ class _CustomersPageState extends State<CustomersPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CustomerFetchingBloc(context.read<CustomerRepo>())
-        ..add(
+      create: (_) => CustomerFetchingBloc(
+        customerRepo: context.read<CustomerRepo>(),
+        currUserRepo: context.read<CurrentUserRepo>(),
+        objectTypeRepo: context.read<ObjectTypeRepo>(),
+      )..add(
           FetchCustomers(
             params: {
               "is_approved": isApproved,
@@ -57,15 +60,17 @@ class _CustomersPageState extends State<CustomersPage> {
         },
         onSearchChanged: (value) {},
         child: BlocListener<CustomerFetchingBloc, CustomerFetchingState>(
-          listenWhen: (previous, current) => previous.status != current.status,
-          listener: (_, state) {
+          listenWhen: (prev, curr) => prev.status != prev.status,
+          listener: (context, state) {
             if (state.status == FetchingStatus.loading) {
               context.loaderOverlay.show();
-            } else if (state.status == FetchingStatus.success) {
-              context.loaderOverlay.hide();
             } else if (state.status == FetchingStatus.error) {
               context.loaderOverlay.hide();
               CustomDialogBox.errorMessage(context, message: state.message);
+            } else if (state.status == FetchingStatus.success) {
+              context.loaderOverlay.hide();
+            } else if (state.status == FetchingStatus.unauthorized) {
+              context.loaderOverlay.hide();
             }
           },
           child: Builder(builder: (context) {

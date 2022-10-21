@@ -13,18 +13,47 @@ part 'state.dart';
 
 class UomsBloc extends Bloc<UomsBlocEvent, UomsBlocState> {
   final UomRepo uomRepo;
-  UomsBloc(this.uomRepo) : super(const UomsBlocState()) {
+  final CurrentUserRepo currUserRepo;
+  final ObjectTypeRepo objectTypeRepo;
+  UomsBloc({
+    required this.uomRepo,
+    required this.currUserRepo,
+    required this.objectTypeRepo,
+  }) : super(const UomsBlocState()) {
     on<LoadUoms>(_onLoadUoms);
   }
 
   void _onLoadUoms(LoadUoms event, Emitter<UomsBlocState> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
     try {
-      await uomRepo.getAll();
-      emit(state.copyWith(status: FetchingStatus.success, uoms: uomRepo.datas));
+      // Check if authorized
+      int objType = await objectTypeRepo.getObjectTypeByName("Unit Of Measure");
+      bool isAuthorized = currUserRepo.checkIfUserAuthorized(
+        objtype: objType,
+        auths: {"full": true, "create": true},
+      );
+      if (!isAuthorized) {
+        emit(
+          state.copyWith(
+            status: FetchingStatus.unauthorized,
+            errorMessage: "Unauthorized user.",
+          ),
+        );
+      } else {
+        await uomRepo.getAll();
+        emit(state.copyWith(
+            status: FetchingStatus.success, uoms: uomRepo.datas));
+      }
     } on HttpException catch (err) {
       emit(state.copyWith(
           status: FetchingStatus.error, errorMessage: err.message));
+    } on Exception catch (e) {
+      emit(
+        state.copyWith(
+          status: FetchingStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

@@ -30,6 +30,7 @@ class _BranchesPageState extends State<BranchesPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<BranchesBloc, BranchesBlocState>(
+      listenWhen: (prev, curr) => prev.status != prev.status,
       listener: (context, state) {
         if (state.status == FetchingStatus.loading) {
           context.loaderOverlay.show();
@@ -37,6 +38,8 @@ class _BranchesPageState extends State<BranchesPage> {
           context.loaderOverlay.hide();
           CustomDialogBox.errorMessage(context, message: state.message);
         } else if (state.status == FetchingStatus.success) {
+          context.loaderOverlay.hide();
+        } else if (state.status == FetchingStatus.unauthorized) {
           context.loaderOverlay.hide();
         }
       },
@@ -54,7 +57,7 @@ class _BranchesPageState extends State<BranchesPage> {
           );
         },
         onRefreshButton: () {
-          sfDataGridKey.currentState!.refresh();
+          context.read<BranchesBloc>().add(LoadBranches());
         },
         onSearchChanged: (value) {},
         child: BranchesTable(

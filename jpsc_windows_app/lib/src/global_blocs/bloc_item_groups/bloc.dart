@@ -10,8 +10,14 @@ part 'event.dart';
 part 'state.dart';
 
 class ItemGroupsBloc extends Bloc<ItemGroupsBlocEvent, ItemGroupsBlocState> {
-  ItemGroupRepo itemGroupRepo;
-  ItemGroupsBloc(this.itemGroupRepo) : super(const ItemGroupsBlocState()) {
+  final ItemGroupRepo itemGroupRepo;
+  final CurrentUserRepo currUserRepo;
+  final ObjectTypeRepo objectTypeRepo;
+  ItemGroupsBloc({
+    required this.itemGroupRepo,
+    required this.currUserRepo,
+    required this.objectTypeRepo,
+  }) : super(const ItemGroupsBlocState()) {
     on<LoadItemGroups>(_onLoadItemGroups);
   }
 
@@ -20,12 +26,30 @@ class ItemGroupsBloc extends Bloc<ItemGroupsBlocEvent, ItemGroupsBlocState> {
     emit(state.copyWith(status: FetchingStatus.loading));
 
     try {
-      await itemGroupRepo.getAll();
-      emit(state.copyWith(
-          status: FetchingStatus.success, itemGroups: itemGroupRepo.datas));
+      // Check if authorized
+      int objType = await objectTypeRepo.getObjectTypeByName("Item Group");
+      bool isAuthorized = currUserRepo.checkIfUserAuthorized(
+        objtype: objType,
+        auths: {"full": true, "create": true},
+      );
+      if (!isAuthorized) {
+        emit(
+          state.copyWith(
+            status: FetchingStatus.unauthorized,
+            errorMessage: "Unauthorized user.",
+          ),
+        );
+      } else {
+        await itemGroupRepo.getAll();
+        emit(state.copyWith(
+            status: FetchingStatus.success, itemGroups: itemGroupRepo.datas));
+      }
     } on HttpException catch (err) {
       emit(state.copyWith(
           status: FetchingStatus.error, errorMessage: err.message));
+    } on Exception catch (err) {
+      emit(state.copyWith(
+          status: FetchingStatus.error, errorMessage: err.toString()));
     }
   }
 }
