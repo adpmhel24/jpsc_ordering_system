@@ -1,6 +1,7 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, status
 from sqlmodel import Session
+from my_app.shared.custom_enums.enum_object_types import ObjectTypesEnum
 
 
 from my_app.shared.schemas.success_response import SuccessMessage
@@ -8,9 +9,7 @@ from .schemas import BranchCreate, BranchRead, BranchUpdate
 from .cruds import crud_branch
 from ..system_user.schemas import SystemUserRead
 
-from my_app.dependencies import (
-    get_current_active_user,
-)
+from my_app.dependencies import get_current_active_user, get_authorized_user
 
 
 router = APIRouter()
@@ -26,7 +25,9 @@ async def new_branch(
     schema: BranchCreate,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_branch.create(create_schema=schema, user_id=current_user.id)
+    # Check if the user is authorized
+
+    result = crud_branch.create(create_schema=schema, current_user=current_user)
     return SuccessMessage(message="Successfully added!", data=result)
 
 
@@ -57,7 +58,9 @@ async def update(
     schema: BranchUpdate,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_branch.update(update_schema=schema, fk=branch_code)
+    result = crud_branch.update(
+        update_schema=schema, fk=branch_code, current_user=current_user
+    )
     return SuccessMessage(message="Updated successfully", data=result)
 
 

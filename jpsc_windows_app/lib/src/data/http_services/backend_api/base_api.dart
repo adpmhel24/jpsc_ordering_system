@@ -102,6 +102,30 @@ class BaseAPI {
     return response;
   }
 
+  Future<Response> bulkInsert(
+    String token, {
+    required String urlPath,
+    required List<Map<String, dynamic>> datas,
+  }) async {
+    Response response;
+
+    try {
+      response = await _dio.post(
+        urlPath,
+        data: datas,
+        options: Options(
+          headers: {
+            'Authorization': "Bearer $token",
+            "Accept": "application/json",
+          },
+        ),
+      );
+    } on DioError catch (e) {
+      throw CustomThrowError.throwError(e);
+    }
+    return response;
+  }
+
   Future<Response> getByFk(
     String token, {
     required String urlPath,

@@ -13,7 +13,7 @@ import '../../../../shared/widgets/custom_date_picker.dart';
 import '../../../../utils/constant.dart';
 
 import '../../../../utils/fetching_status.dart';
-import '../../../widgets/custom_dialog.dart';
+import '../../../../shared/widgets/custom_dialog.dart';
 import 'components/pq_table.dart';
 
 class PriceQuotationPage extends StatefulWidget {

@@ -1,15 +1,14 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, status
 from my_app.shared.custom_enums.custom_enums import PQStatusEnum
+from my_app.shared.custom_enums.enum_object_types import ObjectTypesEnum
 
 
 # Local Import
 
 from my_app.shared.schemas.success_response import SuccessMessage
 from my_app.shared.custom_enums import DocstatusEnum
-from my_app.dependencies import (
-    get_current_active_user,
-)
+from my_app.dependencies import get_current_active_user, get_authorized_user
 from my_app.core.modules.MasterData.system_user.schemas import SystemUserRead
 
 from .schemas_header import (
@@ -20,7 +19,7 @@ from .schemas_header import (
 from .schemas_pq_comment import PriceQuotationCommentCreate
 
 
-from .schemas_row import PriceQuotationRowCreate, PriceQuotationRowRead
+from .schemas_row import PriceQuotationRowCreate
 
 from .cruds import crud_pq
 
@@ -39,10 +38,11 @@ async def create_price_quotation(
     rows_schema: List[PriceQuotationRowCreate],
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
+
     result = crud_pq.create(
         header_schema=header_schema,
         rows_schema=rows_schema,
-        user_id=current_user.id,
+        current_user=current_user,
     )
     return SuccessMessage(message=f"PQ Ref. {result.reference}", data=result)
 
@@ -63,6 +63,7 @@ async def get_all_price_quotation(
         from_date=from_date,
         to_date=to_date,
         branch=branch,
+        current_user=current_user,
     )
     others = {
         "for_price_confirmation": crud_pq.count_orders(
@@ -102,15 +103,12 @@ async def get_all_price_quotations_by_created_by(
 
 
 @router.put("/", response_model=SuccessMessage)
-async def udpatePriceQuotation(
+async def updatedPriceQuotation(
     *,
     schema: PriceQuotationHeaderUpdate,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    message = crud_pq.update(
-        schema=schema,
-        user_id=current_user.id,
-    )
+    message = crud_pq.update(schema=schema, current_user=current_user)
     return {"message": message}
 
 
@@ -121,5 +119,5 @@ async def cancel(
     schema: PriceQuotationCommentCreate,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_pq.cancel(id=id, schema=schema, user_id=current_user.id)
+    result = crud_pq.cancel(id=id, schema=schema, current_user=current_user)
     return SuccessMessage(message="Successfully canceled.", data=result)

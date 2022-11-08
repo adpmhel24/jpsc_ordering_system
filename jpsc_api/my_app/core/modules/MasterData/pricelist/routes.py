@@ -13,7 +13,8 @@ from .schemas_header import (
     PricelistHeaderRead,
     PricelistHeaderCreate,
 )
-from .schemas_row import PricelistRowRead, PricelistRowUpdate
+from .models import PricelistHeader
+from .schemas_row import PricelistRowRead, PricelistRowUpdate, PricelistRowLogsRead
 from .cruds import crud_pricelist
 
 
@@ -34,7 +35,7 @@ async def new_pricelist(
     return SuccessMessage(message="Created successfully", data=result)
 
 
-@router.get("/", response_model=SuccessMessage[List[PricelistHeaderRead]])
+@router.get("/", response_model=SuccessMessage[List[PricelistHeader]])
 async def get_all_pricelist(
     *,
     is_active: bool = Query(True),
@@ -44,38 +45,75 @@ async def get_all_pricelist(
     return {"data": result}
 
 
-@router.get(
-    "/{pricelist_code}", response_model=SuccessMessage[Optional[PricelistHeaderRead]]
-)
+@router.put("/{pricelist_code}", response_model=SuccessMessage)
+async def get_by_code(
+    *,
+    pricelist_code: str,
+    schema: PricelistHeaderCreate,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result_message = crud_pricelist.udpate_pricelist_header(
+        fk=pricelist_code, data_dict=schema.dict(), current_user=current_user
+    )
+    return SuccessMessage(message=result_message)
+
+
+@router.get("/{pricelist_code}", response_model=SuccessMessage[PricelistHeaderRead])
 async def get_by_code(
     *,
     pricelist_code: str,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_pricelist.get(fk=pricelist_code)
-    return SuccessMessage(data=result)
+    result = await crud_pricelist.getPricelistRowByPricelistCode(fk=pricelist_code)
+    return {"data": result}
 
 
 @router.get(
-    "/pricelist_row/by_branch/{branch_code}",
+    "/rows/by_item/{item_code}",
     response_model=SuccessMessage[List[Optional[PricelistRowRead]]],
 )
-async def get_pricelist_by_branch(
+async def get_pricelist_r_by_item_code(
+    *,
+    item_code: str,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result = await crud_pricelist.get_pricelist_r_by_item_code(item_code=item_code)
+    return {"data": result}
+
+
+@router.get(
+    "/rows/by_branch/{branch_code}",
+    response_model=SuccessMessage[List[Optional[PricelistRowRead]]],
+)
+async def get_pricelist_r_by_branch(
     *,
     branch_code: str,
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_pricelist.get_item_price_by_branch(branch_code=branch_code)
-    return SuccessMessage(data=result)
+    result = crud_pricelist.get_pricelist_r_by_branch(branch_code=branch_code)
+    return {"data": result}
 
 
-@router.put("/pricelist_rows", response_model=SuccessMessage)
+@router.get(
+    "/rows/logs/{pricelist_row_id}",
+    response_model=SuccessMessage[List[PricelistRowLogsRead]],
+)
+async def get_pricelist_r_logs(
+    *,
+    pricelist_row_id: int,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result = crud_pricelist.get_pricelist_row_logs(pricelist_row_id=pricelist_row_id)
+    return {"data": result}
+
+
+@router.put("/rows/bulk_update", response_model=SuccessMessage)
 async def pricelist_rows_bulk_update(
     *,
     pricelistRows: List[PricelistRowUpdate],
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result = crud_pricelist.update_rows(
-        pricelistRows=pricelistRows, user_id=current_user.id
+    result_message = crud_pricelist.update_rows(
+        pricelistRows=pricelistRows, current_user=current_user
     )
-    return SuccessMessage(message="Updated successfully")
+    return SuccessMessage(message=result_message)

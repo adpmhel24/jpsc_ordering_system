@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import '../models.dart';
+import 'base_model.dart';
 
 part 'model.g.dart';
 
 @JsonSerializable()
-class CustomerModel {
+class CustomerModel extends CustomerBaseModel {
   static List<CustomerAddressModel> customerAddressFromJson(
       List<dynamic> data) {
     if (data.isNotEmpty) {
@@ -22,32 +23,8 @@ class CustomerModel {
     return [];
   }
 
-  String code;
-
-  @JsonKey(name: "full_name")
-  String? fullName;
-
-  @JsonKey(name: "first_name")
-  String? firstName;
-
-  @JsonKey(name: "last_name")
-  String? lastName;
-
-  @JsonKey(name: "contact_number")
-  String? contactNumber;
-
-  String? email;
-
   @JsonKey(name: "is_active")
   bool? isActive;
-
-  String? location;
-
-  @JsonKey(name: "payment_terms")
-  String? paymentTerm;
-
-  @JsonKey(name: "credit_limit")
-  double creditLimit;
 
   @JsonKey(name: "is_approved")
   bool? isApproved;
@@ -68,16 +45,17 @@ class CustomerModel {
   List<CustomerAddressModel> addresses;
 
   CustomerModel({
-    required this.code,
-    this.fullName,
-    this.firstName,
-    this.lastName,
-    this.contactNumber,
-    this.email,
+    required super.code,
+    super.cardName,
+    super.firstName,
+    super.middleInitial,
+    super.lastName,
+    super.contactNumber,
+    super.email,
     this.isActive,
-    this.location,
-    this.paymentTerm,
-    required this.creditLimit,
+    super.location,
+    super.paymentTerm,
+    super.creditLimit,
     this.isApproved,
     this.createdBy,
     this.dateCreated,

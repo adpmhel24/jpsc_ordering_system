@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../../data/repositories/repos.dart';
 import '../../../../../../shared/widgets/bordered_text.dart';
-import '../../../../../../shared/widgets/custom_filled_button.dart';
+import '../../../../../../shared/widgets/custom_button.dart';
 import '../../../../../../utils/constant.dart';
 import '../../../../../../utils/date_formatter.dart';
 import '../../../../../../utils/responsive.dart';

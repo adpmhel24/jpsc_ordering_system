@@ -14,9 +14,12 @@ if TYPE_CHECKING:
 
 
 class CustomerBase(SQLModel):
-    code: str = Field(primary_key=True, index=True, sa_column_kwargs={"unique": True})
-
+    code: str = Field(
+        primary_key=True, index=True, sa_column_kwargs={"unique": True}, max_length=15
+    )
+    card_name: Optional[str] = Field(index=True, max_length=100)
     first_name: Optional[str] = Field(index=True)
+    middle_initial: Optional[str] = Field(index=True)
     last_name: Optional[str] = Field(index=True)
     contact_number: Optional[str] = Field(default=None)
     email: Optional[EmailStr] = Field(default=None)
@@ -35,7 +38,6 @@ class CustomerBase(SQLModel):
 
 
 class CustomerOtherColumn(SQLModel):
-    full_name: Optional[str] = Field(index=True)
     is_active: bool = Field(
         default=True, sa_column_kwargs={"server_default": text("true")}
     )

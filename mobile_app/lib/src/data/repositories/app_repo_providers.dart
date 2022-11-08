@@ -9,14 +9,22 @@ class AppRepoProvider {
       lazy: false,
       create: (context) => LocalStorageRepo()..init(),
     ),
+    RepositoryProvider<CurrentUserRepo>(
+      create: (context) => CurrentUserRepo()..checkIfLoggedIn(),
+    ),
     RepositoryProvider<PhLocationRepo>(
       create: (context) => PhLocationRepo(PhLocationApiService()),
     ),
-    RepositoryProvider<AuthRepo>(
-      create: (context) => AuthRepo(),
+    RepositoryProvider<CurrentUserRepo>(
+      create: (context) => CurrentUserRepo(),
     ),
     RepositoryProvider<MenuController>(
       create: (context) => MenuController(),
+    ),
+    RepositoryProvider<SystemUserRepo>(
+      create: (context) => SystemUserRepo(
+        localStorage: context.read<LocalStorageRepo>().localStorage,
+      ),
     ),
     RepositoryProvider<SystemUserBranchRepo>(
       create: (context) => SystemUserBranchRepo(

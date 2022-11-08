@@ -32,19 +32,19 @@ class SideMenu extends StatelessWidget {
                 DrawerHeader(
                   child: Image.asset("assets/images/logo.png"),
                 ),
-                DrawerListTile(
-                  title: "Dashboard",
-                  svgSrc: "assets/icons/menu_dashbord.svg",
-                  press: () {
-                    if (!isDesktop) {
-                      toggleMenu(context);
-                    }
-                    router!.replace(const DashboardScreenRoute());
-                    context.read<DrawerMenuBloc>().add(
-                          const DrawerMenuClicked("Dashboard"),
-                        );
-                  },
-                ),
+                // DrawerListTile(
+                //   title: "Dashboard",
+                //   svgSrc: "assets/icons/menu_dashbord.svg",
+                //   press: () {
+                //     if (!isDesktop) {
+                //       toggleMenu(context);
+                //     }
+                //     router!.replace(const DashboardScreenRoute());
+                //     context.read<DrawerMenuBloc>().add(
+                //           const DrawerMenuClicked("Dashboard"),
+                //         );
+                //   },
+                // ),
                 DrawerListTile(
                   title: "Create Price Quotation",
                   svgSrc: "assets/icons/menu_tag.svg",
@@ -93,6 +93,19 @@ class SideMenu extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Divider(),
+                DrawerListTile(
+                  title: "My Profile",
+                  svgSrc: "assets/icons/menu_profile.svg",
+                  press: () {
+                    if (!isDesktop) {
+                      toggleMenu(context);
+                    }
+                    router!.replace(const MyProfilePageRoute());
+                    context.read<DrawerMenuBloc>().add(
+                          const DrawerMenuClicked("My Profile"),
+                        );
+                  },
+                ),
                 DrawerListTile(
                   title: "Logout",
                   svgSrc: "assets/icons/sign_out.svg",

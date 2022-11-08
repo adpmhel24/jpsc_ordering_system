@@ -41,7 +41,7 @@ class PriceQuotationCardItem extends StatelessWidget {
                 height: 5.0,
               ),
               WithLabel(
-                labelText: 'Customer Code:',
+                labelText: 'Card Code:',
                 textData: "${pq.customerCode}",
               ),
               const SizedBox(
@@ -177,9 +177,7 @@ class WithLabel extends StatelessWidget {
         Text(
           textData,
           style: Theme.of(context).textTheme.bodyText2!.copyWith(
-              color: const Color(0xFF632626),
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold),
+              fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
         ),
       ],
     );

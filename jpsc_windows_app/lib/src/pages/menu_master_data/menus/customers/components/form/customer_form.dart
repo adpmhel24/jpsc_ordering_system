@@ -3,13 +3,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:jpsc_windows_app/src/pages/widgets/custom_dialog.dart';
+import 'package:jpsc_windows_app/src/shared/widgets/custom_dialog.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../../data/models/models.dart';
 import '../../../../../../data/repositories/repos.dart';
-import '../../../../../../global_blocs/bloc_customer/creating_update_bloc/bloc.dart';
 import '../../../../../../utils/constant.dart';
+import '../../blocs/creating_update_bloc/bloc.dart';
 import 'address_form_modal.dart';
 import 'address_table.dart';
 

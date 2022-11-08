@@ -7,9 +7,9 @@ import 'package:jpsc_windows_app/src/router/router.gr.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
-import '../../../../../global_blocs/blocs.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
+import '../blocs/fetching_pricelists/bloc.dart';
 
 class PricelistHeaderTable extends StatefulWidget {
   const PricelistHeaderTable({
@@ -27,11 +27,6 @@ class _PricelistTableState extends State<PricelistHeaderTable> {
   late int _rowsPerPage = 10;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   final double _dataPagerHeight = 60.0;
   @override
@@ -208,16 +203,19 @@ class DataSource extends DataGridSource {
               m.Material(
                 child: m.InkWell(
                   onTap: () {
-                    // cntx.router.navigate(
-                    //   ItemWrapper(
-                    //     children: [
-                    //       ItemCreatePage(
-                    //         header: "Item Edit Form",
-                    //         selectedItem: dataGridCell.value,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // );
+                    final int dataRowIndex = dataGridRows.indexOf(row);
+
+                    cntx.router.navigate(
+                      PricelistWrapper(
+                        children: [
+                          PricelistFormRoute(
+                            header: "Pricelist Edit Form",
+                            refresh: handleRefresh,
+                            selectedPricelist: paginatedDatas[dataRowIndex],
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   child: SvgPicture.asset(
                     "assets/icons/sm_right_arrow.svg",
@@ -225,37 +223,40 @@ class DataSource extends DataGridSource {
                   ),
                 ),
               ),
-              Flexible(child: SelectableText(dataGridCell.value.code)),
+              Flexible(child: SelectableText(dataGridCell.value)),
             ],
           ),
         );
       } else if (dataGridCell.columnName == 'Action') {
-        return DropDownButton(
-          leading: const Icon(
-            FluentIcons.settings,
-            size: 15,
-          ),
-          items: [
-            MenuFlyoutItem(
-              leading: const Icon(
-                FluentIcons.edit,
-                size: 15,
-              ),
-              text: const Text('Update Product Prices'),
-              onPressed: () {
-                cntx.router.navigate(
-                  PricelistWrapper(
-                    children: [
-                      PricelistRowRoute(
-                        pricelistModel: dataGridCell.value,
-                        refresh: handleRefresh,
-                      ),
-                    ],
-                  ),
-                );
-              },
+        return Container(
+          alignment: Alignment.center,
+          child: DropDownButton(
+            leading: const Icon(
+              FluentIcons.settings,
+              size: 15,
             ),
-          ],
+            items: [
+              MenuFlyoutItem(
+                leading: const Icon(
+                  FluentIcons.edit,
+                  size: 15,
+                ),
+                text: const Text('Update Product Prices'),
+                onPressed: () {
+                  cntx.router.navigate(
+                    PricelistWrapper(
+                      children: [
+                        PricelistRowRoute(
+                          pricelistCode: dataGridCell.value.code,
+                          refresh: handleRefresh,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         );
       }
       return Container(
@@ -280,7 +281,7 @@ class PricelistTableSettings {
   static DataGridRow dataGrid(PricelistModel data) {
     return DataGridRow(
       cells: [
-        DataGridCell(columnName: columnName["code"]["name"], value: data),
+        DataGridCell(columnName: columnName["code"]["name"], value: data.code),
         DataGridCell(
             columnName: columnName["description"]["name"],
             value: data.description),

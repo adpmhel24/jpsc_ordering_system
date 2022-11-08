@@ -1,12 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../utils/responsive.dart';
-import '../../../../widgets/custom_dialog.dart';
-import 'bloc/bloc.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
+import '../blocs/create_update_bloc/bloc.dart';
 
 class UomFormBody extends StatefulWidget {
   const UomFormBody({
@@ -96,7 +95,7 @@ class _UomFormBodyState extends State<UomFormBody> {
           formBloc.add(CodeChanged(_codeController));
         },
         validator: (_) {
-          return formBloc.state.code.invalid ? "Provide branch code." : null;
+          return formBloc.state.code.invalid ? "Required field." : null;
         },
       ),
     );
@@ -133,7 +132,6 @@ class _UomFormBodyState extends State<UomFormBody> {
                         CreateButtonSubmitted(),
                       );
                     }
-                    cntx.router.pop();
                   },
                 );
               }

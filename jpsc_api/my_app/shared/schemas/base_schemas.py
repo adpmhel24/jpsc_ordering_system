@@ -4,7 +4,11 @@ from datetime import datetime
 
 
 class PrimaryKeyBase(SQLModel):
-    id: int = Field(primary_key=True, index=True)
+    id: int = Field(
+        primary_key=True,
+        index=True,
+        sa_column_kwargs={"autoincrement": True, "unique": True},
+    )
 
 
 class CreatedBase(SQLModel):

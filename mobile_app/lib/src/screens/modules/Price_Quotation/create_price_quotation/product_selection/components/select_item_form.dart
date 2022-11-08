@@ -135,43 +135,39 @@ class _SelectItemFormState extends State<SelectItemForm> {
                       onPressed: data["isActualPriceValid"] &&
                               data["isQuantityValid"]
                           ? () {
-                              CustomAnimatedDialog.warning(
-                                  cntx: context,
+                              CustomAnimatedDialog.warning(context,
                                   message: "Are you sure you want to proceed?",
-                                  onPositiveClick: (cntx) {
-                                    widget.bloc.add(
-                                      CartItemAdded(
-                                        CartItemModel(
-                                          id: uuid.v1(),
-                                          itemCode: _itemNameController.text,
-                                          quantity: double.parse(
-                                              _quantityController.text),
-                                          srpPrice: double.parse(
-                                              _unitPriceController.text),
-                                          unitPrice: double.parse(
-                                              _actualPriceController.text),
-                                          uom: _uomController.text,
-                                          total: double.parse(
-                                            _totalController.text,
-                                          ),
-                                        ),
+                                  onPositiveClick: (_) {
+                                widget.bloc.add(
+                                  CartItemAdded(
+                                    CartItemModel(
+                                      id: uuid.v1(),
+                                      itemCode: _itemNameController.text,
+                                      quantity: double.parse(
+                                          _quantityController.text),
+                                      srpPrice: double.parse(
+                                          _unitPriceController.text),
+                                      unitPrice: double.parse(
+                                          _actualPriceController.text),
+                                      uom: _uomController.text,
+                                      total: double.parse(
+                                        _totalController.text,
                                       ),
-                                    );
+                                    ),
+                                  ),
+                                );
 
-                                    // to pop the dialog warning
-                                    Navigator.of(cntx).pop();
+                                // to pop the Modal
+                                Navigator.of(context).pop();
 
-                                    // to pop the Modal
-                                    Navigator.of(context).pop();
-
-                                    Fluttertoast.showToast(
-                                        msg: "Item Added",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.TOP,
-                                        timeInSecForIosWeb: 1,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  });
+                                Fluttertoast.showToast(
+                                    msg: "Item Added",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.TOP,
+                                    timeInSecForIosWeb: 1,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              });
                             }
                           : null,
                       child: const Text('Add To Cart'),

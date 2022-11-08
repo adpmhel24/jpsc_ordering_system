@@ -13,10 +13,11 @@ import '../../../../../../data/models/models.dart';
 
 import '../../../../../../global_blocs/blocs.dart';
 import '../../../../../../shared/widgets/bordered_text.dart';
-import '../../../../../../shared/widgets/custom_filled_button.dart';
+import '../../../../../../shared/widgets/custom_button.dart';
 import '../../../../../../utils/constant.dart';
+import '../../../../../../utils/currency_formater.dart';
 import '../../../../../../utils/date_formatter.dart';
-import '../../../../../widgets/custom_dialog.dart';
+import '../../../../../../shared/widgets/custom_dialog.dart';
 import 'pq_details_table.dart';
 
 class PriceQuotationHeaderDetailsPage extends StatelessWidget {
@@ -384,7 +385,8 @@ class _PriceQuotationHeaderDetailsBodyState
                     ),
                     wrapLabelSelectableText(
                       label: "Subtotal :",
-                      value: "${state.priceQuotation.subtotal}",
+                      value: formatStringToDecimal(
+                          "${state.priceQuotation.subtotal}"),
                     ),
                   ],
                 ),
@@ -401,7 +403,6 @@ class _PriceQuotationHeaderDetailsBodyState
                         context.read<PriceQuotationUpdateBloc>().add(
                               PriceQuotationUpdateSubmitted(),
                             );
-                        cntx.router.pop();
                       });
                     },
                     child: const Center(

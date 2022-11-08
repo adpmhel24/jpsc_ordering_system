@@ -6,7 +6,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import '../bloc/create_update_bloc/bloc.dart';
 import 'form_body.dart';
 

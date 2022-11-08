@@ -6,16 +6,19 @@ import 'package:jpsc_windows_app/src/data/models/system_user/model.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/repositories/repos.dart';
-import '../../../../../global_blocs/blocs.dart';
-import '../../../../widgets/custom_dialog.dart';
-import 'bloc/bloc.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
+import '../blocs/create_update_bloc/bloc.dart';
 import 'form_body.dart';
 
 class SystemUserFormPage extends StatelessWidget {
-  const SystemUserFormPage({Key? key, this.selectedSystemUser})
-      : super(key: key);
+  const SystemUserFormPage({
+    Key? key,
+    this.selectedSystemUser,
+    required this.onRefresh,
+  }) : super(key: key);
 
   final SystemUserModel? selectedSystemUser;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,8 @@ class SystemUserFormPage extends StatelessWidget {
               context,
               message: state.message,
               onPositiveClick: (_) {
-                context.read<SystemUsersBloc>().add(LoadSystemUsers());
+                onRefresh();
+
                 context.router.pop();
               },
             );

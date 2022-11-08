@@ -67,7 +67,7 @@ class PriceQuotationModel {
   @JsonKey(name: "date_confirmed")
   DateTime? dateConfirmed;
 
-  @JsonKey(name: "date_udpated")
+  @JsonKey(name: "date_updated")
   DateTime? dateUpdated;
 
   @JsonKey(name: "date_created")

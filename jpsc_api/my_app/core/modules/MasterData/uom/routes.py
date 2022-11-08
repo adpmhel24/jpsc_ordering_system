@@ -59,3 +59,13 @@ async def update(
 ):
     result = crud_uom.update(update_schema=schema, fk=uom_code)
     return SuccessMessage(message="Updated successfully", data=result)
+
+
+@router.post("/bulk_insert", response_model=SuccessMessage)
+async def bulkInsert(
+    *,
+    schemas: List[UoMCreate],
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result_message = crud_uom.bulkInsert(schemas=schemas, curr_user=current_user)
+    return SuccessMessage(message=result_message)

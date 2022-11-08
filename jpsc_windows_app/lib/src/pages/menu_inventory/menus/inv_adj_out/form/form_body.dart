@@ -7,10 +7,9 @@ import 'package:formz/formz.dart';
 
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../shared/widgets/custom_button.dart';
-import '../../../../../shared/widgets/custom_filled_button.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import 'bloc/bloc.dart';
 import 'form_row_modal.dart';
 import 'form_table.dart';
@@ -167,7 +166,6 @@ class _MyWidgetState extends State<InvAdjustmentOutFormBody> {
                             context
                                 .read<InvAdjustmentOutFormBloc>()
                                 .add(NewInvAdjustmentOutSubmitted());
-                            Navigator.of(cntx).pop();
                           },
                         );
                       }

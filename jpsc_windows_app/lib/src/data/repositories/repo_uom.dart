@@ -60,6 +60,17 @@ class UomRepo {
     return response.data['message'];
   }
 
+  Future<String> bulkInsert({required List<Map<String, dynamic>> datas}) async {
+    Response response;
+
+    response = await api.bulkInsert(
+      _token,
+      urlPath: "${urlPath}bulk_insert",
+      datas: datas,
+    );
+    return response.data['message'];
+  }
+
   Future<List<UomModel>> offlineSearch(String value) async {
     Future.delayed(const Duration(seconds: 5));
     if (_datas.isEmpty) {

@@ -60,6 +60,28 @@ def get_by_id(
     return {"data": result}
 
 
+@router.post("/bulk_insert", response_model=SuccessMessage)
+async def bulk_insert(
+    *,
+    schemas: List[SystemUserCreate],
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result_message = crud_sys_user.bulkInsert(schemas=schemas, curr_user=current_user)
+    return SuccessMessage(message=result_message)
+
+
+@router.put("/change_password", response_model=SuccessMessage)
+async def change_pasword(
+    *,
+    data_dict: dict,
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result_message = crud_sys_user.change_password(
+        data_dict=data_dict, current_user=current_user
+    )
+    return SuccessMessage(message=result_message)
+
+
 @router.put("/{user_id}", response_model=SuccessMessage[SystemUserRead])
 async def update(
     *,

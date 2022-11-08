@@ -35,7 +35,7 @@ class InvAdjustmentOutHeaderRead(
     created_by_user: Optional["SystemUserRead"]
     updated_by_user: Optional["SystemUserRead"]
     date_created: datetime
-    date_udpated: Optional["datetime"]
+    date_updatedd: Optional["datetime"]
 
 
 class InvAdjustmentOutHeaderUpdate(InvAdjustmentOutHeaderBase):

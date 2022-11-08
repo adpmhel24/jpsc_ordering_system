@@ -1,13 +1,12 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:jpsc_windows_app/src/global_blocs/bloc_pricelist/creating_bloc/bloc.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
+import '../blocs/create_update_pricelist_bloc/bloc.dart';
 
 class PricelistHeaderFormBody extends StatefulWidget {
   const PricelistHeaderFormBody({
@@ -24,13 +23,13 @@ class PricelistHeaderFormBody extends StatefulWidget {
 class _PricelistHeaderFormBodyState extends State<PricelistHeaderFormBody> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  late PricelistCreateBloc formBloc;
+  late CreateUpdatePricelistBloc formBloc;
 
   bool _isActive = true;
 
   @override
   void initState() {
-    formBloc = context.read<PricelistCreateBloc>();
+    formBloc = context.read<CreateUpdatePricelistBloc>();
     final selectedPricelist = widget.selectedPricelist;
     if (selectedPricelist != null) {
       _codeController.text = selectedPricelist.code ?? "";
@@ -123,26 +122,20 @@ class _PricelistHeaderFormBodyState extends State<PricelistHeaderFormBody> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: FilledButton(
-        onPressed: context.watch<PricelistCreateBloc>().state.status.isValidated
-            ? () {
-                CustomDialogBox.warningMessage(
-                  context,
-                  message: "Are you sure you want to proceed?",
-                  onPositiveClick: (cntx) {
-                    if (widget.selectedPricelist != null) {
-                      // formBloc.add(
-                      //   CreateButtonSubmitted(),
-                      // );
-                    } else {
-                      formBloc.add(
-                        PriceListCreateSubmitted(),
-                      );
-                    }
-                    cntx.router.pop();
-                  },
-                );
-              }
-            : null,
+        onPressed:
+            context.watch<CreateUpdatePricelistBloc>().state.status.isValidated
+                ? () {
+                    CustomDialogBox.warningMessage(
+                      context,
+                      message: "Are you sure you want to proceed?",
+                      onPositiveClick: (cntx) {
+                        formBloc.add(
+                          ButtonSubmitted(),
+                        );
+                      },
+                    );
+                  }
+                : null,
         child: widget.selectedPricelist != null
             ? const Text("Update")
             : const Text("Create"),

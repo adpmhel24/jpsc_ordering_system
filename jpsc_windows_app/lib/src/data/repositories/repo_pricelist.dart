@@ -34,6 +34,23 @@ class PricelistRepo {
         response.data['data'].map((e) => PricelistModel.fromJson(e))).toList();
   }
 
+  Future<PricelistModel> getByPricelistCode(String pricelistCode) async {
+    Response response;
+
+    response = await api.getByFk(_token, urlPath: urlPath, fk: pricelistCode);
+    return PricelistModel.fromJson(response.data['data']);
+  }
+
+  Future<List<PricelistRowModel>> getByItemCode(String itemCode) async {
+    Response response;
+
+    response = await api.getByFk(_token,
+        urlPath: "${urlPath}rows/by_item/", fk: itemCode);
+    return List<PricelistRowModel>.from(
+            response.data['data'].map((e) => PricelistRowModel.fromJson(e)))
+        .toList();
+  }
+
   Future<String> create(Map<String, dynamic> data) async {
     Response response;
 
@@ -60,6 +77,19 @@ class PricelistRepo {
     return response.data['message'];
   }
 
+  Future<List<PricelistRowLogModel>> getLogs(int pricelistRowId) async {
+    Response response;
+
+    response = await api.getAll(
+      _token,
+      urlPath: "${urlPath}rows/logs/$pricelistRowId",
+    );
+
+    return List<PricelistRowLogModel>.from(
+            response.data['data'].map((e) => PricelistRowLogModel.fromJson(e)))
+        .toList();
+  }
+
   Future<String> bulkUpdatePricelistRow({
     required List<Map<String, dynamic>> datas,
   }) async {
@@ -67,7 +97,7 @@ class PricelistRepo {
 
     response = await api.bulkUpdate(
       _token,
-      urlPath: "${urlPath}pricelist_rows",
+      urlPath: "${urlPath}rows/bulk_update",
       datas: datas,
     );
     return response.data['message'];

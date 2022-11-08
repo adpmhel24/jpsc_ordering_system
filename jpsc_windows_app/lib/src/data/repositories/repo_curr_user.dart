@@ -13,12 +13,12 @@ class CurrentUserRepo extends ChangeNotifier {
   late LoginAPI loginApi = LoginAPI();
   late SharedPreferences localStorage = LocalStorageRepo().localStorage;
 
-  AuthUserModel? _currentUser;
+  SystemUserModel? _currentUser;
   bool _isAuthenticated = false;
 
   // Getter
   bool get isAuthenticated => _isAuthenticated;
-  AuthUserModel get currentUser => _currentUser!;
+  SystemUserModel get currentUser => _currentUser!;
 
   // Setter
   set(bool value) {
@@ -32,7 +32,7 @@ class CurrentUserRepo extends ChangeNotifier {
       _isAuthenticated = false;
       notifyListeners();
     } else {
-      _currentUser = AuthUserModel.fromJson(json.decode(user));
+      _currentUser = SystemUserModel.fromJson(json.decode(user));
       _isAuthenticated = true;
       notifyListeners();
     }
@@ -43,6 +43,9 @@ class CurrentUserRepo extends ChangeNotifier {
     required Map<String, dynamic> auths,
   }) {
     bool authorized = false;
+    if (_currentUser!.isSuperAdmin) {
+      return true;
+    }
     AuthorizationModel? authorization = currentUser.authorizations
         .firstWhereOrNull((e) => e.objtype == objtype);
 
@@ -59,10 +62,26 @@ class CurrentUserRepo extends ChangeNotifier {
     return authorized;
   }
 
+  bool checkIfGrantToViewLastPurch(String itemGroupCode) {
+    return _currentUser?.itemGroupAuth
+            .firstWhereOrNull(
+                (element) => element.itemGroupCode == itemGroupCode)
+            ?.grantLastPurc ??
+        false;
+  }
+
+  bool checkIfGrantToViewAvgSAP(String itemGroupCode) {
+    return _currentUser?.itemGroupAuth
+            .firstWhereOrNull(
+                (element) => element.itemGroupCode == itemGroupCode)
+            ?.grantAvgValue ??
+        false;
+  }
+
   Future<void> loginWithCredentials(Map<String, dynamic> data) async {
     Response response;
     response = await loginApi.login(data);
-    _currentUser = AuthUserModel.fromJson(response.data['data']);
+    _currentUser = SystemUserModel.fromJson(response.data['data']);
     localStorage.setString("userData", json.encode(_currentUser!.toJson()));
     localStorage.setString("access_token", response.data['access_token']);
     localStorage.setString(

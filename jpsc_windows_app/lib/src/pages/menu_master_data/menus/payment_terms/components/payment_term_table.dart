@@ -242,7 +242,7 @@ class DataSource extends DataGridSource {
                   PricelistWrapper(
                     children: [
                       PricelistRowRoute(
-                        pricelistModel: dataGridCell.value,
+                        pricelistCode: dataGridCell.value.code,
                         refresh: handleRefresh,
                       ),
                     ],

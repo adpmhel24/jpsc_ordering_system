@@ -19,15 +19,17 @@ SystemUserModel _$SystemUserModelFromJson(Map<String, dynamic> json) =>
               .toList() ??
           const [],
       isActive: json['is_active'] as bool,
+      isSuperAdmin: json['is_super_admin'] as bool,
     );
 
 Map<String, dynamic> _$SystemUserModelToJson(SystemUserModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'email': instance.email,
       'first_name': instance.firstName,
       'last_name': instance.lastName,
       'is_active': instance.isActive,
+      'is_super_admin': instance.isSuperAdmin,
       'position_code': instance.positionCode,
+      'id': instance.id,
       'assigned_branch': instance.assignedBranch,
     };

@@ -22,6 +22,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
     this.itemBuilder,
     this.prefixIcon,
     this.prefix,
+    this.filterFn,
   }) : super(key: key);
 
   /// (item) => item!.name
@@ -46,6 +47,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
   final Widget Function(BuildContext, T, bool)? itemBuilder;
   final Widget? prefixIcon;
   final Widget? prefix;
+  final bool Function(T, String)? filterFn;
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +55,36 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
       autoValidateMode: autoValidateMode,
       enabled: enable ?? true,
       items: items ?? [],
+      filterFn: filterFn,
       popupProps: Responsive.isMobile(context)
           ? PopupProps.modalBottomSheet(
               showSelectedItems: true,
               showSearchBox: true,
               isFilterOnline: true,
               itemBuilder: itemBuilder,
-              modalBottomSheetProps: const ModalBottomSheetProps(
-                shape: RoundedRectangleBorder(
+              searchFieldProps: TextFieldProps(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                decoration: InputDecoration(
+                  hintText: "Search",
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide:
+                        const BorderSide(color: Colors.transparent, width: 0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide:
+                        const BorderSide(color: Colors.transparent, width: 0),
+                  ),
+                ),
+              ),
+              modalBottomSheetProps: ModalBottomSheetProps(
+                backgroundColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey.shade700
+                    : null,
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
@@ -107,7 +131,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
                     const BorderSide(color: Colors.transparent, width: 0),
               ),
               filled: true,
-              fillColor: const Color(0xFFeeeee4),
+              // fillColor: const Color(0xFFeeeee4),
               labelText: labelText,
               prefixIcon: prefixIcon,
               prefix: prefix,
@@ -115,6 +139,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             ),
           ),
+
       dropdownButtonProps: const DropdownButtonProps(
         icon: Icon(Icons.arrow_drop_down, size: 15),
         splashRadius: 15,
@@ -127,6 +152,7 @@ class MyCustomDropdownSearch<T> extends StatelessWidget {
       //     horizontal: 10,
       //   ),
       // ),
+
       compareFn: compareFn,
       onChanged: onChanged,
       validator: validator,

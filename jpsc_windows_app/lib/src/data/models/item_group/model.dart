@@ -1,19 +1,15 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'base_model.dart';
+
 part 'model.g.dart';
 
 @JsonSerializable()
-class ItemGroupModel {
-  String code;
-  String? description;
-
-  @JsonKey(name: "is_active")
-  bool isActive;
-
+class ItemGroupModel extends ItemGroupBaseModel {
   ItemGroupModel({
-    required this.code,
-    this.description,
-    required this.isActive,
+    required super.code,
+    super.description,
+    required super.isActive,
   });
 
   factory ItemGroupModel.fromJson(Map<String, dynamic> json) =>

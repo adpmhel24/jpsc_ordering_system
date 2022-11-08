@@ -34,6 +34,7 @@ class _BodyState extends State<Body> {
   late CreatePriceQuotationBloc bloc;
 
   TextEditingController customerCodeController = TextEditingController();
+  TextEditingController cardNameController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
@@ -56,6 +57,7 @@ class _BodyState extends State<Body> {
   @override
   void dispose() {
     customerCodeController.dispose();
+    cardNameController.dispose();
     firstNameController.dispose();
     lastNameController.dispose();
     contactNumberController.dispose();
@@ -69,6 +71,7 @@ class _BodyState extends State<Body> {
       address = selectedCustomer?.addresses.firstWhere((e) => e!.isDefault);
     }
     customerCodeController.text = selectedCustomer?.code ?? "";
+    cardNameController.text = selectedCustomer?.cardName ?? "";
     firstNameController.text = selectedCustomer?.firstName ?? "";
     lastNameController.text = selectedCustomer?.lastName ?? "";
     contactNumberController.text = selectedCustomer?.contactNumber ?? "";
@@ -98,6 +101,8 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
                 _branchSelectionField(context),
                 Constant.heightSpacer,
                 _customerSelectionField(state),
+                Constant.heightSpacer,
+                _cardNameField(),
                 Constant.heightSpacer,
                 _firstNameField(),
                 Constant.heightSpacer,
@@ -140,6 +145,15 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
     );
   }
 
+  CustomTextField _cardNameField() {
+    return CustomTextField(
+      labelText: "Card Name",
+      controller: cardNameController,
+      prefixIcon: const Icon(Icons.person),
+      enabled: false,
+    );
+  }
+
   ValueListenableBuilder<List<CustomerModel>> _customerSelectionField(
       CreateSalesOrderState state) {
     return ValueListenableBuilder<List<CustomerModel>>(
@@ -147,16 +161,33 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
         builder: (context, customers, _) {
           return MyCustomDropdownSearch<CustomerModel>(
             enable: state.dispatchingBranch.valid,
-            labelText: "Select Customer Code",
+            labelText: "Select Card Code",
             selectedItem: selectedCustomer,
             itemAsString: (data) => data!.code,
             items: customers,
+            filterFn: (item, filter) {
+              if (filter.isEmpty) {
+                return true;
+              }
+              if ((item.code.toLowerCase().contains(filter.toLowerCase())) ||
+                  (item.cardName
+                          ?.toLowerCase()
+                          .contains(filter.toLowerCase()) ??
+                      "".isEmpty)) {
+                return true;
+              } else {
+                return false;
+              }
+            },
             compareFn: (data, selectedData) => data == selectedCustomer,
-            itemBuilder: (context, data, _) => Card(
-              elevation: 2,
-              child: ListTile(
-                selected: data.code == state.customerCode.value,
-                title: Text("Customer Code: ${data.code}"),
+            itemBuilder: (context, data, _) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Card(
+                child: ListTile(
+                  selected: data.code == state.customerCode.value,
+                  title: SelectableText("Card Code: ${data.code}"),
+                  subtitle: SelectableText("Card Name: ${data.cardName}"),
+                ),
               ),
             ),
             onChanged: (CustomerModel? data) {
@@ -179,6 +210,17 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
       itemAsString: (data) => data!,
       items: _branchesCode,
       compareFn: (data, selectedData) => data == selectedData,
+      itemBuilder: (_, value, selected) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Card(
+            child: ListTile(
+              selected: selected,
+              title: Text(value),
+            ),
+          ),
+        );
+      },
       onChanged: (String? data) async {
         bloc.add(ClearSalesOrder());
 
@@ -354,7 +396,6 @@ customInputDecoration({
       borderSide: const BorderSide(color: Colors.transparent, width: 0),
     ),
     filled: true,
-    fillColor: const Color(0xFFeeeee4),
     labelText: labelText,
     prefix: prefix,
     suffix: suffix,

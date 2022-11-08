@@ -18,6 +18,7 @@ class CreateCustomerBloc
   CustomerRepo customerRepo;
   CreateCustomerBloc(this.customerRepo) : super(const CreateCustomerState()) {
     on<CustCodeChanged>(_onCustCodeChanged);
+    on<CardNameChanged>(_onCardNameChanged);
     on<CustFirstNameChanged>(_onCustFirstNameChanged);
     on<CustLastNameChanged>(_onCustLastNameChanged);
     on<CustBranchChanged>(_onCustBranchChanged);
@@ -39,6 +40,21 @@ class CreateCustomerBloc
         custCode: custCode,
         status: Formz.validate([
           custCode,
+          state.custBranch,
+        ]),
+      ),
+    );
+  }
+
+  void _onCardNameChanged(
+      CardNameChanged event, Emitter<CreateCustomerState> emit) {
+    final cardName = FormzString.dirty(event.value);
+
+    emit(
+      state.copyWith(
+        custCode: cardName,
+        status: Formz.validate([
+          state.custCode,
           state.custBranch,
         ]),
       ),
@@ -198,6 +214,7 @@ class CreateCustomerBloc
     Map<String, dynamic> data = {
       "customer_schema": {
         "code": "C_${state.custCode.value}",
+        "card_name": state.cardName.value,
         "first_name": state.custFirstName.value,
         "last_name": state.custLastName.value,
         "contact_number": state.custContactNumber.value,

@@ -35,6 +35,16 @@ async def new_customer(
     return SuccessMessage(message="Successfully added!", data=result)
 
 
+@router.post("/bulk_insert", response_model=SuccessMessage)
+async def bulkInsert(
+    *,
+    schemas: List[CustomerCreate],
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result_message = crud_customer.bulkInsert(schemas=schemas, curr_user=current_user)
+    return SuccessMessage(message=result_message)
+
+
 @router.get("/", response_model=SuccessMessage[List[CustomerRead]])
 async def get_all_customer(
     *,

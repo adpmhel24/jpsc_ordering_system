@@ -15,13 +15,6 @@ class GlobalBlocs {
           objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),
       ),
-      BlocProvider<SystemUsersBloc>(
-        create: (_) => SystemUsersBloc(
-          systemUserRepo: context.read<SystemUserRepo>(),
-          currUserRepo: context.read<CurrentUserRepo>(),
-          objectTypeRepo: context.read<ObjectTypeRepo>(),
-        ),
-      ),
       BlocProvider<WarehousesBloc>(
         create: (_) => WarehousesBloc(
           warehouseRepo: context.read<WarehouseRepo>(),
@@ -32,20 +25,6 @@ class GlobalBlocs {
       BlocProvider<UomsBloc>(
         create: (_) => UomsBloc(
           uomRepo: context.read<UomRepo>(),
-          currUserRepo: context.read<CurrentUserRepo>(),
-          objectTypeRepo: context.read<ObjectTypeRepo>(),
-        ),
-      ),
-      BlocProvider<ItemGroupsBloc>(
-        create: (_) => ItemGroupsBloc(
-          itemGroupRepo: context.read<ItemGroupRepo>(),
-          currUserRepo: context.read<CurrentUserRepo>(),
-          objectTypeRepo: context.read<ObjectTypeRepo>(),
-        ),
-      ),
-      BlocProvider<ItemsBloc>(
-        create: (_) => ItemsBloc(
-          itemRepo: context.read<ProductRepo>(),
           currUserRepo: context.read<CurrentUserRepo>(),
           objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),

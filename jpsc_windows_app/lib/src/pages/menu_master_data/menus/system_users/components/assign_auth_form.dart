@@ -6,7 +6,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 
 class SystemUserAuthDialog extends StatefulWidget {
   const SystemUserAuthDialog({
@@ -46,26 +46,33 @@ class _SystemUserAuthState extends State<SystemUserAuthDialog> {
     try {
       await repo.getAll();
       menuGroupsNotifier.value = repo.datas;
+      context.loaderOverlay.hide();
     } on HttpException catch (e) {
+      context.loaderOverlay.hide();
+
       CustomDialogBox.errorMessage(context, message: e.message);
     } on Exception catch (e) {
+      context.loaderOverlay.hide();
+
       CustomDialogBox.errorMessage(context, message: e.toString());
     }
-    context.loaderOverlay.hide();
   }
 
   Future<void> updateAuthorizations() async {
     context.loaderOverlay.show();
 
     try {
-      widget.authorizationRepo
+      await widget.authorizationRepo
           .bulkUpdate(datas: sysAuthsObj.map((e) => e.toJson()).toList());
+      context.loaderOverlay.hide();
     } on HttpException catch (e) {
+      context.loaderOverlay.hide();
       CustomDialogBox.errorMessage(context, message: e.message);
     } on Exception catch (e) {
+      context.loaderOverlay.hide();
+
       CustomDialogBox.errorMessage(context, message: e.toString());
     }
-    context.loaderOverlay.hide();
   }
 
   @override
@@ -83,9 +90,7 @@ class _SystemUserAuthState extends State<SystemUserAuthDialog> {
             CustomDialogBox.warningMessage(context,
                 message: "Are you sure you want to proceed?",
                 onPositiveClick: (cntx) async {
-              Navigator.of(cntx)
-                ..pop()
-                ..pop();
+              Navigator.of(cntx).pop();
 
               await updateAuthorizations();
 
@@ -105,152 +110,133 @@ class _SystemUserAuthState extends State<SystemUserAuthDialog> {
               TreeViewItem(
                 content: const Text('Authorizations'),
                 value: "Authorizations",
-                // This means the item will be expandable, although there are no
-                // children yet.
                 lazy: true,
-                // Ensure the list is modifiable.
-                children: [],
-                onExpandToggle: (item, getsExpanded) async {
-                  // If it's already populated, return.
-                  if (item.children.isNotEmpty) return;
+                expanded: false,
+                children: menuGroups
+                    .map(
+                      (e) => TreeViewItem(
+                        content: Text(e.code),
+                        lazy: true,
+                        value: e.code,
+                        expanded: false,
+                        children: sysAuthsObj
+                            .where((auth) =>
+                                auth.objectTypeObj?.menuGroupCode == e.code)
+                            .toList()
+                            .map(
+                              (auth) => TreeViewItem(
+                                  content: Text(auth.objectTypeObj?.name ?? ""),
+                                  value: auth,
+                                  lazy: true,
+                                  onInvoked: (item, reason) async {
+                                    if (reason ==
+                                        TreeViewItemInvokeReason
+                                            .selectionToggle) {
+                                      AuthorizationModel authObj = item.value;
+                                      authObj.full = item.selected!;
+                                      authObj.create = item.selected!;
+                                      authObj.read = item.selected!;
+                                      authObj.update = item.selected!;
+                                      authObj.approve = item.selected!;
+                                    }
+                                  },
+                                  onExpandToggle: (item, getsExpanded) async {
+                                    if (item.children.isNotEmpty) {
+                                      return;
+                                    }
 
-                  await Future.delayed(const Duration(seconds: 1));
-                  // ...and add the fetched nodes.
-                  item.children.addAll(
-                    menuGroups
-                        .map(
-                          (e) => TreeViewItem(
-                              content: Text(e.code),
-                              lazy: true,
-                              value: e.code,
-                              children: [],
-                              onInvoked: (item, reason) async {
-                                sysAuthsObj
-                                    .where((auth) =>
-                                        auth.objectTypeObj?.menuGroupCode ==
-                                        e.code)
-                                    .toList()
-                                    .map((e) {
-                                  e.full = item.selected!;
-                                  e.create = item.selected!;
-                                  e.read = item.selected!;
-                                  e.update = item.selected!;
-                                  e.approve = item.selected!;
-                                });
-                              },
-                              onExpandToggle: (item, getsExpanded) async {
-                                if (item.children.isNotEmpty) return;
-                                item.children.addAll(
-                                  sysAuthsObj
-                                      .where((auth) =>
-                                          auth.objectTypeObj?.menuGroupCode ==
-                                          e.code)
-                                      .toList()
-                                      .map(
-                                        (auth) => TreeViewItem(
-                                            content: Text(
-                                                auth.objectTypeObj?.name ?? ""),
-                                            value: auth,
-                                            lazy: true,
-                                            onInvoked: (item, reason) async {
-                                              if (reason ==
-                                                  TreeViewItemInvokeReason
-                                                      .selectionToggle) {
-                                                AuthorizationModel authObj =
-                                                    item.value;
-                                                authObj.full = item.selected!;
-                                                authObj.create = item.selected!;
-                                                authObj.read = item.selected!;
-                                                authObj.update = item.selected!;
-                                                authObj.approve =
-                                                    item.selected!;
-                                              }
-                                            },
-                                            children: [
-                                              TreeViewItem(
-                                                content: const Text("Full"),
-                                                selected: auth.full,
-                                                onInvoked:
-                                                    (item, reason) async {
-                                                  if (reason ==
-                                                      TreeViewItemInvokeReason
-                                                          .selectionToggle) {
-                                                    AuthorizationModel authObj =
-                                                        item.parent!.value;
-                                                    authObj.full =
-                                                        item.selected!;
-                                                  }
-                                                },
-                                              ),
-                                              TreeViewItem(
-                                                content: const Text("Create"),
-                                                selected: auth.create,
-                                                onInvoked:
-                                                    (item, reason) async {
-                                                  if (reason ==
-                                                      TreeViewItemInvokeReason
-                                                          .selectionToggle) {
-                                                    AuthorizationModel authObj =
-                                                        item.parent!.value;
-                                                    authObj.create =
-                                                        item.selected!;
-                                                  }
-                                                },
-                                              ),
-                                              TreeViewItem(
-                                                content: const Text("Read"),
-                                                selected: auth.read,
-                                                onInvoked:
-                                                    (item, reason) async {
-                                                  if (reason ==
-                                                      TreeViewItemInvokeReason
-                                                          .selectionToggle) {
-                                                    AuthorizationModel authObj =
-                                                        item.parent!.value;
-                                                    authObj.read =
-                                                        item.selected!;
-                                                  }
-                                                },
-                                              ),
-                                              TreeViewItem(
-                                                content: const Text("Update"),
-                                                selected: auth.update,
-                                                onInvoked:
-                                                    (item, reason) async {
-                                                  if (reason ==
-                                                      TreeViewItemInvokeReason
-                                                          .selectionToggle) {
-                                                    AuthorizationModel authObj =
-                                                        item.parent!.value;
-                                                    authObj.update =
-                                                        item.selected!;
-                                                  }
-                                                },
-                                              ),
-                                              TreeViewItem(
-                                                content: const Text("Approve"),
-                                                selected: auth.approve,
-                                                onInvoked:
-                                                    (item, reason) async {
-                                                  if (reason ==
-                                                      TreeViewItemInvokeReason
-                                                          .selectionToggle) {
-                                                    AuthorizationModel authObj =
-                                                        item.parent!.value;
-                                                    authObj.approve =
-                                                        item.selected!;
-                                                  }
-                                                },
-                                              ),
-                                            ]),
-                                      )
-                                      .toList(),
-                                );
-                              }),
-                        )
-                        .toList(),
-                  );
-                },
+                                    item.children.addAll([
+                                      TreeViewItem(
+                                        content: const Text("Full"),
+                                        selected: auth.full,
+                                        value: auth.full,
+                                        onInvoked: (item, reason) async {
+                                          if (reason ==
+                                              TreeViewItemInvokeReason
+                                                  .selectionToggle) {
+                                            AuthorizationModel authObj =
+                                                item.parent!.value;
+                                            authObj.full = item.selected!;
+                                          }
+                                        },
+                                      ),
+                                      TreeViewItem(
+                                        content: const Text("Create"),
+                                        selected: auth.create,
+                                        value: auth.create,
+                                        onInvoked: (item, reason) async {
+                                          if (reason ==
+                                              TreeViewItemInvokeReason
+                                                  .selectionToggle) {
+                                            AuthorizationModel authObj =
+                                                item.parent!.value;
+                                            authObj.create = item.selected!;
+                                          }
+                                        },
+                                      ),
+                                      TreeViewItem(
+                                        content: const Text("Read"),
+                                        selected: auth.read,
+                                        value: auth.read,
+                                        onInvoked: (item, reason) async {
+                                          if (reason ==
+                                              TreeViewItemInvokeReason
+                                                  .selectionToggle) {
+                                            AuthorizationModel authObj =
+                                                item.parent!.value;
+                                            authObj.read = item.selected!;
+                                          }
+                                        },
+                                      ),
+                                      TreeViewItem(
+                                        content: const Text("Update"),
+                                        selected: auth.update,
+                                        value: auth.update,
+                                        onInvoked: (item, reason) async {
+                                          if (reason ==
+                                              TreeViewItemInvokeReason
+                                                  .selectionToggle) {
+                                            AuthorizationModel authObj =
+                                                item.parent!.value;
+                                            authObj.update = item.selected!;
+                                          }
+                                        },
+                                      ),
+                                      TreeViewItem(
+                                        content: const Text("Approve"),
+                                        selected: auth.approve,
+                                        value: auth.approve,
+                                        onInvoked: (item, reason) async {
+                                          if (reason ==
+                                              TreeViewItemInvokeReason
+                                                  .selectionToggle) {
+                                            AuthorizationModel authObj =
+                                                item.parent!.value;
+                                            authObj.approve = item.selected!;
+                                          }
+                                        },
+                                      ),
+                                    ]);
+                                  },
+                                  children: []),
+                            )
+                            .toList(),
+                        onInvoked: (item, reason) async {
+                          sysAuthsObj
+                              .where((auth) =>
+                                  auth.objectTypeObj?.menuGroupCode == e.code)
+                              .toList()
+                              .map((e) {
+                            e.full = item.selected!;
+                            e.create = item.selected!;
+                            e.read = item.selected!;
+                            e.update = item.selected!;
+                            e.approve = item.selected!;
+                          });
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
             ],
             // onItemInvoked: (item, reason) async => item.selected = true,

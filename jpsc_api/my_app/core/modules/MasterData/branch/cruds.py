@@ -1,8 +1,12 @@
 from fastapi import HTTPException, status
 from typing import Any, Dict, List, Optional, Union
 from sqlmodel import or_, func, and_
+
 from fastapi_sqlalchemy import db
+from my_app.core.modules.MasterData.system_user.schemas import SystemUserRead
+from my_app.dependencies import get_authorized_user
 from my_app.shared.crud import CRUDBase
+from my_app.shared.custom_enums.enum_object_types import ObjectTypesEnum
 from . import Branch
 from .schemas import BranchCreate, BranchUpdate, BranchRead
 
@@ -12,25 +16,18 @@ class CRUDBranch(CRUDBase[Branch, BranchCreate, BranchUpdate, BranchRead]):
         self,
         *,
         create_schema: BranchCreate,
-        user_id: int,
+        current_user: SystemUserRead,
     ) -> Any:
-
-        # Check if branch code was passed is already exist
-        branch_obj = (
-            db.session.query(self.model)
-            .filter(func.lower(self.model.code) == create_schema.code.lower())
-            .first()
+        get_authorized_user(
+            objtype=ObjectTypesEnum.branch_data,
+            current_user=current_user,
+            full=True,
+            create=True,
         )
-        if branch_obj:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Branch code already exist.",
-            )
-        # create schema model to dict
         c_dict = create_schema.dict()
 
         db_obj = Branch(**c_dict)
-        db_obj.created_by = user_id
+        db_obj.created_by = current_user.id
 
         db.session.add(db_obj)
         db.session.commit()
@@ -57,10 +54,16 @@ class CRUDBranch(CRUDBase[Branch, BranchCreate, BranchUpdate, BranchRead]):
 
     def update(
         self,
-        fk: str,
         *,
+        fk: str,
         update_schema: Union[BranchUpdate, Dict[str, Any]],
+        current_user: SystemUserRead,
     ) -> Any:
+        get_authorized_user(
+            objtype=ObjectTypesEnum.branch_data,
+            current_user=current_user,
+            full=True,
+        )
         db_obj = self.get(fk=fk)
         if not db_obj:
             raise HTTPException(

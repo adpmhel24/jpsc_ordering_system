@@ -17,7 +17,9 @@ class ProductCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         footer: GridTileBar(
-          backgroundColor: const Color(0xFFFFCBCB),
+          backgroundColor: Theme.of(context).brightness == Brightness.dark
+              ? const Color.fromARGB(255, 93, 50, 50)
+              : const Color(0xFFFFCBCB),
           leading: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -33,7 +35,9 @@ class ProductCard extends StatelessWidget {
           },
           child: Container(
             padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-            color: const Color(0xFFE7FBBE),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey.shade600
+                : const Color(0xFFE7FBBE),
             child: Text(
               product.code,
               style: Theme.of(context).textTheme.subtitle1,

@@ -20,7 +20,7 @@ class PriceQuotationHeaderBase(SQLModel):
     customer_code: str = Field(
         foreign_key="customer.code",
         index=True,
-        fk_kwargs={"onupdate": "CASCADE"},
+        fk_kwargs={"onupdate": "CASCADE", "ondelete": "RESTRICT"},
     )
     delivery_date: datetime = Field(default=datetime.now())
     delivery_method: Optional[str] = Field(index=True)
@@ -29,7 +29,7 @@ class PriceQuotationHeaderBase(SQLModel):
     )
     remarks: Optional[str]
     dispatching_branch: str = Field(
-        index=True, foreign_key="branch.code", fk_kwargs={"onudpate": "CASCADE"}
+        index=True, foreign_key="branch.code", fk_kwargs={"onupdate": "CASCADE"}
     )
     hashed_id: str = Field(sa_column_kwargs={"unique": True})
     contact_number: Optional[str]

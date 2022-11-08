@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+
+  api:
+    platform: linux/amd64
+    container_name: jpsc_sap_api
+    build: .
+    command: uvicorn my_app.main:app --host 0.0.0.0 --port 8002 --reload
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 8802:8002
+    restart: always
+

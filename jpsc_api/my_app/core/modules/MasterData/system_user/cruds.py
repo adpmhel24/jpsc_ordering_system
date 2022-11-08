@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional, Union
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
-from sqlmodel import or_
+from sqlmodel import and_, or_
 from fastapi_sqlalchemy import db
 
 from my_app.core.settings import verify_password, get_password_hash
@@ -14,6 +14,8 @@ from .schemas import (
     SystemUserRead,
     SystemUserUpdate,
 )
+from ..object_type.models import ObjectType
+from ..authorization.models import Authorization
 
 
 class CRUDUser(
@@ -49,9 +51,9 @@ class CRUDUser(
             create_schema.email = create_schema.email.strip().lower()
             # convert to dictionary
             obj_in_dict = create_schema.dict()
-            hashed_passsword = get_password_hash(obj_in_dict.pop("password"))
+            hashed_password = get_password_hash(obj_in_dict.pop("password"))
             db_obj = SystemUser(**obj_in_dict)
-            db_obj.hashed_password = hashed_passsword
+            db_obj.hashed_password = hashed_password
             db.session.add(db_obj)
             db.session.commit()
             db.session.refresh(db_obj)
@@ -89,11 +91,55 @@ class CRUDUser(
 
         db_obj = (
             db.session.query(SystemUser)
-            .filter(or_(is_active == None, SystemUser.is_active.is_(is_active)))
+            .filter(
+                and_(
+                    or_(is_active == None, SystemUser.is_active.is_(is_active)),
+                )
+            )
             .order_by(SystemUser.id)
             .all()
         )
         return db_obj
+
+    def bulkInsert(
+        self,
+        *,
+        schemas: List[SystemUserCreate],
+        curr_user: SystemUserRead,
+    ):
+        list_object_dict = []
+
+        for i in schemas:
+            schema_dict = i.dict()
+            schema_dict["hashed_password"] = get_password_hash(
+                schema_dict.pop("password")
+            )
+            schema_dict["created_by"] = curr_user.id
+            list_object_dict.append(schema_dict)
+
+        db.session.bulk_insert_mappings(self.model, list_object_dict)
+        db.session.commit()
+        return "Uploaded succesfully."
+
+    def change_password(self, *, data_dict: dict, current_user: SystemUser):
+
+        password = data_dict.pop("password")
+        confirm_password = data_dict.pop("confirm_password")
+        if not password or not confirm_password:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN, detail="Required fields!"
+            )
+        if password != confirm_password:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Confirm password doesn't match!",
+            )
+
+        system_user_obj = db.session.query(self.model).get(current_user.id)
+        hashed_password = get_password_hash(password)
+        system_user_obj.hashed_password = hashed_password
+        db.session.commit()
+        return "Updated successfully."
 
     def get_super_admin(self) -> Optional[SystemUser]:
         system_user = (
@@ -114,8 +160,8 @@ class CRUDUser(
     def is_active(self, user: SystemUser) -> bool:
         return user.is_active
 
-    def is_superuser(self, user: SystemUser) -> bool:
-        return user.is_superuser
+    def isSuperAdmin(self, user: SystemUser) -> bool:
+        return user.is_super_admin
 
 
 crud_sys_user = CRUDUser(SystemUser)

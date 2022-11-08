@@ -38,7 +38,7 @@ class InventoryMenuPage extends StatefulWidget {
     //     AssetImage('assets/icons/product.png'),
     //     size: 40,
     //   ),
-    //   route: const ItemWrapper(),
+    //   route: const ProductsWrapper(),
     // ),
     // MenuItems(
     //   name: "Inventory Receive",

@@ -39,6 +39,17 @@ class SystemUserRepo {
     return response.data['message'];
   }
 
+  Future<String> changePassword(Map<String, dynamic> data) async {
+    Response response;
+
+    response = await api.update(
+      _token,
+      pathUrl: "${_urlPath}change_password",
+      data: data,
+    );
+    return response.data['message'];
+  }
+
   Future<void> getAllSystemUser({Map<String, dynamic>? params}) async {
     Response response;
 

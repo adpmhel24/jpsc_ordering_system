@@ -1,8 +1,9 @@
 from fastapi import HTTPException, status
-from typing import Any, Dict, Union
+from typing import Any, Dict, List, Union
 from sqlmodel import func
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi_sqlalchemy import db
+from my_app.core.modules.MasterData.system_user.schemas import SystemUserRead
 
 from my_app.shared.crud import CRUDBase
 from .models import ItemGroup
@@ -49,6 +50,23 @@ class CRUDItemGroup(
 
         except SQLAlchemyError as err:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=err)
+
+    def bulkInsert(
+        self,
+        *,
+        schemas: List[ItemGroupCreate],
+        curr_user: SystemUserRead,
+    ):
+        list_object_dict = []
+
+        for i in schemas:
+            schema_dict = i.dict()
+            schema_dict["created_by"] = curr_user.id
+            list_object_dict.append(schema_dict)
+
+        db.session.bulk_insert_mappings(self.model, list_object_dict)
+        db.session.commit()
+        return "Uploaded succesfully."
 
     def get_all(
         self,

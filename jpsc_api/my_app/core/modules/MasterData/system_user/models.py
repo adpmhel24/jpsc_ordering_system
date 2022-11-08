@@ -7,6 +7,7 @@ from sqlalchemy_events import listen_events, on
 
 if TYPE_CHECKING:
     from ..system_user_branch.models import SystemUserBranch
+    from ..authorization.models import Authorization, ItemGroupUserAuth
 
 
 @listen_events
@@ -17,8 +18,26 @@ class SystemUser(DbAdditionalField, SystemUserBase, PrimaryKeyBase, table=True):
 
     assigned_branch: List["SystemUserBranch"] = Relationship(
         sa_relationship=relationship(
-            "SystemUserBranch", lazy=True, order_by="SystemUserBranch.branch_code"
+            "SystemUserBranch",
+            lazy=True,
+            order_by="SystemUserBranch.branch_code",
         ),
+    )
+    authorizations: List["Authorization"] = Relationship(
+        sa_relationship=relationship(
+            "Authorization",
+            primaryjoin="Authorization.system_user_id == SystemUser.id",
+            viewonly=True,
+        )
+    )
+
+    item_group_auth: List["ItemGroupUserAuth"] = Relationship(
+        sa_relationship=relationship(
+            "ItemGroupUserAuth",
+            primaryjoin="ItemGroupUserAuth.system_user_id == SystemUser.id",
+            viewonly=True,
+            order_by="ItemGroupUserAuth.item_group_code",
+        )
     )
 
     @on("before_insert")

@@ -17,16 +17,17 @@ import 'package:mobile_app/src/global_bloc/bloc_customer/create_customer/bloc.da
     as _i16;
 import 'package:mobile_app/src/router/router_guard.dart' as _i15;
 import 'package:mobile_app/src/screens/login_screen/login_screen.dart' as _i1;
-import 'package:mobile_app/src/screens/modules/Dashboard/dashboard.dart' as _i5;
 import 'package:mobile_app/src/screens/modules/main_screen.dart' as _i3;
 import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_customer/address_form.dart'
     as _i4;
 import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_customer/create_customer_screen.dart'
+    as _i7;
+import 'package:mobile_app/src/screens/modules/My_Profile/my_profile.dart'
     as _i8;
 import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/cart/main_screen.dart'
     as _i11;
 import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/create_pq_screen.dart'
-    as _i6;
+    as _i5;
 import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/customer_selection/main_screen.dart'
     as _i9;
 import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/product_selection/main_screen.dart'
@@ -34,7 +35,7 @@ import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quot
 import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/pq_base_screen.dart'
     as _i12;
 import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/purch_quotations_screen.dart'
-    as _i7;
+    as _i6;
 import 'package:mobile_app/src/screens/widgets/success_screen.dart' as _i2;
 
 class AppRouter extends _i13.RootStackRouter {
@@ -82,28 +83,28 @@ class AppRouter extends _i13.RootStackRouter {
         ),
       );
     },
-    DashboardScreenRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: const _i5.DashboardScreen(),
-      );
-    },
     CreatePriceQuotationScreenRoute.name: (routeData) {
       return _i13.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i6.CreatePriceQuotationScreen(),
+        child: const _i5.CreatePriceQuotationScreen(),
       );
     },
     PriceQuotationScreenRoute.name: (routeData) {
       return _i13.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i7.PriceQuotationScreen(),
+        child: const _i6.PriceQuotationScreen(),
       );
     },
     CreateCustomerScreenRoute.name: (routeData) {
       return _i13.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i8.CreateCustomerScreen(),
+        child: const _i7.CreateCustomerScreen(),
+      );
+    },
+    MyProfilePageRoute.name: (routeData) {
+      return _i13.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i8.MyProfilePage(),
       );
     },
     CustomerSelectionRoute.name: (routeData) {
@@ -158,13 +159,8 @@ class AppRouter extends _i13.RootStackRouter {
               '#redirect',
               path: '',
               parent: MainScreenRoute.name,
-              redirectTo: 'dashboard',
+              redirectTo: 'create_pq',
               fullMatch: true,
-            ),
-            _i13.RouteConfig(
-              DashboardScreenRoute.name,
-              path: 'dashboard',
-              parent: MainScreenRoute.name,
             ),
             _i13.RouteConfig(
               CreatePriceQuotationScreenRoute.name,
@@ -210,6 +206,11 @@ class AppRouter extends _i13.RootStackRouter {
             _i13.RouteConfig(
               CreateCustomerScreenRoute.name,
               path: 'create_customer',
+              parent: MainScreenRoute.name,
+            ),
+            _i13.RouteConfig(
+              MyProfilePageRoute.name,
+              path: 'my_profile',
               parent: MainScreenRoute.name,
             ),
           ],
@@ -331,19 +332,7 @@ class AddressFormScreenRouteArgs {
 }
 
 /// generated route for
-/// [_i5.DashboardScreen]
-class DashboardScreenRoute extends _i13.PageRouteInfo<void> {
-  const DashboardScreenRoute()
-      : super(
-          DashboardScreenRoute.name,
-          path: 'dashboard',
-        );
-
-  static const String name = 'DashboardScreenRoute';
-}
-
-/// generated route for
-/// [_i6.CreatePriceQuotationScreen]
+/// [_i5.CreatePriceQuotationScreen]
 class CreatePriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
   const CreatePriceQuotationScreenRoute({List<_i13.PageRouteInfo>? children})
       : super(
@@ -356,7 +345,7 @@ class CreatePriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.PriceQuotationScreen]
+/// [_i6.PriceQuotationScreen]
 class PriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
   const PriceQuotationScreenRoute({List<_i13.PageRouteInfo>? children})
       : super(
@@ -369,7 +358,7 @@ class PriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.CreateCustomerScreen]
+/// [_i7.CreateCustomerScreen]
 class CreateCustomerScreenRoute extends _i13.PageRouteInfo<void> {
   const CreateCustomerScreenRoute()
       : super(
@@ -378,6 +367,18 @@ class CreateCustomerScreenRoute extends _i13.PageRouteInfo<void> {
         );
 
   static const String name = 'CreateCustomerScreenRoute';
+}
+
+/// generated route for
+/// [_i8.MyProfilePage]
+class MyProfilePageRoute extends _i13.PageRouteInfo<void> {
+  const MyProfilePageRoute()
+      : super(
+          MyProfilePageRoute.name,
+          path: 'my_profile',
+        );
+
+  static const String name = 'MyProfilePageRoute';
 }
 
 /// generated route for

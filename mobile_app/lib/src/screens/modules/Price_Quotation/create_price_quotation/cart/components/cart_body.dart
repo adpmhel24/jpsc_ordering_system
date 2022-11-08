@@ -21,7 +21,7 @@ class CartBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Customer Selection",
+                  "Cart Details",
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Constant.heightSpacer,

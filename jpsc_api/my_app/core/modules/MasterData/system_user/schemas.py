@@ -17,7 +17,10 @@ class SystemUserBase(SQLModel):
     first_name: Optional[str] = Field(index=True)
     last_name: Optional[str] = Field(index=True)
     is_super_admin: bool = Field(
-        default=True, sa_column=Column(BOOLEAN, server_default=text("false"))
+        default=False, sa_column=Column(BOOLEAN, server_default=text("false"))
+    )
+    is_active: Optional[bool] = Field(
+        sa_column=Column(BOOLEAN, server_default=text("true"))
     )
     position_code: Optional[str] = Field(
         foreign_key="position.code",
@@ -51,8 +54,12 @@ class SystemUserRead(SystemUserBase, PrimaryKeyBase):
 
     is_active: Optional[bool]
     assigned_branch: Optional[List["SystemUserBranch"]]
+    authorizations: Optional[List["schemas.AuthorizationRead"]]
+    item_group_auth: Optional[List["ItemGroupUserAuthRead"]]
 
 
 from ..system_user_branch.models import SystemUserBranch
+from ..authorization import schemas
+from ..item_group_auth.schemas import ItemGroupUserAuthRead
 
 SystemUserRead.update_forward_refs()

@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     TextInputType? keyboardType,
     int? minLines,
     int? maxLines,
+    int? maxLength,
     String? Function(String?)? validator,
     bool? showCursor,
     bool? readOnly,
@@ -33,6 +34,7 @@ class CustomTextField extends StatelessWidget {
         _keyboardType = keyboardType,
         _minLines = minLines,
         _maxLines = maxLines,
+        _maxLength = maxLength,
         _validator = validator,
         _onTap = onTap,
         _showCursor = showCursor,
@@ -55,6 +57,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? _keyboardType;
   final int? _minLines;
   final int? _maxLines;
+  final int? _maxLength;
   final String? Function(String?)? _validator;
   final bool? _showCursor;
   final bool? _readOnly;
@@ -78,6 +81,7 @@ class CustomTextField extends StatelessWidget {
       inputFormatters: _inputFormatters,
       enabled: _enabled,
       controller: _controller,
+      maxLength: _maxLength,
       minLines: _minLines ?? 1,
       maxLines: _maxLines ?? 1,
       showCursor: _showCursor,
@@ -95,7 +99,6 @@ class CustomTextField extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.transparent, width: 0),
         ),
         filled: true,
-        fillColor: const Color(0xFFeeeee4),
         labelText: _labelText,
         prefixIcon: _prefixIcon,
         prefix: _prefix,

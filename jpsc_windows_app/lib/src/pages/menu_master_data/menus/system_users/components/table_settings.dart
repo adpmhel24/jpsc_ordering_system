@@ -18,6 +18,10 @@ class SystemUsersTableSettings {
       "name": "Authorizations",
       "width": Constant.minPadding * 20
     },
+    "itemGroupAuth": {
+      "name": "Item Group Auth",
+      "width": Constant.minPadding * 20
+    },
     "isActive": {"name": "Active", "width": Constant.minPadding * 15},
   };
 
@@ -45,6 +49,10 @@ class SystemUsersTableSettings {
         DataGridCell(
           columnName: columnName["authorizations"]["name"],
           value: systemUser.authorizations,
+        ),
+        DataGridCell(
+          columnName: columnName["itemGroupAuth"]["name"],
+          value: systemUser.itemGroupAuth,
         ),
         DataGridCell(
           columnName: columnName["isActive"]["name"],

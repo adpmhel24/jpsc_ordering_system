@@ -24,8 +24,8 @@ class CustomerModel {
 
   String code;
 
-  @JsonKey(name: "full_name")
-  String? fullName;
+  @JsonKey(name: "card_name")
+  String? cardName;
 
   @JsonKey(name: "first_name")
   String? firstName;
@@ -66,7 +66,7 @@ class CustomerModel {
 
   CustomerModel({
     required this.code,
-    this.fullName,
+    this.cardName,
     this.firstName,
     this.lastName,
     this.contactNumber,

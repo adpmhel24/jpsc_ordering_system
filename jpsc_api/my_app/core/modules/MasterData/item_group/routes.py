@@ -64,3 +64,13 @@ async def update(
 ):
     result = crud_item_grp.update(update_schema=schema, fk=item_grp_code)
     return SuccessMessage(message="Updated successfully", data=result)
+
+
+@router.post("/bulk_insert", response_model=SuccessMessage)
+async def bulkInsert(
+    *,
+    schemas: List[ItemGroupCreate],
+    current_user: SystemUserRead = Depends(get_current_active_user),
+):
+    result_message = crud_item_grp.bulkInsert(schemas=schemas, curr_user=current_user)
+    return SuccessMessage(message=result_message)

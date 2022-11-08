@@ -12,29 +12,13 @@ import 'src/data/repositories/repos.dart';
 import 'src/global_bloc/bloc_auth/bloc.dart';
 import 'src/router/router.gr.dart';
 import 'src/router/router_guard.dart';
-import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Provider.debugCheckInvalidValueType = null;
 
   await LocalStorageRepo().init();
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MainApp(),
-    );
-  }
+  runApp(const MainApp());
 }
 
 class MainApp extends StatefulWidget {
@@ -74,16 +58,16 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (_) => AppTheme(),
-        builder: (context, _) {
-          final appTheme = context.watch<AppTheme>();
-          return MultiRepositoryProvider(
-            providers: AppRepoProvider.repoProviders,
-            child: BlocProvider(
-              create: (context) => AuthBloc(),
-              child: GlobalLoaderOverlay(
+    return MultiRepositoryProvider(
+      providers: AppRepoProvider.repoProviders,
+      child: BlocProvider(
+        create: (context) => AuthBloc(),
+        child: Provider(
+            create: (_) => CurrentUserRepo(),
+            builder: (context, _) {
+              return GlobalLoaderOverlay(
                 child: MaterialApp.router(
+                  themeMode: ThemeMode.system,
                   title: "JPSC Ordering App",
                   debugShowCheckedModeBanner: false,
                   locale: _locale,
@@ -103,8 +87,8 @@ class _MainAppState extends State<MainApp> {
                   supportedLocales: const [
                     Locale('en', 'US'),
                   ],
-                  themeMode: appTheme.mode,
-                  color: appTheme.color,
+                  // themeMode: appTheme.mode,
+                  // color: appTheme.color,
                   darkTheme: ThemeData(
                     brightness: Brightness.dark,
                     colorScheme: const ColorScheme.dark(),
@@ -130,10 +114,10 @@ class _MainAppState extends State<MainApp> {
                   routeInformationParser: _appRouter.defaultRouteParser(),
                   routerDelegate: _appRouter.delegate(),
                 ),
-              ),
-            ),
-          );
-        });
+              );
+            }),
+      ),
+    );
   }
 }
 

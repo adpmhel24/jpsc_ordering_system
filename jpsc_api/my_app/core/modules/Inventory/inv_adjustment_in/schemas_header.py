@@ -28,7 +28,7 @@ class InvAdjustmentInHeaderRead(
     created_by_user: Optional["SystemUserRead"]
     updated_by_user: Optional["SystemUserRead"]
     date_created: datetime
-    date_udpated: Optional["datetime"]
+    date_updatedd: Optional["datetime"]
 
 
 class InvAdjustmentInHeaderUpdate(InvAdjustmentInHeaderBase):

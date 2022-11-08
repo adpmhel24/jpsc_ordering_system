@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../global_blocs/blocs.dart';
 import '../../../../router/router.gr.dart';
 import '../../../../utils/fetching_status.dart';
-import '../../../widgets/custom_dialog.dart';
+import '../../../../shared/widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
 import 'components/table.dart';
 
@@ -30,7 +30,7 @@ class _BranchesPageState extends State<BranchesPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<BranchesBloc, BranchesBlocState>(
-      listenWhen: (prev, curr) => prev.status != prev.status,
+      listenWhen: (prev, curr) => prev.status != curr.status,
       listener: (context, state) {
         if (state.status == FetchingStatus.loading) {
           context.loaderOverlay.show();

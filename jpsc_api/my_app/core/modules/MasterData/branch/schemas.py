@@ -32,9 +32,9 @@ class BranchUpdate(BranchBase):
 class BranchRead(UpdatedBase, CreatedBase, BranchBase):
     """Read Schema"""
 
-    pricelist: Optional["PricelistHeaderRead"]
+    pricelist: Optional["PricelistHeader"]
 
 
-from ..pricelist import PricelistHeaderRead
+from ..pricelist.models import PricelistHeader
 
 BranchRead.update_forward_refs()

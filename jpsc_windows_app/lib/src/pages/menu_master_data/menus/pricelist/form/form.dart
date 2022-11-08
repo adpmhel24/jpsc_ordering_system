@@ -6,8 +6,8 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
-import '../../../../../global_blocs/bloc_pricelist/creating_bloc/bloc.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
+import '../blocs/create_update_pricelist_bloc/bloc.dart';
 import 'form_body.dart';
 
 class PricelistFormPage extends StatelessWidget {
@@ -25,10 +25,12 @@ class PricelistFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PricelistCreateBloc(
-        context.read<PricelistRepo>(),
+      create: (context) => CreateUpdatePricelistBloc(
+        pricelistRepo: context.read<PricelistRepo>(),
+        selectedPricelist: selectedPricelist,
       ),
-      child: BlocListener<PricelistCreateBloc, PricelistCreateState>(
+      child:
+          BlocListener<CreateUpdatePricelistBloc, CreateUpdatePricelistState>(
         listenWhen: (previous, current) =>
             current.status.isSubmissionFailure ||
             current.status.isSubmissionInProgress ||

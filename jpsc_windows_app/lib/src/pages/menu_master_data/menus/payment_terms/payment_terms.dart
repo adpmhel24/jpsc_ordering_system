@@ -5,10 +5,9 @@ import 'package:jpsc_windows_app/src/data/repositories/repos.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../global_blocs/blocs.dart';
 import '../../../../router/router.gr.dart';
 import '../../../../utils/fetching_status.dart';
-import '../../../widgets/custom_dialog.dart';
+import '../../../../shared/widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
 import 'bloc/fetching_bloc/bloc.dart';
 import 'components/payment_term_table.dart';
@@ -32,7 +31,7 @@ class _PaymentTermsPageState extends State<PaymentTermsPage> {
         objectTypeRepo: context.read<ObjectTypeRepo>(),
       )..add(LoadPaymentTerms()),
       child: BlocListener<FetchingPaymentTermsBloc, FetchingPaymentTermsState>(
-        listenWhen: (prev, curr) => prev.status != prev.status,
+        listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) {
           if (state.status == FetchingStatus.loading) {
             context.loaderOverlay.show();

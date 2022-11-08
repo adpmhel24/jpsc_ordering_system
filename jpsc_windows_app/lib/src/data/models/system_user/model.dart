@@ -1,11 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../models.dart';
+import 'base_model.dart';
 
 part 'model.g.dart';
 
 @JsonSerializable()
-class SystemUserModel {
+class SystemUserModel extends SystemUserBaseModel {
   static List<AuthorizationModel> _authFromJson(List<dynamic> data) {
     if (data.isNotEmpty) {
       return data.map((e) => AuthorizationModel.fromJson(e!)).toList();
@@ -23,21 +24,6 @@ class SystemUserModel {
   }
 
   int id;
-  String email;
-
-  @JsonKey(name: "first_name")
-  String firstName;
-
-  @JsonKey(name: "last_name")
-  String lastName;
-
-  @JsonKey(name: "is_active")
-  bool isActive;
-  @JsonKey(name: "is_super_admin")
-  bool isSuperAdmin;
-
-  @JsonKey(name: "position_code")
-  String? positionCode;
 
   @JsonKey(name: "assigned_branch")
   List<SystemUserBranchModel> assignedBranch;
@@ -45,15 +31,19 @@ class SystemUserModel {
   @JsonKey(fromJson: _authFromJson, toJson: _authToJson)
   List<AuthorizationModel> authorizations;
 
+  @JsonKey(name: "item_group_auth")
+  List<AuthItemGroupModel> itemGroupAuth;
+
   SystemUserModel({
     required this.id,
-    required this.email,
-    this.firstName = '',
-    this.lastName = '',
-    this.positionCode,
+    required super.email,
+    super.firstName = '',
+    super.lastName = '',
+    super.positionCode,
     this.assignedBranch = const [],
-    required this.isActive,
-    required this.isSuperAdmin,
+    this.itemGroupAuth = const [],
+    required super.isActive,
+    required super.isSuperAdmin,
     required this.authorizations,
   });
 

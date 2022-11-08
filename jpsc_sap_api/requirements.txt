@@ -1,0 +1,6 @@
+fastapi
+pyodbc
+sqlalchemy
+uvicorn
+FastAPI-SQLAlchemy
+python-dotenv

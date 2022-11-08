@@ -7,8 +7,8 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../global_blocs/blocs.dart';
-import '../../../../widgets/custom_dialog.dart';
-import 'bloc/bloc.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
+import '../blocs/create_update_bloc/bloc.dart';
 import 'form_body.dart';
 
 class UomFormPage extends StatelessWidget {

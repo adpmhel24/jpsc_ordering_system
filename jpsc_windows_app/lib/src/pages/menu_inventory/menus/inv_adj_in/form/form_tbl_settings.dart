@@ -1,10 +1,9 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import 'bloc/bloc.dart';
 import 'form_row_modal.dart';
 
@@ -59,7 +58,6 @@ class FormTableSettings {
                     context
                         .read<InvAdjustmentInFormBloc>()
                         .add(DeleteRowItem(data));
-                    cntx.router.pop();
                   },
                 ),
               ),

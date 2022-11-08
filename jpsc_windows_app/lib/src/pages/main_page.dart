@@ -1,12 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../theme.dart';
 import '../global_blocs/blocs.dart';
 import '../router/router.gr.dart';
-import 'widgets/menu_items.dart';
+import '../shared/widgets/custom_button.dart';
+import 'menu_items.dart';
+import 'windows_button.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -16,10 +19,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with WindowListener {
+  final _innerRouterKey = GlobalKey<AutoRouterState>();
   bool value = false;
 
   int index = 0;
-  final settingsController = ScrollController();
   final viewKey = GlobalKey();
 
   @override
@@ -31,7 +34,6 @@ class _MainPageState extends State<MainPage> with WindowListener {
   @override
   void dispose() {
     windowManager.removeListener(this);
-    settingsController.dispose();
     super.dispose();
   }
 
@@ -41,6 +43,7 @@ class _MainPageState extends State<MainPage> with WindowListener {
     const SalesMenuWrapperRoute(),
     // const InventoryWrapperRoute(),
     const MasterDataWrapperRoute(),
+    const MyProfileRoute(),
   ];
 
   @override
@@ -51,8 +54,14 @@ class _MainPageState extends State<MainPage> with WindowListener {
       child: SafeArea(
         child: NavigationView(
           key: viewKey,
-          appBar: const NavigationAppBar(
+          appBar: NavigationAppBar(
             automaticallyImplyLeading: false,
+            actions: [TargetPlatform.windows].contains(defaultTargetPlatform)
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [Spacer(), WindowButtons()],
+                  )
+                : null,
           ),
           pane: NavigationPane(
             selected: index,
@@ -91,6 +100,11 @@ class _MainPageState extends State<MainPage> with WindowListener {
             ],
             footerItems: [
               PaneItemSeparator(),
+              PaneItem(
+                body: const SizedBox.expand(),
+                icon: const Icon(FluentIcons.account_management),
+                title: const Text("My Account"),
+              ),
               PaneItemAction(
                 icon: const Icon(FluentIcons.sign_out),
                 title: const Text('Sign Out'),
@@ -100,9 +114,11 @@ class _MainPageState extends State<MainPage> with WindowListener {
               ),
             ],
           ),
-          paneBodyBuilder: (viewWidget) => const AutoRouter(
-            key: GlobalObjectKey("main_router"),
-          ),
+          paneBodyBuilder: (viewWidget) {
+            return AutoRouter(
+              key: _innerRouterKey,
+            );
+          },
         ),
       ),
     );
@@ -119,17 +135,17 @@ class _MainPageState extends State<MainPage> with WindowListener {
             title: const Text('Confirm close'),
             content: const Text('Are you sure you want to close this window?'),
             actions: [
-              FilledButton(
+              CustomButton(
+                child: const Text('No'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              CustomFilledButton(
                 child: const Text('Yes'),
                 onPressed: () {
                   Navigator.pop(context);
                   windowManager.destroy();
-                },
-              ),
-              Button(
-                child: const Text('No'),
-                onPressed: () {
-                  Navigator.pop(context);
                 },
               ),
             ],

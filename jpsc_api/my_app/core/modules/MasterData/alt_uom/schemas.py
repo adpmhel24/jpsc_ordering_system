@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 from pydantic import condecimal
-from sqlmodel import Relationship, SQLModel, Field
+from sqlmodel import SQLModel, Field
 
 
 from my_app.shared.schemas.base_schemas import PrimaryKeyBase, CreatedBase, UpdatedBase

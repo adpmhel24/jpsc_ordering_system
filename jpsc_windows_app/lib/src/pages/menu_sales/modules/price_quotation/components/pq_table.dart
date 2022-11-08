@@ -14,7 +14,7 @@ import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/currency_formater.dart';
 import '../../../../../utils/date_formatter.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 
 part 'pq_datasource.dart';
 

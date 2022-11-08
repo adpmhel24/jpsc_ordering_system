@@ -5,7 +5,7 @@ import 'package:formz/formz.dart';
 import '../../../../../data/models/models.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import '../bloc/create_update_bloc/bloc.dart';
 
 class PaymentTermFormBody extends StatefulWidget {
@@ -116,7 +116,6 @@ class _PaymentTermFormBodyState extends State<PaymentTermFormBody> {
                   message: "Are you sure you want to proceed?",
                   onPositiveClick: (cntx) {
                     formBloc.add(CreateUpadteSubmitted());
-                    Navigator.of(cntx).pop();
                   },
                 );
               }

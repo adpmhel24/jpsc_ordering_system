@@ -61,6 +61,17 @@ class CustomerRepo {
     return response.data['message'];
   }
 
+  Future<String> bulkInsert({required List<Map<String, dynamic>> datas}) async {
+    Response response;
+
+    response = await api.bulkInsert(
+      _token,
+      urlPath: "${_urlPath}bulk_insert",
+      datas: datas,
+    );
+    return response.data['message'];
+  }
+
   Future<String> update(
       {required String customerCode,
       required Map<String, dynamic> data}) async {

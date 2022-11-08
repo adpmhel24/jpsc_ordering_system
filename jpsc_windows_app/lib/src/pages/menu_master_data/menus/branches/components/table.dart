@@ -230,33 +230,36 @@ class DataSource extends DataGridSource {
           ),
         );
       } else if (dataGridCell.columnName == 'Action') {
-        return DropDownButton(
-          disabled: dataGridCell.value == null,
-          leading: const Icon(
-            FluentIcons.settings,
-            size: 15,
-          ),
-          items: [
-            MenuFlyoutItem(
-              leading: const Icon(
-                FluentIcons.edit,
-                size: 15,
-              ),
-              text: const Text('Update Product Prices'),
-              onPressed: () {
-                cntx.router.navigate(
-                  PricelistWrapper(
-                    children: [
-                      PricelistRowRoute(
-                        pricelistModel: dataGridCell.value,
-                        refresh: handleRefresh,
-                      ),
-                    ],
-                  ),
-                );
-              },
+        return Container(
+          alignment: Alignment.center,
+          child: DropDownButton(
+            disabled: dataGridCell.value == null,
+            leading: const Icon(
+              FluentIcons.settings,
+              size: 15,
             ),
-          ],
+            items: [
+              MenuFlyoutItem(
+                leading: const Icon(
+                  FluentIcons.edit,
+                  size: 15,
+                ),
+                text: const Text('Update Product Prices'),
+                onPressed: () {
+                  cntx.router.navigate(
+                    PricelistWrapper(
+                      children: [
+                        PricelistRowRoute(
+                          pricelistCode: dataGridCell.value.code,
+                          refresh: handleRefresh,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         );
       }
       return Container(

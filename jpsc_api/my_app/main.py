@@ -25,7 +25,14 @@ app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-app.add_middleware(DBSessionMiddleware, db_url=settings.SQLALCHEMY_DATABASE_URI)
+app.add_middleware(
+    DBSessionMiddleware,
+    db_url=settings.SQLALCHEMY_DATABASE_URI,
+    session_args={
+        "autocommit": False,
+        "autoflush": False,
+    },
+)
 
 
 @app.exception_handler(RequestValidationError)
@@ -54,6 +61,14 @@ async def http_exception_handler(request, exc):
     )
 
 
+@app.exception_handler(ValueError)
+async def value_error_handler(request, err):
+    logger.exception(err.args)
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST, content={"message": f"{err.args}"}
+    )
+
+
 @app.exception_handler(TypeError)
 async def type_error_handler(request, err):
     # base_error_message = f"Failed to execute: {request.method}: {request.url}"
@@ -66,7 +81,13 @@ async def type_error_handler(request, err):
 
 @app.exception_handler(SQLAlchemyError)
 async def sqlalchemy_error_handler(request, err):
-    logger.exception(err.args)
+    error = jsonable_encoder(err.args[0].rstrip().split("\n")[0])
+    if "unique" in error:
+        error_detail = jsonable_encoder(err.args[0].rstrip().split("\n")[1])
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": f"{error_detail}"},
+        )
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST, content={"message": f"{err.args}"}
     )
@@ -85,7 +106,7 @@ if settings.BACKEND_CORS_ORIGINS:
 app.include_router(router)
 app.include_router(login_router, prefix=settings.API_V1_STR)
 app.include_router(master_data_router, prefix=settings.API_V1_STR)
-app.include_router(inventory_router, prefix=settings.API_V1_STR)
+# app.include_router(inventory_router, prefix=settings.API_V1_STR)
 app.include_router(sales_router, prefix=settings.API_V1_STR)
 add_pagination(app)
 

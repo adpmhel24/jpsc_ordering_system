@@ -6,6 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import device_info_plus_macos
+import file_selector_macos
 import flutter_acrylic
 import package_info_plus_macos
 import path_provider_macos
@@ -17,6 +18,7 @@ import window_manager
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   DeviceInfoPlusMacosPlugin.register(with: registry.registrar(forPlugin: "DeviceInfoPlusMacosPlugin"))
+  FileSelectorPlugin.register(with: registry.registrar(forPlugin: "FileSelectorPlugin"))
   FlutterAcrylicPlugin.register(with: registry.registrar(forPlugin: "FlutterAcrylicPlugin"))
   FLTPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FLTPackageInfoPlusPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))

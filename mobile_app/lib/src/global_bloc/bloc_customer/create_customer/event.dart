@@ -14,6 +14,14 @@ class CustCodeChanged extends CreateCustomerEvent {
   List<Object?> get props => [value];
 }
 
+class CardNameChanged extends CreateCustomerEvent {
+  final String value;
+  const CardNameChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class CustFirstNameChanged extends CreateCustomerEvent {
   final String value;
   const CustFirstNameChanged(this.value);

@@ -9,7 +9,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../utils/responsive.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 
 class AssignedBranchModal extends StatefulWidget {
   const AssignedBranchModal({
@@ -116,12 +116,13 @@ class _AssignedBranchModalState extends State<AssignedBranchModal> {
     return FilledButton(
       child: const Text("Update"),
       onPressed: () {
-        CustomDialogBox.warningMessage(context,
-            message: "Are you sure you want to proceed?",
-            onPositiveClick: (cntx) {
-          update();
-          cntx.router.pop();
-        });
+        CustomDialogBox.warningMessage(
+          context,
+          message: "Are you sure you want to proceed?",
+          onPositiveClick: (_) {
+            update();
+          },
+        );
       },
     );
   }

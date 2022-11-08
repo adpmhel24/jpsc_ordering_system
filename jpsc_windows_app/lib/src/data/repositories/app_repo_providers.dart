@@ -89,6 +89,11 @@ List<RepositoryProvider> masterDataProviders = [
       localStorage: context.read<LocalStorageRepo>().localStorage,
     ),
   ),
+  RepositoryProvider<ItemGroupAuthRepo>(
+    create: (context) => ItemGroupAuthRepo(
+      localStorage: context.read<LocalStorageRepo>().localStorage,
+    ),
+  ),
   RepositoryProvider<PhLocationRepo>(
     create: (context) => PhLocationRepo(PhLocationApiService()),
   ),

@@ -13,3 +13,6 @@ from .customer.models import Customer
 from .customer_address import CustomerAddress
 from .pricelist.models import PricelistHeader, PricelistRow
 from .payment_terms.models import PaymentTerms
+from .authorization.models import Authorization
+from .item_group_auth.models import ItemGroupUserAuth, ItemGroupUserAuthLogs
+from .menu_group.models import MenuGroup

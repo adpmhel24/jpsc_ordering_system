@@ -2,6 +2,7 @@
 import 'package:collection/collection.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
+import 'package:jpsc_windows_app/src/data/repositories/repos.dart';
 
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -9,8 +10,10 @@ import '../../../../../data/models/models.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../global_blocs/blocs.dart';
+import '../../../../../shared/widgets/custom_button.dart';
 import '../../../../../utils/currency_formater.dart';
+import '../../products/blocs/fetching_bloc/bloc.dart';
+import 'pricelist_r_logs.dart';
 
 class PricelistRowTable extends StatefulWidget {
   const PricelistRowTable({
@@ -26,7 +29,7 @@ class PricelistRowTable extends StatefulWidget {
 
 class _PricelistTableState extends State<PricelistRowTable> {
   late DataSource _dataSource;
-  late int _rowsPerPage = 10;
+  late int _rowsPerPage = 20;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
 
@@ -102,7 +105,7 @@ class _PricelistTableState extends State<PricelistRowTable> {
             : (pricelistLength / _rowsPerPage) +
                 ((pricelistLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: [10, 20, 30, 100, pricelistLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -151,7 +154,7 @@ class DataSource extends DataGridSource {
 
   @override
   Future<void> handleRefresh() async {
-    cntx.read<ItemsBloc>().add(LoadItems());
+    cntx.read<FetchingProductsBloc>().add(LoadProducts());
     buildPaginatedDataGridRows();
     notifyListeners();
   }
@@ -187,7 +190,14 @@ class DataSource extends DataGridSource {
   @override
   bool onCellBeginEdit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
       GridColumn column) {
-    if (column.columnName == 'Price') {
+    final columnsToEdit = [
+      "Suggested Price",
+      "Logistics Cost",
+    ];
+    if (columnsToEdit.contains(column.columnName)) {
+      return true;
+    } else if (column.columnName == "Profit" &&
+        cntx.read<CurrentUserRepo>().currentUser.isSuperAdmin) {
       return true;
     }
     return false;
@@ -208,12 +218,46 @@ class DataSource extends DataGridSource {
     if (newCellValue == null || oldValue == newCellValue) {
       return;
     }
+    PricelistRowModel dataRow = paginatedDatas[dataRowIndex];
 
-    if (column.columnName == 'Price') {
+    if (column.columnName == 'Suggested Price') {
       dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
-          DataGridCell<double>(columnName: 'Price', value: newCellValue);
-      paginatedDatas[dataRowIndex].price = newCellValue;
+          DataGridCell<double>(
+        columnName: 'Suggested Price',
+        value: newCellValue,
+      );
+      dataRow.price = newCellValue;
+
+      final double computedProfit =
+          newCellValue - dataRow.lastPurchasedPrice - dataRow.logisticsCost;
+      // Assign the computed profit
+      dataRow.profit = double.parse(computedProfit.toStringAsFixed(2));
+    } else if (column.columnName == 'Logistics Cost') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<double>(
+        columnName: 'Logistics Cost',
+        value: newCellValue,
+      );
+      dataRow.logisticsCost = newCellValue;
+
+      final computedProfit =
+          dataRow.price - dataRow.lastPurchasedPrice - newCellValue;
+
+      dataRow.profit = double.parse(computedProfit.toStringAsFixed(2));
+    } else if (column.columnName == 'Profit') {
+      dataGridRows[dataRowIndex].getCells()[rowColumnIndex.columnIndex] =
+          DataGridCell<double>(
+        columnName: 'Profit',
+        value: newCellValue,
+      );
+      dataRow.profit = newCellValue;
+
+      var computedSP =
+          dataRow.lastPurchasedPrice + dataRow.logisticsCost + newCellValue;
+      // Computed Suggested Selling Price
+      dataRow.price = double.parse(computedSP.toStringAsFixed(2));
     }
+    notifyListeners();
   }
 
   @override
@@ -232,8 +276,13 @@ class DataSource extends DataGridSource {
     // To avoid committing the [DataGridCell] value that was previously edited
     // into the current non-modified [DataGridCell].
     newCellValue = null;
+    final columnsToEdit = [
+      "Suggested Price",
+      "Logistics Cost",
+      "Profit",
+    ];
 
-    final bool isNumericType = column.columnName == 'Price';
+    final bool isNumericType = columnsToEdit.contains(column.columnName);
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -269,9 +318,66 @@ class DataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
+    final currUserRepo = cntx.read<CurrentUserRepo>();
+
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      // print(dataGridCell.value.runtimeType);
+      final int dataRowIndex = dataGridRows.indexOf(row);
+
+      if (dataGridCell.columnName == "Logs") {
+        return Container(
+          alignment: Alignment.center,
+          child: CustomButton(
+            child: const Text("Logs"),
+            onPressed: () {
+              showDialog(
+                context: cntx,
+                builder: (context) => PricelistRowLogDialogContent(
+                  pricelistRowId: dataGridCell.value,
+                ),
+              );
+            },
+          ),
+        );
+      }
+      if (dataGridCell.columnName == "Last Purchased Price" &&
+          !currUserRepo.checkIfGrantToViewLastPurch(
+              paginatedDatas[dataRowIndex].item?.itemGroupCode ?? "") &&
+          !currUserRepo.currentUser.isSuperAdmin) {
+        return Container(
+          alignment: Alignment.centerRight,
+          child: const Icon(FluentIcons.hide),
+        );
+      }
+      if (dataGridCell.columnName == "Avg SAP Value" &&
+          !currUserRepo.checkIfGrantToViewAvgSAP(
+              paginatedDatas[dataRowIndex].item?.itemGroupCode ?? "") &&
+          !currUserRepo.currentUser.isSuperAdmin) {
+        return Container(
+          alignment: Alignment.centerRight,
+          child: const Icon(FluentIcons.hide),
+        );
+      }
+      if (dataGridCell.columnName == "Profit" &&
+          !currUserRepo.checkIfGrantToViewLastPurch(
+              paginatedDatas[dataRowIndex].item?.itemGroupCode ?? "") &&
+          !currUserRepo.currentUser.isSuperAdmin) {
+        return Container(
+          alignment: Alignment.centerRight,
+          child: Icon(
+            dataGridCell.value > 0
+                ? FluentIcons.like
+                : dataGridCell.value < 0
+                    ? FluentIcons.dislike
+                    : FluentIcons.remove,
+            color: dataGridCell.value > 0
+                ? Colors.green.light
+                : dataGridCell.value < 0
+                    ? Colors.red.light
+                    : null,
+          ),
+        );
+      }
       return Container(
         alignment: dataGridCell.value.runtimeType == double
             ? Alignment.centerRight
@@ -289,27 +395,56 @@ class DataSource extends DataGridSource {
 
 class PricelistTableSettings {
   static Map<String, dynamic> columnName = {
-    "pricelist_code": {"name": "Pricelist Code", "width": double.nan},
-    "item_code": {"name": "Item Code", "width": double.nan},
-    "price": {"name": "Price", "width": double.nan},
+    "pricelistCode": {"name": "Pricelist Code", "width": double.nan},
+    "itemCode": {"name": "Item Code", "width": double.nan},
+    "itemGroup": {"name": "Item Group", "width": double.nan},
+    "lastPurchasedPrice": {"name": "Last Purchased Price", "width": double.nan},
+    "avgSapValue": {"name": "Avg SAP Value", "width": double.nan},
+    "price": {"name": "Suggested Price", "width": double.nan},
+    "logisticsCost": {"name": "Logistics Cost", "width": double.nan},
+    "profit": {"name": "Profit", "width": double.nan},
     "uom": {"name": "UoM", "width": double.nan},
+    "logs": {"name": "Logs", "width": double.nan},
   };
 
   static DataGridRow dataGrid(PricelistRowModel data) {
     return DataGridRow(
       cells: [
         DataGridCell(
-            columnName: columnName["pricelist_code"]["name"],
+            columnName: columnName["pricelistCode"]["name"],
             value: data.pricelistCode),
         DataGridCell(
-            columnName: columnName["item_code"]["name"], value: data.itemCode),
+            columnName: columnName["itemCode"]["name"], value: data.itemCode),
         DataGridCell(
+            columnName: columnName["itemGroup"]["name"],
+            value: data.item?.itemGroupCode),
+        DataGridCell<double>(
+          columnName: columnName["lastPurchasedPrice"]["name"],
+          value: data.lastPurchasedPrice,
+        ),
+        DataGridCell<double>(
+          columnName: columnName["avgSapValue"]["name"],
+          value: data.avgSapValue,
+        ),
+        DataGridCell<double>(
           columnName: columnName["price"]["name"],
           value: data.price,
         ),
-        DataGridCell(
+        DataGridCell<double>(
+          columnName: columnName["logisticsCost"]["name"],
+          value: data.logisticsCost,
+        ),
+        DataGridCell<double>(
+          columnName: columnName["profit"]["name"],
+          value: data.profit,
+        ),
+        DataGridCell<String>(
           columnName: columnName["uom"]["name"],
           value: data.uomCode,
+        ),
+        DataGridCell(
+          columnName: columnName["logs"]["name"],
+          value: data.id,
         ),
       ],
     );
@@ -319,7 +454,6 @@ class PricelistTableSettings {
     return columnName.entries.map(
       (e) {
         return GridColumn(
-          allowEditing: e.value["name"] == "Price",
           width: e.value["width"],
           columnName: e.value["name"],
           label: Container(

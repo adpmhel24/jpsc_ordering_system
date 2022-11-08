@@ -10,6 +10,7 @@ from fastapi.encoders import jsonable_encoder
 from .models import Customer
 from .schemas import CustomerCreate, CustomerUpdate, CustomerRead
 from ..customer_address import CustomerAddress, CustomerAddressCreate
+from ..system_user.models import SystemUser
 
 
 class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRead]):
@@ -35,7 +36,6 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
 
         db_obj: Customer = Customer(**customer_schema.dict())
         db_obj.created_by = user_id
-        db_obj.full_name = f"{customer_schema.first_name.capitalize()} {customer_schema.last_name.capitalize()}"
 
         if addresses_schema:
             for address_schema in addresses_schema:
@@ -71,6 +71,23 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
             .order_by(self.model.code)
         )
         return db_obj
+
+    def bulkInsert(
+        self,
+        *,
+        schemas: List[CustomerCreate],
+        curr_user: SystemUser,
+    ):
+        list_object_dict = []
+
+        for i in schemas:
+            schema_dict = i.dict()
+            schema_dict["created_by"] = curr_user.id
+            list_object_dict.append(schema_dict)
+
+        db.session.bulk_insert_mappings(self.model, list_object_dict)
+        db.session.commit()
+        return "Uploaded succesfully."
 
     def get_by_branch(
         self,
@@ -158,7 +175,6 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
                 address_obj.created_by = user_id
                 cust_db_obj.addresses.append(address_obj)
 
-        cust_db_obj.full_name = f"{cust_db_obj.first_name.capitalize()} {cust_db_obj.last_name.capitalize()}"
         cust_db_obj.updated_by = user_id
         cust_db_obj.date_updated = datetime.now()
 

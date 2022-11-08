@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../../data/models/models.dart';
 import '../../../../../shared/enums/docstatus.dart';
 import '../../../../../utils/date_formatter.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import '../bloc/inv_adj_out_bloc.dart';
 
 class InvAdjustmentTableSettings {

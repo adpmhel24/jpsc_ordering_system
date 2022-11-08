@@ -10,7 +10,7 @@ import '../../../../../data/models/models.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import '../bloc/inv_adj_in_bloc.dart';
 import 'table_settings.dart';
 

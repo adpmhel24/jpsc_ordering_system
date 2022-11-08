@@ -23,7 +23,7 @@ class CustomerAddressBase(SQLModel):
 class CustomerOtherField(SQLModel):
     customer_code: str = Field(
         foreign_key="customer.code",
-        fk_kwargs={"onupdate": "CASCADE"},
+        fk_kwargs={"onupdate": "CASCADE", "ondelete": "RESTRICT"},
         index=True,
     )
 

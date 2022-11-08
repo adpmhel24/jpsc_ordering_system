@@ -39,6 +39,17 @@ class ItemGroupRepo {
     return response.data['message'];
   }
 
+  Future<String> bulkInsert({required List<Map<String, dynamic>> datas}) async {
+    Response response;
+
+    response = await api.bulkInsert(
+      _token,
+      urlPath: "${urlPath}bulk_insert",
+      datas: datas,
+    );
+    return response.data['message'];
+  }
+
   Future<String> update(
       {required String fk, required Map<String, dynamic> data}) async {
     Response response;

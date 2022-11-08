@@ -1,11 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../../data/models/models.dart';
-import '../../../../../../global_blocs/bloc_customer/creating_update_bloc/bloc.dart';
-import '../../../../../widgets/custom_dialog.dart';
+import '../../../../../../shared/widgets/custom_dialog.dart';
+import '../../blocs/creating_update_bloc/bloc.dart';
 import 'address_form_modal.dart';
 
 class CustomerFormAddressTable extends StatefulWidget {
@@ -199,11 +198,10 @@ class DataSource extends DataGridSource {
               onPressed: () => CustomDialogBox.warningMessage(
                 cntx,
                 message: "Are you sure you want to delete the row?",
-                onPositiveClick: (dialogBoxContext) {
+                onPositiveClick: (_) {
                   cntx
                       .read<CreateUpdateCustomerBloc>()
                       .add(CustAddressRemoved(dataRowIndex));
-                  dialogBoxContext.router.pop();
                 },
               ),
             ),

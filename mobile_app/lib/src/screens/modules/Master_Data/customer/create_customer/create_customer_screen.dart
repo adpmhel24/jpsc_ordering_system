@@ -26,55 +26,59 @@ class _CreateCustomerScreenState extends State<CreateCustomerScreen> {
   Widget build(BuildContext buildContext) {
     return BlocProvider(
       create: (_) => CreateCustomerBloc(buildContext.read<CustomerRepo>()),
-      child: Scaffold(
-        body: const CreateCustomerBody(),
-        bottomNavigationBar:
-            BlocConsumer<CreateCustomerBloc, CreateCustomerState>(
-          listener: (context, state) {
-            if (state.status.isSubmissionInProgress) {
-              context.loaderOverlay.show();
-            } else if (state.status.isSubmissionFailure) {
-              context.loaderOverlay.hide();
-              CustomAnimatedDialog.error(context, message: state.message);
-            } else if (state.status.isSubmissionSuccess) {
-              context.loaderOverlay.hide();
-              context.router.replace(
-                SuccessScreenRoute(
-                  message: state.message,
-                  buttonLabel: "Go Back To Menu",
-                  onButtonPressed: (cntx) {
-                    cntx.router.replace(
-                      const MainScreenRoute(
-                        children: [
-                          CreateCustomerScreenRoute(),
-                        ],
-                      ),
-                    );
-                  },
+      child: BlocListener<CreateCustomerBloc, CreateCustomerState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionInProgress) {
+            context.loaderOverlay.show();
+          } else if (state.status.isSubmissionFailure) {
+            context.loaderOverlay.hide();
+            CustomAnimatedDialog.error(context, message: state.message);
+          } else if (state.status.isSubmissionSuccess) {
+            context.loaderOverlay.hide();
+            context.router.replace(
+              SuccessScreenRoute(
+                message: state.message,
+                buttonLabel: "Go Back To Menu",
+                onButtonPressed: (cntx) {
+                  cntx.router.replace(
+                    const MainScreenRoute(
+                      children: [
+                        CreateCustomerScreenRoute(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+        },
+        child: Builder(builder: (context) {
+          return Scaffold(
+            body: const CreateCustomerBody(),
+            bottomNavigationBar:
+                BlocBuilder<CreateCustomerBloc, CreateCustomerState>(
+              builder: (context, state) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: ElevatedButton(
+                  onPressed: state.status.isValidated
+                      ? () {
+                          CustomAnimatedDialog.warning(
+                            context,
+                            message: "Are you sure you want to proceed?",
+                            onPositiveClick: (cntx) {
+                              context
+                                  .read<CreateCustomerBloc>()
+                                  .add(NewCustomerSubmitted());
+                            },
+                          );
+                        }
+                      : null,
+                  child: const Text("Add Customer"),
                 ),
-              );
-            }
-          },
-          builder: (context, state) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: ElevatedButton(
-              onPressed: state.status.isValidated
-                  ? () {
-                      CustomAnimatedDialog.warning(
-                          cntx: context,
-                          message: "Are you sure you want to proceed?",
-                          onPositiveClick: (cntx) {
-                            Navigator.of(cntx).pop();
-                            context
-                                .read<CreateCustomerBloc>()
-                                .add(NewCustomerSubmitted());
-                          });
-                    }
-                  : null,
-              child: const Text("Add Customer"),
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
@@ -89,6 +93,7 @@ class CreateCustomerBody extends StatefulWidget {
 
 class _CreateCustomerBodyState extends State<CreateCustomerBody> {
   final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _cardNameController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _contactNumberController =
@@ -102,6 +107,7 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
   @override
   void dispose() {
     _codeController.dispose();
+    _cardNameController.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
     _contactNumberController.dispose();
@@ -124,6 +130,8 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
           ),
           Constant.heightSpacer,
           _customerCodeField(createCustomerBloc),
+          Constant.heightSpacer,
+          _customerCardNameField(createCustomerBloc),
           Constant.heightSpacer,
           _firstNameField(createCustomerBloc),
           Constant.heightSpacer,
@@ -270,14 +278,28 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
     return CustomTextField(
       autovalidateMode: AutovalidateMode.always,
       controller: _codeController,
-      labelText: "Customer Code *",
+      labelText: "Card Code *",
       prefixIcon: const Icon(Icons.person),
       prefix: const Text("C_"),
+      maxLength: 15,
       onChanged: (v) {
         createCustomerBloc.add(CustCodeChanged(v.trim()));
       },
       validator: (_) =>
           createCustomerBloc.state.custCode.invalid ? "Requierd field" : null,
+    );
+  }
+
+  CustomTextField _customerCardNameField(
+      CreateCustomerBloc createCustomerBloc) {
+    return CustomTextField(
+      controller: _cardNameController,
+      labelText: "Card Name",
+      maxLength: 100,
+      prefixIcon: const Icon(Icons.person),
+      onChanged: (v) {
+        createCustomerBloc.add(CardNameChanged(v.trim()));
+      },
     );
   }
 

@@ -16,3 +16,13 @@ class PQStatusEnum(int, enum.Enum):
 class DeliveryMethodEnum(str, enum.Enum):
     pickup = "Pickup"
     delivery = "Delivery"
+
+
+class AuthEnum(str, enum.Enum):
+
+    full = "F"
+    read = "R"
+    update = "U"
+    create = "C"
+    approve = "A"
+    noAuth = "N"

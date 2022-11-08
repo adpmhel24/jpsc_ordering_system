@@ -3,26 +3,28 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 class CustomAnimatedDialog {
-  static Future<Object?> warning({
-    required BuildContext cntx,
+  static Future<Object?> warning(
+    BuildContext context, {
     required String message,
     void Function(BuildContext)? onPositiveClick,
     void Function()? onNegativeClick,
   }) {
     return showAnimatedDialog(
-      context: cntx,
-      builder: (BuildContext context) {
+      context: context,
+      builder: (BuildContext cntx) {
         return ClassicGeneralDialogWidget(
           titleText: 'Warning!',
           contentText: message,
           negativeText: 'Cancel',
           positiveText: 'Okay',
           onNegativeClick: (onNegativeClick == null)
-              ? Navigator.of(context).pop
+              ? Navigator.of(cntx).pop
               : onNegativeClick,
           onPositiveClick: () {
+            Navigator.of(cntx).pop();
+
             if (onPositiveClick != null) {
-              onPositiveClick(context);
+              onPositiveClick(cntx);
             }
           },
         );

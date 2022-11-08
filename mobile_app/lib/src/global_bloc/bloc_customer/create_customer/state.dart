@@ -3,6 +3,7 @@ part of 'bloc.dart';
 class CreateCustomerState extends Equatable {
   final FormzStatus status;
   final FormzString custCode;
+  final FormzString cardName;
   final FormzString custFirstName;
   final FormzString custLastName;
   final FormzString custBranch;
@@ -16,6 +17,7 @@ class CreateCustomerState extends Equatable {
   const CreateCustomerState({
     this.status = FormzStatus.pure,
     this.custCode = const FormzString.pure(),
+    this.cardName = const FormzString.pure(),
     this.custFirstName = const FormzString.pure(),
     this.custLastName = const FormzString.pure(),
     this.custBranch = const FormzString.pure(),
@@ -30,6 +32,7 @@ class CreateCustomerState extends Equatable {
   CreateCustomerState copyWith({
     FormzStatus? status,
     FormzString? custCode,
+    FormzString? cardName,
     FormzString? custFirstName,
     FormzString? custLastName,
     FormzString? custBranch,
@@ -43,6 +46,7 @@ class CreateCustomerState extends Equatable {
       CreateCustomerState(
         status: status ?? this.status,
         custCode: custCode ?? this.custCode,
+        cardName: cardName ?? this.cardName,
         custFirstName: custFirstName ?? this.custFirstName,
         custLastName: custLastName ?? this.custLastName,
         custBranch: custBranch ?? this.custBranch,
@@ -58,6 +62,7 @@ class CreateCustomerState extends Equatable {
   List<Object?> get props => [
         status,
         custCode,
+        cardName,
         custFirstName,
         custLastName,
         custBranch,

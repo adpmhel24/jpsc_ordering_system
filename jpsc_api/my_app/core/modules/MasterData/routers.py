@@ -12,7 +12,11 @@ from .system_user_branch.routes import router as system_user_branch
 from .customer.routes import router as customer_router
 from .pricelist import router as pricelist_router
 from .payment_terms import router as payment_router
-
+from .authorization.routes import router as auth_router
+from .menu_group import router as menu_group_router
+from .object_type.routes import router as object_type_router
+from .menu_group.routes import router as menu_group_router
+from .item_group_auth.routes import router as item_group_auth_router
 
 master_data_router = APIRouter(prefix="/master_data")
 
@@ -43,4 +47,16 @@ master_data_router.include_router(
 )
 master_data_router.include_router(
     payment_router, prefix="/payment_terms", tags=["Payment Term"]
+)
+master_data_router.include_router(
+    auth_router, prefix="/authorization", tags=["Authorization"]
+)
+master_data_router.include_router(
+    menu_group_router, prefix="/menu_group", tags=["Menu Group"]
+)
+master_data_router.include_router(
+    object_type_router, prefix="/object_type", tags=["Object Type"]
+)
+master_data_router.include_router(
+    item_group_auth_router, prefix="/item_group_auth", tags=["Item Group Auth"]
 )

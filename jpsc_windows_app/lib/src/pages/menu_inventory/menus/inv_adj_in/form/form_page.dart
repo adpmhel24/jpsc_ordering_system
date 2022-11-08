@@ -5,7 +5,7 @@ import 'package:formz/formz.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/repositories/repos.dart';
-import '../../../../widgets/custom_dialog.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
 import '../bloc/inv_adj_in_bloc.dart';
 import 'bloc/bloc.dart';
 import 'form_body.dart';

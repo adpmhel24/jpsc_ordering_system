@@ -35,6 +35,28 @@ class SystemUserRepo {
     return response.data['message'];
   }
 
+  Future<String> bulkInsert({required List<Map<String, dynamic>> datas}) async {
+    Response response;
+
+    response = await api.bulkInsert(
+      _token,
+      urlPath: "${urlPath}bulk_insert",
+      datas: datas,
+    );
+    return response.data['message'];
+  }
+
+  Future<String> changePassword(Map<String, dynamic> data) async {
+    Response response;
+
+    response = await api.update(
+      _token,
+      urlPath: "${urlPath}change_password",
+      data: data,
+    );
+    return response.data['message'];
+  }
+
   Future<void> getAllSystemUser({Map<String, dynamic>? params}) async {
     Response response;
 

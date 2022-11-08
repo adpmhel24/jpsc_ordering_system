@@ -5,11 +5,11 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../data/repositories/repos.dart';
-import '../../../../global_blocs/blocs.dart';
 import '../../../../router/router.gr.dart';
 import '../../../../utils/fetching_status.dart';
-import '../../../widgets/custom_dialog.dart';
+import '../../../../shared/widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
+import 'blocs/fetching_pricelists/bloc.dart';
 import 'widgets/pricelist_h_table.dart';
 
 class PricelistPage extends StatefulWidget {
@@ -31,7 +31,7 @@ class _PricelistPageState extends State<PricelistPage> {
         objectTypeRepo: context.read<ObjectTypeRepo>(),
       )..add(LoadPricelist()),
       child: BlocListener<PricelistFetchingBloc, PricelistFetchingState>(
-        listenWhen: (prev, curr) => prev.status != prev.status,
+        listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) {
           if (state.status == FetchingStatus.loading) {
             context.loaderOverlay.show();
@@ -51,7 +51,7 @@ class _PricelistPageState extends State<PricelistPage> {
               context.router.navigate(
                 PricelistWrapper(
                   children: [
-                    PricelistCreateRoute(
+                    PricelistFormRoute(
                       header: "Pricelist Create Form",
                       refresh: sfDataGridKey.currentState!.refresh,
                     ),

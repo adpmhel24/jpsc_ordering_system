@@ -11,8 +11,8 @@ import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
-import '../../../../widgets/custom_dialog.dart';
-import 'bloc/bloc.dart';
+import '../../../../../shared/widgets/custom_dialog.dart';
+import '../blocs/create_update_bloc/bloc.dart';
 
 class SystemUserFormBody extends StatefulWidget {
   const SystemUserFormBody({
@@ -170,43 +170,46 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
   SizedBox _positionField() {
     return SizedBox(
       width: 200,
-      child: ValueListenableBuilder<List<SystemUserPositionModel>>(
-        valueListenable: systemUserPositions,
-        builder: (context, datas, _) {
-          return AutoSuggestBox.form(
-            autovalidateMode: AutovalidateMode.always,
-            controller: _positionCodeController,
-            enabled: isFieldEnable,
-            items: datas
-                .map<AutoSuggestBoxItem>(
-                  (e) => AutoSuggestBoxItem(
-                    label: "Position *",
-                    value: e.code,
-                    child: Text(e.code),
-                    onSelected: () {
-                      _positionCodeController.text = e.code;
-                      formBloc.add(
-                        PositionCodeChanged(_positionCodeController.text),
-                      );
-                    },
-                  ),
-                )
-                .toList(),
-            onChanged: (value, reason) {
-              String? positionCode = datas
-                  .firstWhereOrNull((element) => element.code == value)
-                  ?.code;
-              formBloc.add(
-                PositionCodeChanged(positionCode ?? ""),
-              );
-            },
-            validator: (_) {
-              return formBloc.state.positionCode.invalid
-                  ? "Invalid item position code"
-                  : null;
-            },
-          );
-        },
+      child: InfoLabel(
+        label: "Position *",
+        child: ValueListenableBuilder<List<SystemUserPositionModel>>(
+          valueListenable: systemUserPositions,
+          builder: (context, datas, _) {
+            return AutoSuggestBox.form(
+              autovalidateMode: AutovalidateMode.always,
+              controller: _positionCodeController,
+              enabled: isFieldEnable,
+              items: datas
+                  .map<AutoSuggestBoxItem>(
+                    (e) => AutoSuggestBoxItem(
+                      label: e.code,
+                      value: e.code,
+                      child: Text(e.code),
+                      onSelected: () {
+                        _positionCodeController.text = e.code;
+                        formBloc.add(
+                          PositionCodeChanged(_positionCodeController.text),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value, reason) {
+                String? positionCode = datas
+                    .firstWhereOrNull((element) => element.code == value)
+                    ?.code;
+                formBloc.add(
+                  PositionCodeChanged(positionCode ?? ""),
+                );
+              },
+              validator: (_) {
+                return formBloc.state.positionCode.invalid
+                    ? "Invalid item position code"
+                    : null;
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -226,7 +229,6 @@ class _SystemUserFormBodyState extends State<SystemUserFormBody> {
                         formBloc.add(
                           ButtonSubmitted(),
                         );
-                        Navigator.of(cntx).pop();
                       },
                     );
                   }

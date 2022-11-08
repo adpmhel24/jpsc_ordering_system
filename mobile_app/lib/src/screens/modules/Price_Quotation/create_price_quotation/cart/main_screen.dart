@@ -31,13 +31,12 @@ class CartScreen extends StatelessWidget {
               context.watch<CreatePriceQuotationBloc>().state.status.isValidated
                   ? () {
                       CustomAnimatedDialog.warning(
-                        cntx: context,
+                        context,
                         message: "Are you sure you want to proceed?",
                         onPositiveClick: (cntx) {
                           context
                               .read<CreatePriceQuotationBloc>()
                               .add(OrderSubmitted(uuid));
-                          Navigator.of(cntx).pop();
                         },
                       );
                     }

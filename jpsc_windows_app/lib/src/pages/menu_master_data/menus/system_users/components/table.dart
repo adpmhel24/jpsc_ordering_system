@@ -7,12 +7,13 @@ import 'package:jpsc_windows_app/src/data/repositories/repos.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
-import '../../../../../global_blocs/blocs.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
+import '../blocs/fetching_bloc/bloc.dart';
 import 'assign_branch_form.dart';
 import 'assign_auth_form.dart';
+import 'item_group_auth.dart';
 import 'table_settings.dart';
 
 class SystemUsersTable extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: BlocBuilder<SystemUsersBloc, SystemUsersBlocState>(
+      child: BlocBuilder<FetchingSystemUsersBloc, FetchingSystemUsersState>(
         buildWhen: (prev, curr) =>
             curr.status == FetchingStatus.unauthorized ||
             curr.status == FetchingStatus.success,
@@ -110,7 +111,7 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
           );
   }
 
-  SizedBox tableFooter(SystemUsersBlocState state) {
+  SizedBox tableFooter(FetchingSystemUsersState state) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
@@ -190,7 +191,7 @@ class DataSource extends DataGridSource {
 
   @override
   Future<void> handleRefresh() async {
-    cntx.read<SystemUsersBloc>().add(LoadSystemUsers());
+    cntx.read<FetchingSystemUsersBloc>().add(LoadSystemUsers());
     buildPaginatedDataGridRows();
     notifyListeners();
   }
@@ -220,6 +221,11 @@ class DataSource extends DataGridSource {
                             SystemUserFormRoute(
                               selectedSystemUser:
                                   paginatedSystemUsers[dataRowIndex],
+                              onRefresh: () {
+                                cntx
+                                    .read<FetchingSystemUsersBloc>()
+                                    .add(LoadSystemUsers());
+                              },
                             )
                           ],
                         ),
@@ -236,55 +242,89 @@ class DataSource extends DataGridSource {
             ),
           );
         } else if (dataGridCell.columnName == 'Assigned Branch') {
-          return DropDownButton(
-            leading: const Icon(
-              FluentIcons.settings,
-              size: 15,
-            ),
-            items: [
-              MenuFlyoutItem(
-                leading: const Icon(
-                  FluentIcons.edit,
-                  size: 15,
-                ),
-                text: const Text('Update'),
-                onPressed: () {
-                  showDialog(
-                    context: cntx,
-                    builder: (_) => AssignedBranchModal(
-                      assignedBranches: dataGridCell.value!,
-                      handleRefresh: handleRefresh,
-                    ),
-                  );
-                },
+          return Container(
+            alignment: Alignment.center,
+            child: DropDownButton(
+              leading: const Icon(
+                FluentIcons.settings,
+                size: 15,
               ),
-            ],
+              items: [
+                MenuFlyoutItem(
+                  leading: const Icon(
+                    FluentIcons.edit,
+                    size: 15,
+                  ),
+                  text: const Text('Update'),
+                  onPressed: () {
+                    showDialog(
+                      context: cntx,
+                      builder: (_) => AssignedBranchModal(
+                        assignedBranches: dataGridCell.value!,
+                        handleRefresh: handleRefresh,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           );
         } else if (dataGridCell.columnName == 'Authorizations') {
-          return DropDownButton(
-            leading: const Icon(
-              FluentIcons.settings,
-              size: 15,
-            ),
-            items: [
-              MenuFlyoutItem(
-                leading: const Icon(
-                  FluentIcons.edit,
-                  size: 15,
-                ),
-                text: const Text('Update'),
-                onPressed: () {
-                  showDialog(
-                    context: cntx,
-                    builder: (_) => SystemUserAuthDialog(
-                      sysAuthsObj: dataGridCell.value,
-                      onRefresh: handleRefresh,
-                      authorizationRepo: cntx.read<AuthorizationRepo>(),
-                    ),
-                  );
-                },
+          return Container(
+            alignment: Alignment.center,
+            child: DropDownButton(
+              leading: const Icon(
+                FluentIcons.settings,
+                size: 15,
               ),
-            ],
+              items: [
+                MenuFlyoutItem(
+                  leading: const Icon(
+                    FluentIcons.edit,
+                    size: 15,
+                  ),
+                  text: const Text('Update'),
+                  onPressed: () {
+                    showDialog(
+                      context: cntx,
+                      builder: (_) => SystemUserAuthDialog(
+                        sysAuthsObj: dataGridCell.value,
+                        onRefresh: handleRefresh,
+                        authorizationRepo: cntx.read<AuthorizationRepo>(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
+        } else if (dataGridCell.columnName == 'Item Group Auth') {
+          return Container(
+            alignment: Alignment.center,
+            child: DropDownButton(
+              leading: const Icon(
+                FluentIcons.settings,
+                size: 15,
+              ),
+              items: [
+                MenuFlyoutItem(
+                  leading: const Icon(
+                    FluentIcons.edit,
+                    size: 15,
+                  ),
+                  text: const Text('Update'),
+                  onPressed: () {
+                    showDialog(
+                      context: cntx,
+                      builder: (_) => ItemGroupUserAuthDialog(
+                        itemGroupAuth: dataGridCell.value,
+                        onRefresh: handleRefresh,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           );
         }
         return Container(

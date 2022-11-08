@@ -34,9 +34,9 @@ PriceQuotationModel _$PriceQuotationModelFromJson(Map<String, dynamic> json) =>
       dateConfirmed: json['date_confirmed'] == null
           ? null
           : DateTime.parse(json['date_confirmed'] as String),
-      dateUpdated: json['date_udpated'] == null
+      dateUpdated: json['date_updated'] == null
           ? null
-          : DateTime.parse(json['date_udpated'] as String),
+          : DateTime.parse(json['date_updated'] as String),
       dateCreated: json['date_created'] == null
           ? null
           : DateTime.parse(json['date_created'] as String),
@@ -108,7 +108,7 @@ Map<String, dynamic> _$PriceQuotationModelToJson(PriceQuotationModel instance) {
     'otherfee': instance.otherfee,
     'sq_number': instance.sqNumber,
     'date_confirmed': instance.dateConfirmed?.toIso8601String(),
-    'date_udpated': instance.dateUpdated?.toIso8601String(),
+    'date_updated': instance.dateUpdated?.toIso8601String(),
     'date_created': instance.dateCreated?.toIso8601String(),
     'date_canceled': instance.dateCanceled?.toIso8601String(),
     'date_approved': instance.dateApproved?.toIso8601String(),

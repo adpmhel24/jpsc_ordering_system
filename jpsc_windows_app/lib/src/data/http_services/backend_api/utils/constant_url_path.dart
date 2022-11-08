@@ -4,6 +4,7 @@ class ConstantURLPath {
   static const String userBranch = '/api/v1/master_data/user_branch/';
   static const String branch = '/api/v1/master_data/branch/';
   static const String authorization = '/api/v1/master_data/authorization/';
+  static const String itemGroupAuth = '/api/v1/master_data/item_group_auth/';
   static const String warehouse = '/api/v1/master_data/warehouse/';
   static const String customer = '/api/v1/master_data/customer/';
   static const String objtype = '/api/v1/master_data/object_type/';

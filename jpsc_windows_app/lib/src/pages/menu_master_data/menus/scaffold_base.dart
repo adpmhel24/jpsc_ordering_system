@@ -11,12 +11,14 @@ class BaseMasterDataScaffold extends StatelessWidget {
     this.onNewButton,
     this.onRefreshButton,
     this.child,
+    this.onAttachButton,
   }) : super(key: key);
 
   final String title;
   final void Function(String)? onSearchChanged;
   final void Function()? onNewButton;
   final void Function()? onRefreshButton;
+  final void Function(BuildContext context)? onAttachButton;
   final Widget? child;
 
   PageHeader _header(BuildContext context) {
@@ -72,6 +74,18 @@ class BaseMasterDataScaffold extends StatelessWidget {
                     icon: const Icon(FluentIcons.refresh),
                     label: const Text("Refresh"),
                     onPressed: onRefreshButton,
+                  ),
+                ),
+                CommandBarBuilderItem(
+                  builder: (context, mode, w) => w,
+                  wrappedItem: CommandBarButton(
+                    icon: const Icon(FluentIcons.attach),
+                    label: const Text("Bulk Insert"),
+                    onPressed: () {
+                      if (onAttachButton != null) {
+                        onAttachButton!(context);
+                      }
+                    },
                   ),
                 ),
               ],

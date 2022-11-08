@@ -1,6 +1,8 @@
 PODS:
   - device_info_plus_macos (0.0.1):
     - FlutterMacOS
+  - file_selector_macos (0.0.1):
+    - FlutterMacOS
   - flutter_acrylic (0.1.0):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
@@ -25,6 +27,7 @@ PODS:
 
 DEPENDENCIES:
   - device_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos`)
+  - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
   - flutter_acrylic (from `Flutter/ephemeral/.symlinks/plugins/flutter_acrylic/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - package_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos`)
@@ -42,6 +45,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   device_info_plus_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus_macos/macos
+  file_selector_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos
   flutter_acrylic:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_acrylic/macos
   FlutterMacOS:
@@ -63,6 +68,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   device_info_plus_macos: 1ad388a1ef433505c4038e7dd9605aadd1e2e9c7
+  file_selector_macos: f1b08a781e66103e3ba279fd5d4024a2478b3af6
   flutter_acrylic: c3df24ae52ab6597197837ce59ef2a8542640c17
   FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a

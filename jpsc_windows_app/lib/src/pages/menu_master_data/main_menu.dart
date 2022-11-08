@@ -33,7 +33,7 @@ class MasterDataMenuPage extends StatefulWidget {
       route: const BranchesWrapper(),
     ),
     MenuItems(
-      name: "Pricelist",
+      name: "Pricelists",
       icon: const ImageIcon(
         AssetImage('assets/icons/tags.png'),
         size: 40,
@@ -41,15 +41,15 @@ class MasterDataMenuPage extends StatefulWidget {
       route: const PricelistWrapper(),
     ),
     MenuItems(
-      name: "Items",
+      name: "Products",
       icon: const ImageIcon(
         AssetImage('assets/icons/product.png'),
         size: 40,
       ),
-      route: const ItemWrapper(),
+      route: const ProductsWrapper(),
     ),
     MenuItems(
-      name: "Unit Of Measure",
+      name: "Unit Of Measures",
       icon: const ImageIcon(
         AssetImage('assets/icons/uom.png'),
         size: 40,
@@ -65,11 +65,12 @@ class MasterDataMenuPage extends StatefulWidget {
       route: const PaymentTermWrapper(),
     ),
     MenuItems(
-      name: "G/L Accounts",
+      name: "Item Groups",
       icon: const ImageIcon(
-        AssetImage('assets/icons/gl_account.png'),
+        AssetImage('assets/icons/item_group.png'),
         size: 40,
       ),
+      route: const ItemGroupWrapper(),
     ),
   ];
 
@@ -116,7 +117,7 @@ class _MasterDataMenuPageState extends State<MasterDataMenuPage> {
           return HoverButton(
             onPressed: () {
               if (e.route != null) {
-                context.router.push(e.route);
+                context.router.push(e.route!);
               }
             },
             cursor: SystemMouseCursors.click,

@@ -6,11 +6,14 @@ from sqlalchemy.exc import SQLAlchemyError
 from fastapi.encoders import jsonable_encoder
 from fastapi_sqlalchemy import db
 from pydantic import condecimal
+from my_app.core.modules.MasterData.system_user.schemas import SystemUserRead
+from my_app.dependencies import get_authorized_user
 
 from my_app.shared.crud import CRUDBase
 from my_app.shared.custom_enums import DocstatusEnum, PQStatusEnum
 from my_app.core.modules.MasterData.branch.cruds import crud_branch
 from my_app.core.modules.MasterData.item.cruds import crud_item
+from my_app.shared.custom_enums.enum_object_types import ObjectTypesEnum
 from .schemas_header import (
     PriceQuotationHeaderCreate,
     PriceQuotationHeaderRead,
@@ -34,13 +37,19 @@ class CRUDPriceQuotation(
         *,
         header_schema: PriceQuotationHeaderCreate,
         rows_schema: list[PriceQuotationRowCreate],
-        user_id: int,
+        current_user: SystemUserRead,
     ) -> Any:
 
         try:
+            get_authorized_user(
+                objtype=ObjectTypesEnum.price_quotation,
+                current_user=current_user,
+                full=True,
+                create=True,
+            )
 
             db_header_obj: PriceQuotationHeader = self.model(**header_schema.dict())
-            db_header_obj.created_by = user_id
+            db_header_obj.created_by = current_user.id
 
             db_header_obj.subtotal: condecimal = 0
             for row in rows_schema:
@@ -67,12 +76,14 @@ class CRUDPriceQuotation(
                 raise HTTPException(status_code=404, detail="Invalid branch code.")
             if not (branch_obj.series_code):
                 raise Exception("No series code assigned to this branch!")
+
+            db.session.add(db_header_obj)
+
+            db.session.flush()
             series_num = f"{db_header_obj.id:07d}"
             db_header_obj.reference = (
                 f"PQ-{branch_obj.series_code.upper()}-{date.today().year}-{series_num}"
             )
-
-            db.session.add(db_header_obj)
 
             db.session.commit()
             db.session.refresh(db_header_obj)
@@ -92,7 +103,14 @@ class CRUDPriceQuotation(
         from_date: Optional[str],
         to_date: Optional[str],
         branch: Optional[str],
+        current_user: SystemUserRead,
     ) -> Any:
+        get_authorized_user(
+            objtype=ObjectTypesEnum.price_quotation,
+            current_user=current_user,
+            full=True,
+            read=True,
+        )
         db_obj = (
             db.session.query(self.model)
             .filter(
@@ -160,8 +178,18 @@ class CRUDPriceQuotation(
         return db_obj
 
     def cancel(
-        self, *, id: int, schema: PriceQuotationCommentCreate, user_id: int
+        self,
+        *,
+        id: int,
+        schema: PriceQuotationCommentCreate,
+        current_user: SystemUserRead,
     ) -> Any:
+        get_authorized_user(
+            objtype=ObjectTypesEnum.price_quotation,
+            current_user=current_user,
+            full=True,
+            read=True,
+        )
         db_obj: PriceQuotationHeader = self.get(fk=id)
         if not db_obj:
             raise HTTPException(status_code=404, detail="Invalid id.")
@@ -170,11 +198,11 @@ class CRUDPriceQuotation(
 
         db_obj.docstatus = DocstatusEnum.canceled
         db_obj.canceled_remarks = schema.comment
-        db_obj.canceled_by = user_id
+        db_obj.canceled_by = current_user.id
         db_obj.date_canceled = datetime.now()
 
         comment_obj = PriceQuotationComment(**schema.dict())
-        comment_obj.created_by = user_id
+        comment_obj.created_by = current_user.id
         db_obj.comments.append(comment_obj)
 
         db.session.commit()
@@ -185,12 +213,18 @@ class CRUDPriceQuotation(
         self,
         *,
         schema: PriceQuotationHeaderUpdate,
-        user_id: int,
+        current_user: SystemUserRead,
     ) -> Any:
 
         try:
+            get_authorized_user(
+                objtype=ObjectTypesEnum.price_quotation,
+                current_user=current_user,
+                full=True,
+                update=True,
+            )
             header_dict = schema.dict()
-            header_dict["updated_by"] = user_id
+            header_dict["updated_by"] = current_user.id
             header_dict["date_updated"] = datetime.now()
             rows_dict = header_dict.pop("rows")
 
@@ -198,6 +232,12 @@ class CRUDPriceQuotation(
             price_quotation_h_obj = db.session.query(self.model).filter_by(id=schema.id)
 
             if schema.pq_status == 1:
+                get_authorized_user(
+                    objtype=ObjectTypesEnum.price_quotation,
+                    current_user=current_user,
+                    full=True,
+                    approve=True,
+                )  # Check if authorized
                 if (
                     price_quotation_h_obj.first().pq_status != 0
                     and price_quotation_h_obj.first().pq_status != schema.pq_status
@@ -205,7 +245,7 @@ class CRUDPriceQuotation(
                     raise HTTPException(
                         status_code=403, detail="You can't select 'Price Confirmed'!"
                     )
-                header_dict["approved_by"] = user_id
+                header_dict["approved_by"] = current_user.id
                 header_dict["date_approved"] = datetime.now()
 
             elif schema.pq_status == 2:
@@ -221,7 +261,7 @@ class CRUDPriceQuotation(
                     raise HTTPException(
                         status_code=403, detail="SQ Number is required!"
                     )
-                header_dict["confirmed_by"] = user_id
+                header_dict["confirmed_by"] = current_user.id
                 header_dict["date_confirmed"] = datetime.now()
 
             elif schema.pq_status == 3:
@@ -233,7 +273,7 @@ class CRUDPriceQuotation(
                         status_code=403,
                         detail="You can't select the order status to 'Dispatched',  please update the order status first to 'Credit Confirmed' first.",
                     )
-                header_dict["dispatched_by"] = user_id
+                header_dict["dispatched_by"] = current_user.id
                 header_dict["docstatus"] = DocstatusEnum.closed
                 header_dict["date_dispatched"] = datetime.now()
 

@@ -6,10 +6,10 @@ import 'package:jpsc_windows_app/src/data/models/models.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter/material.dart' as m;
 
-import '../../../../../global_blocs/bloc_customer/fetching_bloc/bloc.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
+import '../blocs/fetching_bloc/bloc.dart';
 
 class CustomersTable extends StatefulWidget {
   const CustomersTable({
@@ -197,7 +197,7 @@ class DataSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      if (dataGridCell.columnName == 'Customer Code') {
+      if (dataGridCell.columnName == 'Card Code') {
         final int dataRowIndex = dataGridRows.indexOf(row);
 
         return Container(
@@ -254,10 +254,10 @@ class DataSource extends DataGridSource {
 
 class TableSettings {
   static Map<String, dynamic> columnName = {
-    "code": {"name": "Customer Code", "width": double.nan},
+    "code": {"name": "Card Code", "width": double.nan},
+    "fullName": {"name": "Card Name", "width": double.nan},
     "firstName": {"name": "First Name", "width": double.nan},
     "lastName": {"name": "Last Name", "width": double.nan},
-    "fullName": {"name": "Full Name", "width": double.nan},
     "location": {"name": "Location", "width": double.nan},
     "paymentTerm": {"name": "Payment term", "width": double.nan},
     "isActive": {"name": "Is Active", "width": Constant.minPadding * 15},
@@ -271,6 +271,9 @@ class TableSettings {
           value: customer.code,
         ),
         DataGridCell<String>(
+            columnName: columnName["fullName"]["name"],
+            value: customer.cardName),
+        DataGridCell<String>(
           columnName: columnName["firstName"]["name"],
           value: customer.firstName,
         ),
@@ -278,9 +281,6 @@ class TableSettings {
           columnName: columnName["lastName"]["name"],
           value: customer.lastName ?? "",
         ),
-        DataGridCell<String>(
-            columnName: columnName["fullName"]["name"],
-            value: customer.fullName),
         DataGridCell(
           columnName: columnName["location"]["name"],
           value: customer.location,

@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 
 import '../screens/login_screen/login_screen.dart';
-import '../screens/modules/Dashboard/dashboard.dart';
 import '../screens/modules/Master_Data/customer/create_customer/address_form.dart';
 import '../screens/modules/Master_Data/customer/create_customer/create_customer_screen.dart';
+import '../screens/modules/My_Profile/my_profile.dart';
 import '../screens/modules/Price_Quotation/create_price_quotation/create_pq_screen.dart';
 import '../screens/modules/Price_Quotation/price_quotations/purch_quotations_screen.dart';
 import '../screens/modules/main_screen.dart';
@@ -19,11 +19,12 @@ import 'router_guard.dart';
       path: '/',
       guards: [RouteGuard],
       children: [
-        AutoRoute(page: DashboardScreen, path: "dashboard", initial: true),
+        // AutoRoute(page: DashboardScreen, path: "dashboard", initial: true),
         AutoRoute(
           page: CreatePriceQuotationScreen,
           path: "create_pq",
           children: CreatePriceQuotationScreen.childrenRoutes,
+          initial: true,
         ),
         AutoRoute(
           page: PriceQuotationScreen,
@@ -31,6 +32,7 @@ import 'router_guard.dart';
           children: PriceQuotationScreen.childrenRoutes,
         ),
         AutoRoute(page: CreateCustomerScreen, path: 'create_customer'),
+        AutoRoute(page: MyProfilePage, path: 'my_profile'),
       ],
     ),
     AutoRoute(page: AddressFormScreen, path: '/address_form'),

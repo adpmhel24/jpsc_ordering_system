@@ -15,6 +15,7 @@ class CustomerFormBody extends StatefulWidget {
 class _CustomerFormBodyState extends State<CustomerFormBody> {
   late CreateUpdateCustomerBloc bloc;
   final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _cardNameController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _contactNumberController =
@@ -36,13 +37,14 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
     bloc = context.read<CreateUpdateCustomerBloc>();
     fetInitialData();
     _codeController.text = widget.selectedCustomer?.code ?? "";
+    _cardNameController.text = widget.selectedCustomer?.cardName ?? "";
     _firstNameController.text = widget.selectedCustomer?.firstName ?? "";
     _lastNameController.text = widget.selectedCustomer?.lastName ?? "";
     _contactNumberController.text =
         widget.selectedCustomer?.contactNumber ?? "";
     _emailController.text = widget.selectedCustomer?.email ?? "";
     _creditLimitController.text = widget.selectedCustomer != null
-        ? widget.selectedCustomer!.creditLimit.toStringAsFixed(2)
+        ? widget.selectedCustomer!.creditLimit!.toStringAsFixed(2)
         : "0";
     selectedBranch = widget.selectedCustomer?.location ?? "";
     selectedPaymentTerm = widget.selectedCustomer?.paymentTerm ?? "";
@@ -55,6 +57,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
   @override
   void dispose() {
     _codeController.dispose();
+    _cardNameController.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
     _contactNumberController.dispose();
@@ -94,6 +97,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
               runSpacing: 12,
               children: [
                 customerCodeField(),
+                cardNameField(),
                 firstNameField(),
                 lastNameField(),
                 contactNumberField(),
@@ -152,7 +156,6 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
                         } else {
                           bloc.add(NewCustomerSubmitted());
                         }
-                        cntx.router.pop();
                       },
                     );
                   }
@@ -270,15 +273,31 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
     return SizedBox(
       width: _kTextBoxWidth,
       child: TextFormBox(
-        header: "Customer Code",
+        header: "Card Code *",
         autovalidateMode: AutovalidateMode.always,
         controller: _codeController,
-        prefix: const Icon(FluentIcons.user_followed),
+        prefix: widget.selectedCustomer != null ? null : const Text("C_"),
+        maxLength: 15,
         onChanged: (value) {
           bloc.add(CustCodeChanged(value.trim()));
         },
         validator: (_) =>
             bloc.state.custCode.invalid ? "Required field!" : null,
+      ),
+    );
+  }
+
+  SizedBox cardNameField() {
+    return SizedBox(
+      width: _kTextBoxWidth,
+      child: TextFormBox(
+        header: "Card Name",
+        controller: _cardNameController,
+        prefix: const Icon(FluentIcons.user_followed),
+        maxLength: 15,
+        onChanged: (value) {
+          bloc.add(CardnameChanged(value.trim()));
+        },
       ),
     );
   }

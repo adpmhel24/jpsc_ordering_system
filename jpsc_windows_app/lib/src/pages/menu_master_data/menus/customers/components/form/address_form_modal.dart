@@ -5,9 +5,9 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../../data/models/models.dart';
 import '../../../../../../data/repositories/repos.dart';
-import '../../../../../../global_blocs/bloc_customer/creating_update_bloc/bloc.dart';
 import '../../../../../../utils/constant.dart';
 import '../../../../../../utils/responsive.dart';
+import '../../blocs/creating_update_bloc/bloc.dart';
 
 class CustomerAddressFormModal extends StatefulWidget {
   const CustomerAddressFormModal({
@@ -216,73 +216,79 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
     );
   }
 
-  ValueListenableBuilder brgyField() {
-    return ValueListenableBuilder<List<BrgyModel>>(
-      valueListenable: _brgys,
-      builder: (_, citiesObj, __) {
-        return AutoSuggestBox(
-          trailingIcon: const Icon(FluentIcons.caret_down8),
-          controller: _brgyController,
-          items: citiesObj
-              .map<AutoSuggestBoxItem>(
-                (brgy) => AutoSuggestBoxItem(
-                  label: "Brgy",
-                  value: brgy.name,
-                  onSelected: () {
-                    selectedBrgy = brgy;
-                  },
-                ),
-              )
-              .toList(),
-          onChanged: (value, reason) {
-            if (reason.name == "cleared") {
-              setState(() {
-                _brgyController.text = "";
-                selectedBrgy = null;
-              });
-            }
-          },
-        );
-      },
+  InfoLabel brgyField() {
+    return InfoLabel(
+      label: "Brgy",
+      child: ValueListenableBuilder<List<BrgyModel>>(
+        valueListenable: _brgys,
+        builder: (_, citiesObj, __) {
+          return AutoSuggestBox(
+            trailingIcon: const Icon(FluentIcons.caret_down8),
+            controller: _brgyController,
+            items: citiesObj
+                .map<AutoSuggestBoxItem>(
+                  (brgy) => AutoSuggestBoxItem(
+                    label: brgy.name,
+                    value: brgy.name,
+                    onSelected: () {
+                      selectedBrgy = brgy;
+                    },
+                  ),
+                )
+                .toList(),
+            onChanged: (value, reason) {
+              if (reason.name == "cleared") {
+                setState(() {
+                  _brgyController.text = "";
+                  selectedBrgy = null;
+                });
+              }
+            },
+          );
+        },
+      ),
     );
   }
 
-  ValueListenableBuilder municipalityField(BuildContext context) {
-    return ValueListenableBuilder<List<CityMunicipalityModel>>(
-      valueListenable: _citiesMunicipalities,
-      builder: (_, citiesObj, __) {
-        return AutoSuggestBox(
-          controller: _cityMunicipalityController,
-          trailingIcon: const Icon(FluentIcons.caret_down8),
-          items: citiesObj
-              .map<AutoSuggestBoxItem>(
-                (city) => AutoSuggestBoxItem(
-                  label: "City / Municipality",
-                  value: city.name,
-                  onSelected: () async {
-                    context.loaderOverlay.show();
-                    selectedCityMunicipality = city;
-                    await fetchBrgys(
-                      selectedProvince,
-                      selectedCityMunicipality,
-                    );
-                    context.loaderOverlay.hide();
-                  },
-                ),
-              )
-              .toList(),
-          onChanged: (_, reason) {
-            if (reason.name == "cleared") {
-              setState(() {
-                _cityMunicipalityController.text = "";
-                _brgyController.text = "";
-                selectedCityMunicipality = null;
-                selectedBrgy = null;
-              });
-            }
-          },
-        );
-      },
+  InfoLabel municipalityField(BuildContext context) {
+    return InfoLabel(
+      label: "City / Municipality",
+      child: ValueListenableBuilder<List<CityMunicipalityModel>>(
+        valueListenable: _citiesMunicipalities,
+        builder: (_, citiesObj, __) {
+          return AutoSuggestBox(
+            controller: _cityMunicipalityController,
+            trailingIcon: const Icon(FluentIcons.caret_down8),
+            items: citiesObj
+                .map<AutoSuggestBoxItem>(
+                  (city) => AutoSuggestBoxItem(
+                    label: city.name,
+                    value: city.name,
+                    onSelected: () async {
+                      context.loaderOverlay.show();
+                      selectedCityMunicipality = city;
+                      await fetchBrgys(
+                        selectedProvince,
+                        selectedCityMunicipality,
+                      );
+                      context.loaderOverlay.hide();
+                    },
+                  ),
+                )
+                .toList(),
+            onChanged: (_, reason) {
+              if (reason.name == "cleared") {
+                setState(() {
+                  _cityMunicipalityController.text = "";
+                  _brgyController.text = "";
+                  selectedCityMunicipality = null;
+                  selectedBrgy = null;
+                });
+              }
+            },
+          );
+        },
+      ),
     );
   }
 

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/models.dart';
 import '../../data/repositories/repos.dart';
-import '../../pages/widgets/custom_dropdown_search.dart';
+import 'custom_dropdown_search.dart';
 import '../../utils/constant.dart';
 
 class ItemSelectionModal extends StatefulWidget {
