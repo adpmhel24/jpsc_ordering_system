@@ -6,4 +6,13 @@ abstract class FetchingProductsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadProducts extends FetchingProductsEvent {}
+class LoadProductsOnline extends FetchingProductsEvent {}
+
+class LoadProductsOffline extends FetchingProductsEvent {}
+
+class OfflineProductSearchByKeyword extends FetchingProductsEvent {
+  final String value;
+  const OfflineProductSearchByKeyword(this.value);
+  @override
+  List<Object?> get props => [value];
+}

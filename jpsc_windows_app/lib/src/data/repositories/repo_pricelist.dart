@@ -103,18 +103,17 @@ class PricelistRepo {
     return response.data['message'];
   }
 
-  Future<List<PricelistModel>> offlineSearch(keyword) async {
+  Future<List<PricelistModel>> offlineSearch(String keyword) async {
     Future.delayed(const Duration(seconds: 5));
-    if (_datas.isEmpty) {
-      await getAll();
+    if (keyword.isNotEmpty) {
+      return _datas
+          .where(
+            (item) => item.code!.toLowerCase().contains(
+                  keyword.toLowerCase(),
+                ),
+          )
+          .toList();
     }
-    var filtered = _datas
-        .where(
-          (item) => item.code!.toLowerCase().contains(
-                keyword!.toLowerCase(),
-              ),
-        )
-        .toList();
-    return filtered;
+    return _datas;
   }
 }

@@ -55,7 +55,7 @@ class _PricelistTableState extends State<PricelistHeaderTable> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     tableBody(constraint),
-                    tableFooter(state),
+                    tableFooter(state.datas.length),
                   ],
                 );
               },
@@ -103,17 +103,17 @@ class _PricelistTableState extends State<PricelistHeaderTable> {
           );
   }
 
-  SizedBox tableFooter(PricelistFetchingState state) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: state.datas.isEmpty
+        pageCount: dataLength <= 0
             ? 1
-            : (state.datas.length / _rowsPerPage) +
-                ((state.datas.length % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: [10, 20, 30, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;

@@ -8,7 +8,7 @@ import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
 import '../../../../../shared/widgets/custom_dialog.dart';
 import '../blocs/create_updating_bloc/bloc.dart';
-import '../blocs/fetching_bloc/bloc.dart';
+
 import 'form_body.dart';
 
 class ProductFormPage extends StatelessWidget {
@@ -16,14 +16,12 @@ class ProductFormPage extends StatelessWidget {
     Key? key,
     required this.header,
     this.selectedItem,
+    required this.onRefresh,
   }) : super(key: key);
 
   final String header;
   final ProductModel? selectedItem;
-
-  void _loadData(BuildContext context) {
-    context.read<FetchingProductsBloc>().add(LoadProducts());
-  }
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +47,7 @@ class ProductFormPage extends StatelessWidget {
               context,
               message: state.message,
               onPositiveClick: (_) {
-                _loadData(context);
+                onRefresh();
                 context.router.pop(); //to pop the form
               },
             );

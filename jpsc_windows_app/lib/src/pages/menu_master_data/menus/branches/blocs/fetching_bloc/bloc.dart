@@ -10,37 +10,30 @@ import '../../../../../../utils/fetching_status.dart';
 part 'event.dart';
 part 'state.dart';
 
-class CustomerFetchingBloc
-    extends Bloc<CustomerFetchingEvent, CustomerFetchingState> {
-  CustomerRepo customerRepo;
+class FetchingBranchesBloc
+    extends Bloc<FetchingBranchesEvent, FetchingBranchesState> {
+  final BranchRepo branchRepo;
   final CurrentUserRepo currUserRepo;
   final ObjectTypeRepo objectTypeRepo;
-  CustomerFetchingBloc({
-    required this.customerRepo,
+
+  FetchingBranchesBloc({
+    required this.branchRepo,
     required this.currUserRepo,
     required this.objectTypeRepo,
-  }) : super(const CustomerFetchingState()) {
-    on<FetchCustomers>(_onFetchCustomers);
-    on<OfflineSearchCustomerByKeyword>(_onOfflineSearchCustomerByKeyword);
+  }) : super(const FetchingBranchesState()) {
+    on<LoadBranches>(_onLoadBranches);
+    on<SearchBranchesByKeyword>(_onSearchBranchesByKeyword);
   }
 
-  void _onFetchCustomers(
-      FetchCustomers event, Emitter<CustomerFetchingState> emit) async {
+  void _onLoadBranches(
+      LoadBranches event, Emitter<FetchingBranchesState> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
-
     try {
       // Check if authorized
-      int objType = await objectTypeRepo.getObjectTypeByName("Customer Data");
-      Map<String, dynamic> auths = {};
-      if (!event.params!["is_approved"]) {
-        // Query for approval
-        auths = {"full": true, "approve": true};
-      } else {
-        auths = {"full": true, "create": true, "read": true};
-      }
+      int objType = await objectTypeRepo.getObjectTypeByName("Branch");
       bool isAuthorized = currUserRepo.checkIfUserAuthorized(
         objtype: objType,
-        auths: auths,
+        auths: {"full": true, "create": true},
       );
       if (!isAuthorized) {
         emit(
@@ -50,13 +43,9 @@ class CustomerFetchingBloc
           ),
         );
       } else {
-        await customerRepo.getAll(params: event.params);
-        emit(
-          state.copyWith(
-            status: FetchingStatus.success,
-            datas: customerRepo.datas,
-          ),
-        );
+        await branchRepo.getAll();
+        emit(state.copyWith(
+            status: FetchingStatus.success, branches: branchRepo.datas));
       }
     } on HttpException catch (e) {
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
@@ -70,18 +59,15 @@ class CustomerFetchingBloc
     }
   }
 
-  void _onOfflineSearchCustomerByKeyword(OfflineSearchCustomerByKeyword event,
-      Emitter<CustomerFetchingState> emit) async {
+  void _onSearchBranchesByKeyword(SearchBranchesByKeyword event,
+      Emitter<FetchingBranchesState> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
-
     try {
       // Check if authorized
-      int objType = await objectTypeRepo.getObjectTypeByName("Customer Data");
-      Map<String, dynamic> auths = {};
-      auths = {"full": true, "read": true};
+      int objType = await objectTypeRepo.getObjectTypeByName("Branch");
       bool isAuthorized = currUserRepo.checkIfUserAuthorized(
         objtype: objType,
-        auths: auths,
+        auths: {"full": true, "create": true},
       );
       if (!isAuthorized) {
         emit(
@@ -91,11 +77,8 @@ class CustomerFetchingBloc
           ),
         );
       } else {
-        List<CustomerModel> datas =
-            await customerRepo.offlineSearch(event.value);
-        emit(
-          state.copyWith(status: FetchingStatus.success, datas: datas),
-        );
+        final datas = await branchRepo.offlineSearch(event.value);
+        emit(state.copyWith(status: FetchingStatus.success, branches: datas));
       }
     } on HttpException catch (e) {
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));

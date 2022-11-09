@@ -87,19 +87,21 @@ class CustomerRepo {
 
   Future<List<CustomerModel>> offlineSearch(String value) async {
     Future.delayed(const Duration(seconds: 5));
-    if (_datas.isEmpty) {
-      await getAll();
-    }
+
     if (value.isNotEmpty) {
       var filtered = _datas
           .where(
-            (customer) => customer.code.toLowerCase().contains(
-                  value.toLowerCase(),
-                ),
+            (customer) =>
+                customer.code.toLowerCase().contains(
+                      value.toLowerCase(),
+                    ) ||
+                (customer.cardName ?? "")
+                    .toLowerCase()
+                    .contains(value.toLowerCase()),
           )
           .toList();
       return filtered;
     }
-    return datas;
+    return _datas;
   }
 }

@@ -49,15 +49,16 @@ class BranchRepo {
 
   Future<List<BranchModel>> offlineSearch(String value) async {
     Future.delayed(const Duration(seconds: 5));
-    if (_datas.isEmpty) {
-      await getAll();
-    }
     if (value.isNotEmpty) {
       var filtered = _datas
           .where(
-            (branch) => branch.code.toLowerCase().contains(
-                  value.toLowerCase(),
-                ),
+            (branch) =>
+                branch.code.toLowerCase().contains(
+                      value.toLowerCase(),
+                    ) ||
+                (branch.description ?? "")
+                    .toLowerCase()
+                    .contains(value.toLowerCase()),
           )
           .toList();
       return filtered;

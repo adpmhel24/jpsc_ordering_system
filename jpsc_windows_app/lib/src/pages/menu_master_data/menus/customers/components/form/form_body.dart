@@ -294,7 +294,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         header: "Card Name",
         controller: _cardNameController,
         prefix: const Icon(FluentIcons.user_followed),
-        maxLength: 15,
+        maxLength: 100,
         onChanged: (value) {
           bloc.add(CardnameChanged(value.trim()));
         },

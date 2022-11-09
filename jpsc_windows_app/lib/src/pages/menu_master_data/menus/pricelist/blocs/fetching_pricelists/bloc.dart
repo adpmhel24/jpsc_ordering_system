@@ -21,7 +21,7 @@ class PricelistFetchingBloc
     required this.objectTypeRepo,
   }) : super(const PricelistFetchingState()) {
     on<LoadPricelist>(_onLoadPricelist);
-    on<FilterPricelist>(_onFilterPricelist);
+    on<SearchPricelistByKeyword>(_onSearchPricelistByKeyword);
   }
 
   void _onLoadPricelist(
@@ -59,19 +59,12 @@ class PricelistFetchingBloc
     }
   }
 
-  void _onFilterPricelist(
-      FilterPricelist event, Emitter<PricelistFetchingState> emit) async {
+  void _onSearchPricelistByKeyword(SearchPricelistByKeyword event,
+      Emitter<PricelistFetchingState> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
     List<PricelistModel> datas = [];
     try {
-      if (event.keyword.isNotEmpty) {
-        datas = await pricelistRepo.offlineSearch(event.keyword);
-      } else {
-        if (pricelistRepo.datas.isEmpty) {
-          await pricelistRepo.getAll();
-        }
-        datas = pricelistRepo.datas;
-      }
+      datas = await pricelistRepo.offlineSearch(event.keyword);
       emit(state.copyWith(status: FetchingStatus.success, datas: datas));
     } on HttpException catch (err) {
       emit(state.copyWith(

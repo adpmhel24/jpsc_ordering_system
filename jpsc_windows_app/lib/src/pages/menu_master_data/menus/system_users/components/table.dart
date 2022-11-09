@@ -66,7 +66,7 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     tableBody(constraint),
-                    tableFooter(state),
+                    tableFooter(state.systemUsers.length),
                   ],
                 );
               },
@@ -111,17 +111,17 @@ class _SystemUsersTableState extends State<SystemUsersTable> {
           );
   }
 
-  SizedBox tableFooter(FetchingSystemUsersState state) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: state.systemUsers.isEmpty
+        pageCount: dataLength <= 0
             ? 1
-            : (state.systemUsers.length / _rowsPerPage) +
-                ((state.systemUsers.length % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: [10, 20, 30, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;

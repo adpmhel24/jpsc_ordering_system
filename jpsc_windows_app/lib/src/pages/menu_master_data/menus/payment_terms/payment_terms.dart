@@ -44,30 +44,28 @@ class _PaymentTermsPageState extends State<PaymentTermsPage> {
             context.loaderOverlay.hide();
           }
         },
-        child: Builder(builder: (context) {
-          return BaseMasterDataScaffold(
-            title: "Payment Terms",
-            onNewButton: () {
-              context.router.navigate(
-                PaymentTermWrapper(
-                  children: [
-                    PaymentTermFormRoute(
-                      header: "Payment Terms Create Form",
-                      onRefresh: sfDataGridKey.currentState!.refresh,
-                    ),
-                  ],
-                ),
-              );
-            },
-            onRefreshButton: () {
-              context.read<FetchingPaymentTermsBloc>().add(LoadPaymentTerms());
-            },
-            onSearchChanged: (value) {},
-            child: PaymentTermTable(
-              sfDataGridKey: sfDataGridKey,
-            ),
-          );
-        }),
+        child: BaseMasterDataScaffold(
+          title: "Payment Terms",
+          onNewButton: (context) {
+            context.router.navigate(
+              PaymentTermWrapper(
+                children: [
+                  PaymentTermFormRoute(
+                    header: "Payment Terms Create Form",
+                    onRefresh: sfDataGridKey.currentState!.refresh,
+                  ),
+                ],
+              ),
+            );
+          },
+          onRefreshButton: (context) {
+            context.read<FetchingPaymentTermsBloc>().add(LoadPaymentTerms());
+          },
+          onSearchChanged: (context, value) {},
+          child: PaymentTermTable(
+            sfDataGridKey: sfDataGridKey,
+          ),
+        ),
       ),
     );
   }

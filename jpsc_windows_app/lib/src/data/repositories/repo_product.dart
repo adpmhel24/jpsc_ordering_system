@@ -125,4 +125,21 @@ class ProductRepo {
     }
     return datas;
   }
+
+  Future<List<ProductModel>> offlineSearchByKeyword(String keyword) async {
+    if (_datas.isEmpty) {
+      await getAll();
+    }
+    return _datas
+        .where(
+          (item) =>
+              item.code.toLowerCase().contains(
+                    keyword.toLowerCase(),
+                  ) ||
+              (item.description ?? "")
+                  .toLowerCase()
+                  .contains(keyword.toLowerCase()),
+        )
+        .toList();
+  }
 }

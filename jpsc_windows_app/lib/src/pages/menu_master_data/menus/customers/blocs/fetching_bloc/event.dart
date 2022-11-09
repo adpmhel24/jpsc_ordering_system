@@ -13,3 +13,11 @@ class FetchCustomers extends CustomerFetchingEvent {
   @override
   List<Object?> get props => [params];
 }
+
+class OfflineSearchCustomerByKeyword extends CustomerFetchingEvent {
+  final String value;
+  const OfflineSearchCustomerByKeyword(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}

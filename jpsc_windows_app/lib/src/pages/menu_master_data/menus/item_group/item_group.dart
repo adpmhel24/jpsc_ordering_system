@@ -106,7 +106,7 @@ class _ItemGroupPageState extends State<ItemGroupPage> {
         },
         child: BaseMasterDataScaffold(
           title: "Item Groups",
-          onNewButton: () {
+          onNewButton: (context) {
             context.router.navigate(
               ItemGroupWrapper(
                 children: [
@@ -117,11 +117,11 @@ class _ItemGroupPageState extends State<ItemGroupPage> {
               ),
             );
           },
-          onRefreshButton: () {
+          onRefreshButton: (_) {
             context.read<FetchingItemGroupBloc>().add(LoadItemGroups());
           },
           onAttachButton: (cntx) => _openTextFile(cntx),
-          onSearchChanged: (value) {},
+          onSearchChanged: (context, value) {},
           child: ItemGroupTable(
             sfDataGridKey: sfDataGridKey,
           ),

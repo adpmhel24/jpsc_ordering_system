@@ -44,30 +44,32 @@ class _PricelistPageState extends State<PricelistPage> {
             context.loaderOverlay.hide();
           }
         },
-        child: Builder(builder: (context) {
-          return BaseMasterDataScaffold(
-            title: "Pricelist",
-            onNewButton: () {
-              context.router.navigate(
-                PricelistWrapper(
-                  children: [
-                    PricelistFormRoute(
-                      header: "Pricelist Create Form",
-                      refresh: sfDataGridKey.currentState!.refresh,
-                    ),
-                  ],
-                ),
-              );
-            },
-            onRefreshButton: () {
-              context.read<PricelistFetchingBloc>().add(LoadPricelist());
-            },
-            onSearchChanged: (value) {},
-            child: PricelistHeaderTable(
-              sfDataGridKey: sfDataGridKey,
-            ),
-          );
-        }),
+        child: BaseMasterDataScaffold(
+          title: "Pricelist",
+          onNewButton: (context) {
+            context.router.navigate(
+              PricelistWrapper(
+                children: [
+                  PricelistFormRoute(
+                    header: "Pricelist Create Form",
+                    refresh: sfDataGridKey.currentState!.refresh,
+                  ),
+                ],
+              ),
+            );
+          },
+          onRefreshButton: (context) {
+            context.read<PricelistFetchingBloc>().add(LoadPricelist());
+          },
+          onSearchChanged: (context, value) {
+            context
+                .read<PricelistFetchingBloc>()
+                .add(SearchPricelistByKeyword(value));
+          },
+          child: PricelistHeaderTable(
+            sfDataGridKey: sfDataGridKey,
+          ),
+        ),
       ),
     );
   }

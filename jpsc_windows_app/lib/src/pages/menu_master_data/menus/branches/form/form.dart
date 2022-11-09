@@ -6,9 +6,8 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
-import '../../../../../global_blocs/blocs.dart';
 import '../../../../../shared/widgets/custom_dialog.dart';
-import 'bloc/bloc.dart';
+import '../blocs/create_update_bloc/bloc.dart';
 import 'form_body.dart';
 
 class BranchFormPage extends StatelessWidget {
@@ -16,19 +15,21 @@ class BranchFormPage extends StatelessWidget {
     Key? key,
     required this.header,
     this.selectedBranch,
+    required this.onRefresh,
   }) : super(key: key);
 
   final String header;
   final BranchModel? selectedBranch;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BranchFormBloc(
+      create: (context) => CreateUpdateBranchBloc(
         branchRepo: context.read<BranchRepo>(),
         selectedBranch: selectedBranch,
       ),
-      child: BlocListener<BranchFormBloc, BranchFormState>(
+      child: BlocListener<CreateUpdateBranchBloc, CreateUpdateBranchState>(
         listenWhen: (previous, current) =>
             current.status.isSubmissionFailure ||
             current.status.isSubmissionInProgress ||
@@ -45,7 +46,7 @@ class BranchFormPage extends StatelessWidget {
               context,
               message: state.message,
               onPositiveClick: (_) {
-                context.read<BranchesBloc>().add(LoadBranches());
+                onRefresh();
                 context.router.pop();
               },
             );

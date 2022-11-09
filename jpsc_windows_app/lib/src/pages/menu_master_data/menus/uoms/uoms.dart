@@ -103,7 +103,7 @@ class _UomsPageState extends State<UomsPage> {
       },
       child: BaseMasterDataScaffold(
         title: "Unit Of Measures",
-        onNewButton: () {
+        onNewButton: (context) {
           context.router.navigate(
             UomsWrapper(
               children: [
@@ -114,11 +114,11 @@ class _UomsPageState extends State<UomsPage> {
             ),
           );
         },
-        onRefreshButton: () {
+        onRefreshButton: (context) {
           context.read<UomsBloc>().add(LoadUoms());
         },
         onAttachButton: (cntx) => _openTextFile(cntx),
-        onSearchChanged: (value) {},
+        onSearchChanged: (context, value) {},
         child: UomsTable(
           sfDataGridKey: sfDataGridKey,
         ),

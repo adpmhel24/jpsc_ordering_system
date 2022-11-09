@@ -73,7 +73,9 @@ class _ProductPageState extends State<ProductPage> {
             ProductBulkInsertRoute(
                 datas: datas,
                 onRefresh: () {
-                  context.read<FetchingProductsBloc>().add(LoadProducts());
+                  context
+                      .read<FetchingProductsBloc>()
+                      .add(LoadProductsOnline());
                 }),
           ],
         ),
@@ -92,7 +94,7 @@ class _ProductPageState extends State<ProductPage> {
         productRepo: context.read<ProductRepo>(),
         currUserRepo: context.read<CurrentUserRepo>(),
         objectTypeRepo: context.read<ObjectTypeRepo>(),
-      )..add(LoadProducts()),
+      )..add(LoadProductsOnline()),
       child: Builder(builder: (context) {
         return BlocListener<FetchingProductsBloc, FetchingProductsState>(
           listenWhen: (prev, curr) => prev.status != curr.status,
@@ -111,12 +113,15 @@ class _ProductPageState extends State<ProductPage> {
           },
           child: BaseMasterDataScaffold(
             title: "Products",
-            onNewButton: () {
+            onNewButton: (context) {
               context.router.navigate(
                 ProductsWrapper(
                   children: [
                     ProductFormRoute(
                       header: "Product Form",
+                      onRefresh: () => context
+                          .read<FetchingProductsBloc>()
+                          .add(LoadProductsOnline()),
                     ),
                   ],
                 ),
@@ -125,10 +130,14 @@ class _ProductPageState extends State<ProductPage> {
             onAttachButton: (context) {
               _openTextFile(context);
             },
-            onRefreshButton: () {
-              context.read<FetchingProductsBloc>().add(LoadProducts());
+            onRefreshButton: (context) {
+              context.read<FetchingProductsBloc>().add(LoadProductsOnline());
             },
-            onSearchChanged: (value) {},
+            onSearchChanged: (context, value) {
+              context
+                  .read<FetchingProductsBloc>()
+                  .add(OfflineProductSearchByKeyword(value));
+            },
             child: ItemsTable(
               sfDataGridKey: sfDataGridKey,
             ),

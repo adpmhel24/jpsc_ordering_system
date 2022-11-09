@@ -1,6 +1,6 @@
 part of 'bloc.dart';
 
-class BranchFormState extends Equatable {
+class CreateUpdateBranchState extends Equatable {
   final FormzStatus status;
   final FormzString code;
   final FormzString description;
@@ -8,7 +8,7 @@ class BranchFormState extends Equatable {
   final FormzBool isActive;
   final String message;
 
-  const BranchFormState({
+  const CreateUpdateBranchState({
     this.status = FormzStatus.pure,
     this.code = const FormzString.pure(),
     this.description = const FormzString.pure(),
@@ -17,7 +17,7 @@ class BranchFormState extends Equatable {
     this.message = "",
   });
 
-  BranchFormState copyWith({
+  CreateUpdateBranchState copyWith({
     FormzStatus? status,
     FormzString? code,
     FormzString? description,
@@ -25,7 +25,7 @@ class BranchFormState extends Equatable {
     FormzBool? isActive,
     String? message,
   }) {
-    return BranchFormState(
+    return CreateUpdateBranchState(
       status: status ?? this.status,
       code: code ?? this.code,
       description: description ?? this.description,

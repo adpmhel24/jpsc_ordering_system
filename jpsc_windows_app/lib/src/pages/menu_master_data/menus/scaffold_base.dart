@@ -7,17 +7,17 @@ class BaseMasterDataScaffold extends StatelessWidget {
   const BaseMasterDataScaffold({
     Key? key,
     required this.title,
-    this.onSearchChanged,
-    this.onNewButton,
-    this.onRefreshButton,
+    required this.onSearchChanged,
+    required this.onNewButton,
+    required this.onRefreshButton,
     this.child,
     this.onAttachButton,
   }) : super(key: key);
 
   final String title;
-  final void Function(String)? onSearchChanged;
-  final void Function()? onNewButton;
-  final void Function()? onRefreshButton;
+  final void Function(BuildContext, String) onSearchChanged;
+  final void Function(BuildContext) onNewButton;
+  final void Function(BuildContext) onRefreshButton;
   final void Function(BuildContext context)? onAttachButton;
   final Widget? child;
 
@@ -43,7 +43,7 @@ class BaseMasterDataScaffold extends StatelessWidget {
         child: TextBox(
           suffix: const Icon(FluentIcons.search),
           placeholder: 'Type to filter the table',
-          onChanged: onSearchChanged,
+          onChanged: (value) => onSearchChanged(context, value),
         ),
       ),
     );
@@ -65,7 +65,7 @@ class BaseMasterDataScaffold extends StatelessWidget {
                   wrappedItem: CommandBarButton(
                     icon: const Icon(FluentIcons.add),
                     label: const Text("New"),
-                    onPressed: onNewButton,
+                    onPressed: () => onNewButton(context),
                   ),
                 ),
                 CommandBarBuilderItem(
@@ -73,7 +73,7 @@ class BaseMasterDataScaffold extends StatelessWidget {
                   wrappedItem: CommandBarButton(
                     icon: const Icon(FluentIcons.refresh),
                     label: const Text("Refresh"),
-                    onPressed: onRefreshButton,
+                    onPressed: () => onRefreshButton(context),
                   ),
                 ),
                 CommandBarBuilderItem(

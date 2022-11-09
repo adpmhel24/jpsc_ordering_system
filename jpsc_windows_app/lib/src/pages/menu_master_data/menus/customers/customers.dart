@@ -119,7 +119,7 @@ class _CustomersPageState extends State<CustomersPage> {
         ),
       child: BaseMasterDataScaffold(
         title: "Customers",
-        onNewButton: () {
+        onNewButton: (context) {
           context.router.navigate(
             CustomerWrapper(
               children: [
@@ -131,11 +131,15 @@ class _CustomersPageState extends State<CustomersPage> {
             ),
           );
         },
-        onRefreshButton: () {
+        onRefreshButton: (_) {
           sfDataGridKey.currentState!.refresh();
         },
         onAttachButton: (context) => _openTextFile(context),
-        onSearchChanged: (value) {},
+        onSearchChanged: (context, value) {
+          context.read<CustomerFetchingBloc>().add(
+                OfflineSearchCustomerByKeyword(value),
+              );
+        },
         child: BlocListener<CustomerFetchingBloc, CustomerFetchingState>(
           listenWhen: (prev, curr) => prev.status != curr.status,
           listener: (context, state) {

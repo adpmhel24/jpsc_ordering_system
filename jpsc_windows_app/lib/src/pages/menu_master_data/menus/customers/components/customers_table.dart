@@ -104,17 +104,17 @@ class _CustomersTableState extends State<CustomersTable> {
           );
   }
 
-  SizedBox tableFooter(int dataCount) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: dataCount == 0
+        pageCount: dataLength <= 0
             ? 1
-            : (dataCount / _rowsPerPage) +
-                ((dataCount % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: [10, 20, 30, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -219,16 +219,6 @@ class DataSource extends DataGridSource {
                         ],
                       ),
                     );
-                    // cntx.router.navigate(
-                    //   BranchesWrapper(
-                    //     children: [
-                    //       BranchCreateRoute(
-                    //         header: "Branch Update Form",
-                    //         selectedBranch: dataGridCell.value,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // );
                   },
                   child: SvgPicture.asset(
                     "assets/icons/sm_right_arrow.svg",

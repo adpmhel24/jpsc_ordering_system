@@ -6,10 +6,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
-import '../../../../../global_blocs/blocs.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
+import '../blocs/fetching_bloc/bloc.dart';
 import 'table_settings.dart';
 
 class BranchesTable extends StatefulWidget {
@@ -34,7 +34,7 @@ class _BranchesTableState extends State<BranchesTable> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: BlocBuilder<BranchesBloc, BranchesBlocState>(
+      child: BlocBuilder<FetchingBranchesBloc, FetchingBranchesState>(
         buildWhen: (prev, curr) =>
             curr.status == FetchingStatus.unauthorized ||
             curr.status == FetchingStatus.success,
@@ -57,7 +57,7 @@ class _BranchesTableState extends State<BranchesTable> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     tableBody(constraint),
-                    tableFooter(state),
+                    tableFooter(state.branches.length),
                   ],
                 );
               },
@@ -98,26 +98,21 @@ class _BranchesTableState extends State<BranchesTable> {
 
                 return true;
               },
-              // onCellDoubleTap: (
-              //   details,
-              // ) async {
-
-              // },
             ),
           );
   }
 
-  SizedBox tableFooter(BranchesBlocState state) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: state.branches.isEmpty
+        pageCount: dataLength <= 0
             ? 1
-            : (state.branches.length / _rowsPerPage) +
-                ((state.branches.length % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: [10, 20, 30, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -161,7 +156,7 @@ class DataSource extends DataGridSource {
 
   @override
   Future<void> handleRefresh() async {
-    cntx.read<BranchesBloc>().add(LoadBranches());
+    cntx.read<FetchingBranchesBloc>().add(LoadBranches());
     buildPaginatedDataGridRows();
     notifyListeners();
   }
@@ -212,9 +207,13 @@ class DataSource extends DataGridSource {
                       BranchesWrapper(
                         children: [
                           BranchCreateRoute(
-                            header: "Branch Update Form",
-                            selectedBranch: dataGridCell.value,
-                          ),
+                              header: "Branch Update Form",
+                              selectedBranch: dataGridCell.value,
+                              onRefresh: () {
+                                cntx
+                                    .read<FetchingBranchesBloc>()
+                                    .add(LoadBranches());
+                              }),
                         ],
                       ),
                     );

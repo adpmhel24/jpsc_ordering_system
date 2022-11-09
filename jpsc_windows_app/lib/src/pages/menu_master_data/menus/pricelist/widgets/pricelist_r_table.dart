@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../shared/widgets/custom_button.dart';
 import '../../../../../utils/currency_formater.dart';
-import '../../products/blocs/fetching_bloc/bloc.dart';
 import 'pricelist_r_logs.dart';
 
 class PricelistRowTable extends StatefulWidget {
@@ -150,13 +149,6 @@ class DataSource extends DataGridSource {
     dataGridRows = paginatedDatas.map((data) {
       return PricelistTableSettings.dataGrid(data);
     }).toList(growable: false);
-  }
-
-  @override
-  Future<void> handleRefresh() async {
-    cntx.read<FetchingProductsBloc>().add(LoadProducts());
-    buildPaginatedDataGridRows();
-    notifyListeners();
   }
 
   @override

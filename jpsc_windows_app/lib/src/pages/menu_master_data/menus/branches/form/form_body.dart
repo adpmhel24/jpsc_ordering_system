@@ -8,7 +8,7 @@ import '../../../../../data/repositories/repos.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/responsive.dart';
 import '../../../../../shared/widgets/custom_dialog.dart';
-import 'bloc/bloc.dart';
+import '../blocs/create_update_bloc/bloc.dart';
 
 class BranchFormBody extends StatefulWidget {
   const BranchFormBody({
@@ -25,7 +25,7 @@ class _BranchFormBodyState extends State<BranchFormBody> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _pricelistController = TextEditingController();
-  late BranchFormBloc formBloc;
+  late CreateUpdateBranchBloc formBloc;
 
   String? _selectedPricelist;
 
@@ -33,7 +33,7 @@ class _BranchFormBodyState extends State<BranchFormBody> {
 
   @override
   void initState() {
-    formBloc = context.read<BranchFormBloc>();
+    formBloc = context.read<CreateUpdateBranchBloc>();
     if (widget.selectedBranch != null) {
       _codeController.text = widget.selectedBranch?.code ?? "";
       _descriptionController.text = widget.selectedBranch?.description ?? "";
@@ -128,8 +128,8 @@ class _BranchFormBodyState extends State<BranchFormBody> {
         header: "Branch Code *",
         autovalidateMode: AutovalidateMode.always,
         controller: _codeController,
-        onChanged: (_) {
-          formBloc.add(BranchCodeChanged(_codeController));
+        onChanged: (value) {
+          formBloc.add(BranchCodeChanged(value));
         },
         validator: (_) {
           return formBloc.state.code.invalid ? "Provide branch code." : null;
@@ -143,8 +143,8 @@ class _BranchFormBodyState extends State<BranchFormBody> {
       child: TextFormBox(
         header: "Branch Description",
         controller: _descriptionController,
-        onChanged: (_) {
-          formBloc.add(BranchDescriptionChanged(_descriptionController));
+        onChanged: (value) {
+          formBloc.add(BranchDescriptionChanged(value));
         },
       ),
     );
@@ -221,25 +221,20 @@ class _BranchFormBodyState extends State<BranchFormBody> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: FilledButton(
-        onPressed: context.watch<BranchFormBloc>().state.status.isValidated
-            ? () {
-                CustomDialogBox.warningMessage(
-                  context,
-                  message: "Are you sure you want to proceed?",
-                  onPositiveClick: (cntx) {
-                    if (widget.selectedBranch != null) {
-                      formBloc.add(
-                        UpdateButtonSubmitted(),
-                      );
-                    } else {
-                      formBloc.add(
-                        CreateButtonSubmitted(),
-                      );
-                    }
-                  },
-                );
-              }
-            : null,
+        onPressed:
+            context.watch<CreateUpdateBranchBloc>().state.status.isValidated
+                ? () {
+                    CustomDialogBox.warningMessage(
+                      context,
+                      message: "Are you sure you want to proceed?",
+                      onPositiveClick: (cntx) {
+                        formBloc.add(
+                          ButtonSubmitted(),
+                        );
+                      },
+                    );
+                  }
+                : null,
         child: widget.selectedBranch != null
             ? const Text("Update")
             : const Text("Create"),

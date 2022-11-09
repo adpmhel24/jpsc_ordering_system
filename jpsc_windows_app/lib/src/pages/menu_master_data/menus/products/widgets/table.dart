@@ -121,7 +121,7 @@ class _ItemsTableState extends State<ItemsTable> {
             : (datasLength / _rowsPerPage) +
                 ((datasLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: [10, 20, 30, datasLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -165,7 +165,7 @@ class DataSource extends DataGridSource {
 
   @override
   Future<void> handleRefresh() async {
-    cntx.read<FetchingProductsBloc>().add(LoadProducts());
+    cntx.read<FetchingProductsBloc>().add(LoadProductsOnline());
     buildPaginatedDataGridRows();
     notifyListeners();
   }
@@ -217,6 +217,9 @@ class DataSource extends DataGridSource {
                           ProductFormRoute(
                             header: "Product Form",
                             selectedItem: dataGridCell.value,
+                            onRefresh: () => cntx
+                                .read<FetchingProductsBloc>()
+                                .add(LoadProductsOnline()),
                           ),
                         ],
                       ),

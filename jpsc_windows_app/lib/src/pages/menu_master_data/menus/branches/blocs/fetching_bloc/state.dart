@@ -1,22 +1,22 @@
 part of 'bloc.dart';
 
-class BranchesBlocState extends Equatable {
+class FetchingBranchesState extends Equatable {
   final List<BranchModel> branches;
   final FetchingStatus status;
   final String message;
 
-  const BranchesBlocState({
+  const FetchingBranchesState({
     this.branches = const [],
     this.status = FetchingStatus.init,
     this.message = "",
   });
 
-  BranchesBlocState copyWith({
+  FetchingBranchesState copyWith({
     List<BranchModel>? branches,
     FetchingStatus? status,
     String? message,
   }) {
-    return BranchesBlocState(
+    return FetchingBranchesState(
       branches: branches ?? this.branches,
       status: status ?? this.status,
       message: message ?? this.message,

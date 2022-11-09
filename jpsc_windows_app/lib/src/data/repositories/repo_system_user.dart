@@ -73,4 +73,15 @@ class SystemUserRepo {
       throw HttpException(e.message);
     }
   }
+
+  Future<List<SystemUserModel>> offlineSearchByKeyword(String value) async {
+    if (value.isNotEmpty) {
+      return _datas
+          .where((e) =>
+              e.email.toLowerCase().contains(value.toLowerCase()) ||
+              e.firstName.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    }
+    return _datas;
+  }
 }

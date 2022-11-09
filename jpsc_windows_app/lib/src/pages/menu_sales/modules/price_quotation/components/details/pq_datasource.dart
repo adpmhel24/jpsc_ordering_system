@@ -173,9 +173,9 @@ class DataSource extends DataGridSource {
     double actualPrice = row.getCells()[4].value;
     return DataGridRowAdapter(
         color: (srpPrice > actualPrice)
-            ? Constant.overSRPColor
+            ? Constant.belowSRPColor
             : (srpPrice < actualPrice)
-                ? Constant.belowSRPColor
+                ? Constant.overSRPColor
                 : null,
         cells: row.getCells().map<Widget>((dataGridCell) {
           return Container(

@@ -28,7 +28,7 @@ class CreateUpdateCustomerState extends Equatable {
     this.custCreditLimit = const FormzDouble.pure(),
     this.custPaymentTerm = const FormzString.pure(),
     this.addresses = const FormzList.pure(),
-    this.isActive = const FormzBool.dirty(true),
+    this.isActive = const FormzBool.dirty(false),
     this.isApproved = const FormzBool.dirty(false),
     this.message = "",
   });

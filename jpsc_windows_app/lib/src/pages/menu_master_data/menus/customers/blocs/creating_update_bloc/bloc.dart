@@ -283,6 +283,14 @@ class CreateUpdateCustomerBloc
 
     addresses.addAll(state.addresses.value);
 
+    if (event.value.isDefault!) {
+      addresses.addAll(state.addresses.value.map((element) {
+        element.isDefault = false;
+        return element;
+      }).toList());
+    } else {
+      addresses.addAll(state.addresses.value);
+    }
     addresses[event.index] = event.value;
 
     emit(
@@ -302,13 +310,15 @@ class CreateUpdateCustomerBloc
     Map<String, dynamic> data = {
       "customer_schema": {
         "code": state.custCode.value,
+        "card_name": state.cardName.value,
         "first_name": state.custFirstName.value,
         "last_name": state.custLastName.value,
         "contact_number": state.custContactNumber.value,
-        "email": state.custEmail.invalid ? null : state.custEmail.value,
+        if (state.custEmail.valid) "email": state.custEmail.value,
         "credit_limit": state.custCreditLimit.value,
         "location": state.custBranch.value,
         "payment_terms": state.custPaymentTerm.value,
+        "is_active": state.isActive.value,
       },
       "addresses_schema": state.addresses.value,
     };
@@ -337,10 +347,11 @@ class CreateUpdateCustomerBloc
     Map<String, dynamic> data = {
       "customer_schema": {
         "code": state.custCode.value,
+        "card_name": state.cardName.value,
         "first_name": state.custFirstName.value,
         "last_name": state.custLastName.value,
         "contact_number": state.custContactNumber.value,
-        "email": state.custEmail.invalid ? null : state.custEmail.value,
+        if (state.custEmail.valid) "email": state.custEmail.value,
         "credit_limit": state.custCreditLimit.value,
         "location": state.custBranch.value,
         if (state.custPaymentTerm.value.isNotEmpty)

@@ -99,47 +99,49 @@ class _SystemUsersPageState extends State<SystemUsersPage> {
         currUserRepo: context.read<CurrentUserRepo>(),
         objectTypeRepo: context.read<ObjectTypeRepo>(),
       )..add(LoadSystemUsers()),
-      child: Builder(builder: (context) {
-        return BlocListener<FetchingSystemUsersBloc, FetchingSystemUsersState>(
-          listenWhen: (prev, curr) => prev.status != curr.status,
-          listener: (context, state) {
-            if (state.status == FetchingStatus.loading) {
-              context.loaderOverlay.show();
-            } else if (state.status == FetchingStatus.error) {
-              context.loaderOverlay.hide();
-              CustomDialogBox.errorMessage(context, message: state.message);
-            } else if (state.status == FetchingStatus.success) {
-              context.loaderOverlay.hide();
-            } else if (state.status == FetchingStatus.unauthorized) {
-              context.loaderOverlay.hide();
-            }
+      child: BlocListener<FetchingSystemUsersBloc, FetchingSystemUsersState>(
+        listenWhen: (prev, curr) => prev.status != curr.status,
+        listener: (context, state) {
+          if (state.status == FetchingStatus.loading) {
+            context.loaderOverlay.show();
+          } else if (state.status == FetchingStatus.error) {
+            context.loaderOverlay.hide();
+            CustomDialogBox.errorMessage(context, message: state.message);
+          } else if (state.status == FetchingStatus.success) {
+            context.loaderOverlay.hide();
+          } else if (state.status == FetchingStatus.unauthorized) {
+            context.loaderOverlay.hide();
+          }
+        },
+        child: BaseMasterDataScaffold(
+          title: "System Users",
+          onNewButton: (context) {
+            context.router.navigate(
+              SystemUsersWrapper(children: [
+                SystemUserFormRoute(
+                  onRefresh: () {
+                    context
+                        .read<FetchingSystemUsersBloc>()
+                        .add(LoadSystemUsers());
+                  },
+                )
+              ]),
+            );
           },
-          child: BaseMasterDataScaffold(
-            title: "System Users",
-            onNewButton: () {
-              context.router.navigate(
-                SystemUsersWrapper(children: [
-                  SystemUserFormRoute(
-                    onRefresh: () {
-                      context
-                          .read<FetchingSystemUsersBloc>()
-                          .add(LoadSystemUsers());
-                    },
-                  )
-                ]),
-              );
-            },
-            onRefreshButton: () {
-              context.read<FetchingSystemUsersBloc>().add(LoadSystemUsers());
-            },
-            onAttachButton: ((context) => _openTextFile(context)),
-            onSearchChanged: (value) {},
-            child: SystemUsersTable(
-              sfDataGridKey: sfDataGridKey,
-            ),
+          onRefreshButton: (context) {
+            context.read<FetchingSystemUsersBloc>().add(LoadSystemUsers());
+          },
+          onAttachButton: ((context) => _openTextFile(context)),
+          onSearchChanged: (context, value) {
+            context
+                .read<FetchingSystemUsersBloc>()
+                .add(SearchSystemUserByKeyword(value));
+          },
+          child: SystemUsersTable(
+            sfDataGridKey: sfDataGridKey,
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }

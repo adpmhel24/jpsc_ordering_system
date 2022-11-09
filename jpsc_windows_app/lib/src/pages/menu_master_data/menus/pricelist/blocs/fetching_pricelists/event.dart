@@ -8,9 +8,9 @@ abstract class PricelistFetchingEvent extends Equatable {
 
 class LoadPricelist extends PricelistFetchingEvent {}
 
-class FilterPricelist extends PricelistFetchingEvent {
+class SearchPricelistByKeyword extends PricelistFetchingEvent {
   final String keyword;
-  const FilterPricelist(this.keyword);
+  const SearchPricelistByKeyword(this.keyword);
   @override
   List<Object?> get props => [keyword];
 }

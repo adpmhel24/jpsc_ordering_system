@@ -8,13 +8,6 @@ import 'blocs.dart';
 class GlobalBlocs {
   static List<BlocProvider> blocs(BuildContext context) {
     return [
-      BlocProvider<BranchesBloc>(
-        create: (_) => BranchesBloc(
-          branchRepo: context.read<BranchRepo>(),
-          currUserRepo: context.read<CurrentUserRepo>(),
-          objectTypeRepo: context.read<ObjectTypeRepo>(),
-        ),
-      ),
       BlocProvider<WarehousesBloc>(
         create: (_) => WarehousesBloc(
           warehouseRepo: context.read<WarehouseRepo>(),

@@ -450,6 +450,7 @@ class AppRouter extends _i19.RootStackRouter {
           key: args.key,
           header: args.header,
           selectedBranch: args.selectedBranch,
+          onRefresh: args.onRefresh,
         ),
         transitionsBuilder: _i19.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
@@ -465,6 +466,7 @@ class AppRouter extends _i19.RootStackRouter {
           key: args.key,
           header: args.header,
           selectedBranch: args.selectedBranch,
+          onRefresh: args.onRefresh,
         ),
         transitionsBuilder: _i19.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
@@ -627,6 +629,7 @@ class AppRouter extends _i19.RootStackRouter {
           key: args.key,
           header: args.header,
           selectedItem: args.selectedItem,
+          onRefresh: args.onRefresh,
         ),
         transitionsBuilder: _i19.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
@@ -1735,6 +1738,7 @@ class BranchCreateRoute extends _i19.PageRouteInfo<BranchCreateRouteArgs> {
     _i22.Key? key,
     required String header,
     _i23.BranchModel? selectedBranch,
+    required void Function() onRefresh,
   }) : super(
           BranchCreateRoute.name,
           path: 'create',
@@ -1742,6 +1746,7 @@ class BranchCreateRoute extends _i19.PageRouteInfo<BranchCreateRouteArgs> {
             key: key,
             header: header,
             selectedBranch: selectedBranch,
+            onRefresh: onRefresh,
           ),
         );
 
@@ -1753,6 +1758,7 @@ class BranchCreateRouteArgs {
     this.key,
     required this.header,
     this.selectedBranch,
+    required this.onRefresh,
   });
 
   final _i22.Key? key;
@@ -1761,9 +1767,11 @@ class BranchCreateRouteArgs {
 
   final _i23.BranchModel? selectedBranch;
 
+  final void Function() onRefresh;
+
   @override
   String toString() {
-    return 'BranchCreateRouteArgs{key: $key, header: $header, selectedBranch: $selectedBranch}';
+    return 'BranchCreateRouteArgs{key: $key, header: $header, selectedBranch: $selectedBranch, onRefresh: $onRefresh}';
   }
 }
 
@@ -1774,6 +1782,7 @@ class BranchEditRoute extends _i19.PageRouteInfo<BranchEditRouteArgs> {
     _i22.Key? key,
     required String header,
     _i23.BranchModel? selectedBranch,
+    required void Function() onRefresh,
   }) : super(
           BranchEditRoute.name,
           path: 'edit',
@@ -1781,6 +1790,7 @@ class BranchEditRoute extends _i19.PageRouteInfo<BranchEditRouteArgs> {
             key: key,
             header: header,
             selectedBranch: selectedBranch,
+            onRefresh: onRefresh,
           ),
         );
 
@@ -1792,6 +1802,7 @@ class BranchEditRouteArgs {
     this.key,
     required this.header,
     this.selectedBranch,
+    required this.onRefresh,
   });
 
   final _i22.Key? key;
@@ -1800,9 +1811,11 @@ class BranchEditRouteArgs {
 
   final _i23.BranchModel? selectedBranch;
 
+  final void Function() onRefresh;
+
   @override
   String toString() {
-    return 'BranchEditRouteArgs{key: $key, header: $header, selectedBranch: $selectedBranch}';
+    return 'BranchEditRouteArgs{key: $key, header: $header, selectedBranch: $selectedBranch, onRefresh: $onRefresh}';
   }
 }
 
@@ -2145,6 +2158,7 @@ class ProductFormRoute extends _i19.PageRouteInfo<ProductFormRouteArgs> {
     _i22.Key? key,
     required String header,
     _i23.ProductModel? selectedItem,
+    required void Function() onRefresh,
   }) : super(
           ProductFormRoute.name,
           path: 'form',
@@ -2152,6 +2166,7 @@ class ProductFormRoute extends _i19.PageRouteInfo<ProductFormRouteArgs> {
             key: key,
             header: header,
             selectedItem: selectedItem,
+            onRefresh: onRefresh,
           ),
         );
 
@@ -2163,6 +2178,7 @@ class ProductFormRouteArgs {
     this.key,
     required this.header,
     this.selectedItem,
+    required this.onRefresh,
   });
 
   final _i22.Key? key;
@@ -2171,9 +2187,11 @@ class ProductFormRouteArgs {
 
   final _i23.ProductModel? selectedItem;
 
+  final void Function() onRefresh;
+
   @override
   String toString() {
-    return 'ProductFormRouteArgs{key: $key, header: $header, selectedItem: $selectedItem}';
+    return 'ProductFormRouteArgs{key: $key, header: $header, selectedItem: $selectedItem, onRefresh: $onRefresh}';
   }
 }
 
