@@ -29,6 +29,9 @@ class CustomerModel extends CustomerBaseModel {
   @JsonKey(name: "is_approved")
   bool? isApproved;
 
+  @JsonKey(name: "with_sap")
+  bool? withSap;
+
   @JsonKey(name: "date_created")
   DateTime? dateCreated;
 

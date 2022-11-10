@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' as m;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/item_group/blocs/fetching_bloc/bloc.dart';
+import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/uoms/blocs/fetching_bloc/bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
@@ -28,6 +29,7 @@ class _ItemGroupTableState extends State<ItemGroupTable> {
   late int _rowsPerPage = 10;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
+  final List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   final double _dataPagerHeight = 60.0;
   @override
@@ -106,17 +108,19 @@ class _ItemGroupTableState extends State<ItemGroupTable> {
           );
   }
 
-  SizedBox tableFooter(int datasLength) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: datasLength <= 0
+        pageCount: dataLength <= 0
             ? 1
-            : (datasLength / _rowsPerPage) +
-                ((datasLength % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: availableRowsPerPage.contains(dataLength)
+            ? availableRowsPerPage
+            : [...availableRowsPerPage, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -212,6 +216,8 @@ class DataSource extends DataGridSource {
                           UomCreateRoute(
                             header: "UoM Update Form",
                             selectedUom: dataGridCell.value,
+                            onRefresh: () =>
+                                cntx.read<FetchingUoMsBloc>().add(LoadUoms()),
                           ),
                         ],
                       ),

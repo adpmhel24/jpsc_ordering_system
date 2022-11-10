@@ -27,6 +27,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
   String? selectedPaymentTerm;
   late ValueNotifier<bool> isApprove;
   late ValueNotifier<bool> isActive;
+  late ValueNotifier<bool> withSap;
   final ValueNotifier<List<PaymentTermModel>> _paymentTerms = ValueNotifier([]);
   final ValueNotifier<List<BranchModel>> _branches = ValueNotifier([]);
 
@@ -51,6 +52,8 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
 
     isApprove = ValueNotifier(widget.selectedCustomer?.isApproved ?? false);
     isActive = ValueNotifier(widget.selectedCustomer?.isActive ?? false);
+    withSap = ValueNotifier(widget.selectedCustomer?.withSap ?? false);
+
     super.initState();
   }
 
@@ -67,6 +70,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
     _branches.dispose();
     isApprove.dispose();
     isActive.dispose();
+    withSap.dispose();
     super.dispose();
   }
 
@@ -107,6 +111,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
                 custLocationField(),
                 if (widget.selectedCustomer != null) _isActiveSwitch(),
                 if (widget.selectedCustomer != null) _isApproveSwitch(),
+                if (widget.selectedCustomer != null) _withSapSwitch(),
               ],
             ),
           ),
@@ -312,7 +317,23 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
             isApprove.value = v;
             bloc.add(CustIsApprovedChanged(v));
           },
-          content: Text(value ? 'Approved' : 'For Approve'),
+          content: Text(value ? 'Approved' : 'Disapproved'),
+        );
+      },
+    );
+  }
+
+  ValueListenableBuilder<bool> _withSapSwitch() {
+    return ValueListenableBuilder<bool>(
+      valueListenable: withSap,
+      builder: (context, value, _) {
+        return ToggleSwitch(
+          checked: value,
+          onChanged: (v) {
+            withSap.value = v;
+            bloc.add(CustWithSapChanged(v));
+          },
+          content: Text(value ? 'With SAP' : 'Without SAP'),
         );
       },
     );
@@ -328,7 +349,7 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
             isActive.value = v;
             bloc.add(CustIsActiveChanged(v));
           },
-          content: Text(value ? 'Active' : 'Inactive'),
+          content: Text(value ? 'Inactive' : 'Active'),
         );
       },
     );

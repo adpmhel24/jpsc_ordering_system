@@ -235,7 +235,11 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
           _customers.value =
               await context.read<CustomerRepo>().getCustomerByLocation(
             branchCode: data,
-            params: {"is_active": true, "is_approved": true},
+            params: {
+              "is_active": true,
+              "is_approved": true,
+              "with_sap": true,
+            },
           );
           context.loaderOverlay.hide();
         }

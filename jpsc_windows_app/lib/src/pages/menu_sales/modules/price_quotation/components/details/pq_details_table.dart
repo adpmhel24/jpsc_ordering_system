@@ -28,6 +28,7 @@ class _DetailsTableState extends State<DetailsTable> {
   late int _rowsPerPage = 10;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to itemRows per page
+  final List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   @override
   void initState() {
@@ -53,7 +54,7 @@ class _DetailsTableState extends State<DetailsTable> {
             mainAxisSize: MainAxisSize.min,
             children: [
               tableBody(constraint),
-              tableFooter(),
+              tableFooter(widget.itemRows.length),
             ],
           );
         },
@@ -76,7 +77,7 @@ class _DetailsTableState extends State<DetailsTable> {
               navigationMode: GridNavigationMode.cell,
               allowColumnsResizing: true,
               columns: TableSettings.columns,
-              columnWidthMode: ColumnWidthMode.fill,
+              columnWidthMode: ColumnWidthMode.auto,
               onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
                 var column = TableSettings.columnName.values
                     .firstWhere((e) => e['name'] == details.column.columnName);
@@ -91,17 +92,19 @@ class _DetailsTableState extends State<DetailsTable> {
           );
   }
 
-  SizedBox tableFooter() {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: widget.itemRows.isEmpty
+        pageCount: dataLength <= 0
             ? 1
-            : (widget.itemRows.length / _rowsPerPage) +
-                ((widget.itemRows.length % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: availableRowsPerPage.contains(dataLength)
+            ? availableRowsPerPage
+            : [...availableRowsPerPage, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;

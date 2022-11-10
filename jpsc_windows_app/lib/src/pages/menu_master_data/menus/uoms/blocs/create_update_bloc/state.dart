@@ -1,13 +1,13 @@
 part of 'bloc.dart';
 
-class UomFormBlocState extends Equatable {
+class CreateUpdateUomState extends Equatable {
   final FormzStatus status;
   final FormzString code;
   final FormzString description;
   final FormzBool isActive;
   final String message; //response message
 
-  const UomFormBlocState({
+  const CreateUpdateUomState({
     this.status = FormzStatus.pure,
     this.code = const FormzString.pure(),
     this.description = const FormzString.pure(),
@@ -15,14 +15,14 @@ class UomFormBlocState extends Equatable {
     this.message = "",
   });
 
-  UomFormBlocState copyWith({
+  CreateUpdateUomState copyWith({
     FormzStatus? status,
     FormzString? code,
     FormzString? description,
     FormzBool? isActive,
     String? message,
   }) {
-    return UomFormBlocState(
+    return CreateUpdateUomState(
       status: status ?? this.status,
       code: code ?? this.code,
       description: description ?? this.description,

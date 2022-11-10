@@ -1,9 +1,26 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../global_blocs/main_nav_bloc/bloc.dart';
 import 'components/body.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
+
+  static const routeName = 'DashboardPage';
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage>
+    with AutoRouteAwareStateMixin<DashboardPage> {
+  @override
+  void didPush() {
+    context.read<NavMenuCubit>().currentMenu(DashboardPage.routeName);
+    super.didPush();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -41,12 +41,12 @@ class CreateUpdateCustomerBloc
                       FormzString.dirty(selectedCustomer.paymentTerm ?? ""),
                   isActive: FormzBool.dirty(selectedCustomer.isActive),
                   isApproved: FormzBool.dirty(selectedCustomer.isApproved),
+                  withSap: FormzBool.dirty(selectedCustomer.withSap),
                   addresses: FormzList.dirty(
                     selectedCustomer.addresses
                         .map((e) => CustomerAddressModel.fromJson(e.toJson()))
                         .toList(),
                   ),
-                  status: FormzStatus.valid,
                 )
               : const CreateUpdateCustomerState(),
         ) {
@@ -61,6 +61,7 @@ class CreateUpdateCustomerBloc
     on<CustPaymentTermChanged>(_onCustPaymentTermChanged);
     on<CustIsActiveChanged>(_onCustIsActiveChanged);
     on<CustIsApprovedChanged>(_onCustIsApprovedChanged);
+    on<CustWithSapChanged>(_onCustWithSapChanged);
     on<CustAddressAdded>(_onCustAddressAdded);
     on<CustAddressUpdated>(_onCustAddressUpdated);
     on<CustAddressRemoved>(_onCustAddressRemoved);
@@ -234,6 +235,21 @@ class CreateUpdateCustomerBloc
     );
   }
 
+  void _onCustWithSapChanged(
+      CustWithSapChanged event, Emitter<CreateUpdateCustomerState> emit) {
+    final withSap = FormzBool.dirty(event.value);
+
+    emit(
+      state.copyWith(
+        withSap: withSap,
+        status: Formz.validate([
+          state.custCode,
+          state.custBranch,
+        ]),
+      ),
+    );
+  }
+
   void _onCustAddressAdded(
       CustAddressAdded event, Emitter<CreateUpdateCustomerState> emit) {
     List<CustomerAddressModel> addresses = [];
@@ -358,6 +374,7 @@ class CreateUpdateCustomerBloc
           "payment_terms": state.custPaymentTerm.value,
         "is_active": state.isActive.value,
         "is_approved": state.isApproved.value,
+        "with_sap": state.withSap.value,
       },
       "addresses_schema": state.addresses.value.map((e) => e.toJson()).toList(),
     };

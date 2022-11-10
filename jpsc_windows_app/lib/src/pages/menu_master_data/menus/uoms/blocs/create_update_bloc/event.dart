@@ -1,32 +1,30 @@
 part of 'bloc.dart';
 
-abstract class UomFormBlocEvent extends Equatable {
-  const UomFormBlocEvent();
+abstract class CreateUpdateUomEvent extends Equatable {
+  const CreateUpdateUomEvent();
   @override
   List<Object?> get props => [];
 }
 
-class CodeChanged extends UomFormBlocEvent {
-  final TextEditingController codeController;
-  const CodeChanged(this.codeController);
+class CodeChanged extends CreateUpdateUomEvent {
+  final String value;
+  const CodeChanged(this.value);
   @override
-  List<Object?> get props => [codeController];
+  List<Object?> get props => [value];
 }
 
-class DescriptionChanged extends UomFormBlocEvent {
-  final TextEditingController descriptionController;
-  const DescriptionChanged(this.descriptionController);
+class DescriptionChanged extends CreateUpdateUomEvent {
+  final String value;
+  const DescriptionChanged(this.value);
   @override
-  List<Object?> get props => [descriptionController];
+  List<Object?> get props => [value];
 }
 
-class IsActiveChanged extends UomFormBlocEvent {
-  final bool? isActive;
-  const IsActiveChanged(this.isActive);
+class IsActiveChanged extends CreateUpdateUomEvent {
+  final bool value;
+  const IsActiveChanged(this.value);
   @override
-  List<Object?> get props => [isActive];
+  List<Object?> get props => [value];
 }
 
-class CreateButtonSubmitted extends UomFormBlocEvent {}
-
-class UpdateButtonSubmitted extends UomFormBlocEvent {}
+class ButtonSubmitted extends CreateUpdateUomEvent {}

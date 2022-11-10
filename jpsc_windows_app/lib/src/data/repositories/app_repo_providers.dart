@@ -10,7 +10,7 @@ class AppRepoProvider {
       create: (context) => LocalStorageRepo()..init(),
     ),
     RepositoryProvider<CurrentUserRepo>(
-      create: (context) => CurrentUserRepo()..checkIfLoggedIn(),
+      create: (context) => CurrentUserRepo(),
     ),
     ...salesProviders,
     ...masterDataProviders,

@@ -73,6 +73,7 @@ class _LogsTableState extends State<LogsTable> {
   final int _startIndex = 0;
   final int _endIndex = 10;
   final double _dataPagerHeight = 60.0;
+  final List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   @override
   Widget build(BuildContext context) {
@@ -137,17 +138,19 @@ class _LogsTableState extends State<LogsTable> {
           );
   }
 
-  SizedBox tableFooter(int datasLength) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: datasLength <= 0
+        pageCount: dataLength <= 0
             ? 1
-            : (datasLength / _rowsPerPage) +
-                ((datasLength % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: availableRowsPerPage.contains(dataLength)
+            ? availableRowsPerPage
+            : [...availableRowsPerPage, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;

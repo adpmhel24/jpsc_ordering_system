@@ -18,6 +18,7 @@ import '../../../../../../utils/constant.dart';
 import '../../../../../../utils/currency_formater.dart';
 import '../../../../../../utils/date_formatter.dart';
 import '../../../../../../shared/widgets/custom_dialog.dart';
+import '../../../../../../utils/responsive.dart';
 import 'pq_details_table.dart';
 
 class PriceQuotationHeaderDetailsPage extends StatelessWidget {
@@ -178,6 +179,9 @@ class _PriceQuotationHeaderDetailsBodyState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flex(
+                  mainAxisSize: Responsive.isMobile(context)
+                      ? MainAxisSize.min
+                      : MainAxisSize.max,
                   direction: Axis.horizontal,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,18 +193,18 @@ class _PriceQuotationHeaderDetailsBodyState
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            wrapLabelSelectableText(
+                            labeledSelectableText(
                               label: "Reference :",
                               value: widget.priceQuotation.reference,
                             ),
                             Constant.heightSpacer,
-                            wrapLabelSelectableText(
+                            labeledSelectableText(
                               label: "Posting Date :",
                               value: dateFormatter(
                                   widget.priceQuotation.transdate),
                             ),
                             Constant.heightSpacer,
-                            wrapLabelSelectableText(
+                            labeledSelectableText(
                               label: "Delivery Date :",
                               value: dateFormatter(
                                 widget.priceQuotation.deliveryDate,
@@ -210,7 +214,7 @@ class _PriceQuotationHeaderDetailsBodyState
                               ),
                             ),
                             Constant.heightSpacer,
-                            wrapLabelSelectableText(
+                            labeledSelectableText(
                               label: "Customer Code :",
                               value: widget.priceQuotation.customerCode,
                             ),
@@ -225,7 +229,7 @@ class _PriceQuotationHeaderDetailsBodyState
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            _wrapLabelWidget(
+                            labeledWidget(
                               label: "Dispatching Branch :",
                               child: ValueListenableBuilder<List<BranchModel>>(
                                 valueListenable: _branches,
@@ -258,7 +262,7 @@ class _PriceQuotationHeaderDetailsBodyState
                               ),
                             ),
                             Constant.heightSpacer,
-                            _wrapLabelWidget(
+                            labeledWidget(
                               label: "PQ Status :",
                               child: ComboBox<String>(
                                 value: selectedOrderStatus,
@@ -292,7 +296,7 @@ class _PriceQuotationHeaderDetailsBodyState
                               ),
                             ),
                             Constant.heightSpacer,
-                            _wrapLabelWidget(
+                            labeledWidget(
                               label: "Payment Terms:",
                               child: ValueListenableBuilder<
                                   List<PaymentTermModel>>(
@@ -326,7 +330,7 @@ class _PriceQuotationHeaderDetailsBodyState
                               ),
                             ),
                             Constant.heightSpacer,
-                            _wrapLabelWidget(
+                            labeledWidget(
                               label: "SQ Number :",
                               child: SizedBox(
                                 width: 150,
@@ -366,7 +370,7 @@ class _PriceQuotationHeaderDetailsBodyState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _wrapLabelWidget(
+                    labeledWidget(
                       label: "Remarks: ",
                       child: SizedBox(
                         width: constraints.maxHeight * .5,
@@ -383,7 +387,7 @@ class _PriceQuotationHeaderDetailsBodyState
                         ),
                       ),
                     ),
-                    wrapLabelSelectableText(
+                    labeledSelectableText(
                       label: "Subtotal :",
                       value: formatStringToDecimal(
                           "${state.priceQuotation.subtotal}"),
@@ -452,30 +456,29 @@ class _PriceQuotationHeaderDetailsBodyState
     );
   }
 
-  Wrap wrapLabelSelectableText({required String label, required String value}) {
-    return Wrap(
-      spacing: 10.0,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text(label),
-        BorderedText(
+  SizedBox labeledSelectableText(
+      {required String label, required String value}) {
+    return SizedBox(
+      width: 200.0,
+      child: InfoLabel(
+        label: label,
+        child: BorderedText(
           child: SelectableText(
             value,
             toolbarOptions: const ToolbarOptions(copy: true, selectAll: true),
           ),
         ),
-      ],
+      ),
     );
   }
 
-  Wrap _wrapLabelWidget({required String label, required Widget child}) {
-    return Wrap(
-      spacing: 10.0,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text(label),
-        child,
-      ],
+  SizedBox labeledWidget({required String label, required Widget child}) {
+    return SizedBox(
+      width: 200.0,
+      child: InfoLabel(
+        label: label,
+        child: child,
+      ),
     );
   }
 }

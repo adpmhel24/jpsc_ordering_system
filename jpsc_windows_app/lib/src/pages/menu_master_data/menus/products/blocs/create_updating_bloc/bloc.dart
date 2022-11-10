@@ -30,13 +30,6 @@ class CreateUpdateProductBloc
                     FormzString.dirty(selectedItem.itemGroupCode ?? ""),
                 formzSaleUom: FormzString.dirty(selectedItem.saleUomCode ?? ""),
                 formzIsActive: FormzBool.dirty(selectedItem.isActive),
-                status: Formz.validate(
-                  [
-                    FormzString.dirty(selectedItem.code),
-                    FormzString.dirty(selectedItem.itemGroupCode ?? ""),
-                    FormzString.dirty(selectedItem.saleUomCode ?? ""),
-                  ],
-                ),
               )
             : const CreateUpdateProductState()) {
     on<CodeChanged>(_onCodeChanged);

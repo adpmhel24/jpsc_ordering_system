@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
@@ -14,23 +13,29 @@ import '../../../../../../utils/formz_string.dart';
 part 'event.dart';
 part 'state.dart';
 
-class UomFormBloc extends Bloc<UomFormBlocEvent, UomFormBlocState> {
+class CreateUpdateUomBloc
+    extends Bloc<CreateUpdateUomEvent, CreateUpdateUomState> {
   final UomRepo uomRepo;
   final UomModel? selectedUom;
 
-  UomFormBloc({
+  CreateUpdateUomBloc({
     required this.uomRepo,
     this.selectedUom,
-  }) : super(const UomFormBlocState()) {
+  }) : super(selectedUom != null
+            ? CreateUpdateUomState(
+                code: FormzString.dirty(selectedUom.code),
+                description: FormzString.dirty(selectedUom.description ?? ""),
+                isActive: FormzBool.dirty(selectedUom.isActive),
+              )
+            : const CreateUpdateUomState()) {
     on<CodeChanged>(_onCodeChanged);
     on<DescriptionChanged>(_onDescriptionChanged);
     on<IsActiveChanged>(_onIsActiveChanged);
-    on<CreateButtonSubmitted>(_onCreateButtonSubmitted);
-    on<UpdateButtonSubmitted>(_onUpdateButtonSubmitted);
+    on<ButtonSubmitted>(_onButtonSubmitted);
   }
 
-  void _onCodeChanged(CodeChanged event, Emitter<UomFormBlocState> emit) {
-    FormzString code = FormzString.dirty(event.codeController.text);
+  void _onCodeChanged(CodeChanged event, Emitter<CreateUpdateUomState> emit) {
+    FormzString code = FormzString.dirty(event.value);
     emit(
       state.copyWith(
         code: code,
@@ -46,9 +51,8 @@ class UomFormBloc extends Bloc<UomFormBlocEvent, UomFormBlocState> {
   }
 
   void _onDescriptionChanged(
-      DescriptionChanged event, Emitter<UomFormBlocState> emit) {
-    FormzString description =
-        FormzString.dirty(event.descriptionController.text);
+      DescriptionChanged event, Emitter<CreateUpdateUomState> emit) {
+    FormzString description = FormzString.dirty(event.value);
     emit(
       state.copyWith(
         description: description,
@@ -64,8 +68,8 @@ class UomFormBloc extends Bloc<UomFormBlocEvent, UomFormBlocState> {
   }
 
   void _onIsActiveChanged(
-      IsActiveChanged event, Emitter<UomFormBlocState> emit) {
-    FormzBool isActive = FormzBool.dirty(event.isActive);
+      IsActiveChanged event, Emitter<CreateUpdateUomState> emit) {
+    FormzBool isActive = FormzBool.dirty(event.value);
     emit(
       state.copyWith(
         isActive: isActive,
@@ -80,42 +84,22 @@ class UomFormBloc extends Bloc<UomFormBlocEvent, UomFormBlocState> {
     );
   }
 
-  void _onCreateButtonSubmitted(
-      CreateButtonSubmitted event, Emitter<UomFormBlocState> emit) async {
+  void _onButtonSubmitted(
+      ButtonSubmitted event, Emitter<CreateUpdateUomState> emit) async {
     Map<String, dynamic> data = {
       "code": state.code.value,
       "description": state.description.value,
       "is_active": state.isActive.value,
     };
+    String message;
 
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      String message = await uomRepo.create(data);
-      emit(state.copyWith(
-          status: FormzStatus.submissionSuccess, message: message));
-    } on HttpException catch (err) {
-      emit(state.copyWith(
-          status: FormzStatus.submissionFailure, message: err.message));
-    }
-  }
-
-  void _onUpdateButtonSubmitted(
-      UpdateButtonSubmitted event, Emitter<UomFormBlocState> emit) async {
-    String code = state.code.value;
-    String description = state.description.value;
-    bool? isActive = state.isActive.value;
-    Map<String, dynamic> data = {
-      "code": code.isEmpty ? selectedUom!.code : state.code.value,
-      "description": description.isEmpty
-          ? selectedUom!.description
-          : state.description.value,
-      "is_active":
-          isActive == null ? selectedUom!.isActive : state.isActive.value,
-    };
-
-    emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    try {
-      String message = await uomRepo.update(fk: selectedUom!.code, data: data);
+      if (selectedUom == null) {
+        message = await uomRepo.create(data);
+      } else {
+        message = await uomRepo.update(fk: selectedUom!.code, data: data);
+      }
       emit(state.copyWith(
           status: FormzStatus.submissionSuccess, message: message));
     } on HttpException catch (err) {

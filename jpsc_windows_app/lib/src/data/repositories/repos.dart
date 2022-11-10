@@ -12,7 +12,7 @@ export 'repo_inv_adj_out.dart';
 export 'repo_sys_user_position.dart';
 export 'repo_sys_user_branch.dart';
 export 'repo_pricelist.dart';
-export 'repo_sales_order.dart';
+export 'repo_price_quotation.dart';
 export 'repo_customer.dart';
 export 'repo_payment_term.dart';
 export 'repo_ph_location.dart';

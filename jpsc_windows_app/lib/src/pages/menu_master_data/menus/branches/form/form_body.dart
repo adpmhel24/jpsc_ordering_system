@@ -41,7 +41,6 @@ class _BranchFormBodyState extends State<BranchFormBody> {
       _selectedPricelist = widget.selectedBranch?.pricelistCode ?? "";
       _isActive = widget.selectedBranch?.isActive ?? true;
     }
-    formBloc.add(BranchIsActiveChanged(_isActive));
     fetchPricelist();
     super.initState();
   }
@@ -193,29 +192,6 @@ class _BranchFormBodyState extends State<BranchFormBody> {
       ),
     );
   }
-
-  // Flexible _pricelistField() {
-  //   return Flexible(
-  //     child: InfoLabel(
-  //       label: "Pricelist Code",
-  //       child: m.Material(
-  //         child: Builder(builder: (context) {
-  //           return MyCustomDropdownSearch<String>(
-  //             selectedItem: _selectedPricelist,
-  //             itemAsString: (pricelist) => pricelist!.code!,
-  //             onFind: (String? filter) =>
-  //                 context.read<PricelistRepo>().offlineSearch(filter!),
-  //             compareFn: (item, selectedItem) =>
-  //                 item!.code == selectedItem!.code,
-  //             onChanged: (PricelistModel? data) {
-  //               _pricelistController.text = data?.code ?? "";
-  //             },
-  //           );
-  //         }),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   MouseRegion _createUpdateButton(BuildContext context) {
     return MouseRegion(

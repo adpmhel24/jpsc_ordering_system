@@ -14,6 +14,7 @@ class CreateUpdateCustomerState extends Equatable {
   final FormzList<CustomerAddressModel> addresses;
   final FormzBool isActive;
   final FormzBool isApproved;
+  final FormzBool withSap;
   final String message;
 
   const CreateUpdateCustomerState({
@@ -30,6 +31,7 @@ class CreateUpdateCustomerState extends Equatable {
     this.addresses = const FormzList.pure(),
     this.isActive = const FormzBool.dirty(false),
     this.isApproved = const FormzBool.dirty(false),
+    this.withSap = const FormzBool.dirty(false),
     this.message = "",
   });
 
@@ -46,6 +48,7 @@ class CreateUpdateCustomerState extends Equatable {
     FormzString? custPaymentTerm,
     FormzBool? isActive,
     FormzBool? isApproved,
+    FormzBool? withSap,
     FormzList<CustomerAddressModel>? addresses,
     String? message,
   }) =>
@@ -63,6 +66,7 @@ class CreateUpdateCustomerState extends Equatable {
         addresses: addresses ?? this.addresses,
         isActive: isActive ?? this.isActive,
         isApproved: isApproved ?? this.isApproved,
+        withSap: withSap ?? this.withSap,
         message: message ?? this.message,
       );
 
@@ -80,6 +84,7 @@ class CreateUpdateCustomerState extends Equatable {
         custPaymentTerm,
         isActive,
         isApproved,
+        withSap,
         addresses,
         message,
       ];

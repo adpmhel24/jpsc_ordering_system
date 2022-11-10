@@ -28,7 +28,6 @@ class CreateUpdateItemGroupBloc
                 description:
                     FormzString.dirty(selectedItemGroup.description ?? ""),
                 isActive: FormzBool.dirty(selectedItemGroup.isActive),
-                status: FormzStatus.valid,
               )
             : const CreateUpdateItemGroupState()) {
     on<CodeChanged>(_onCodeChanged);

@@ -95,6 +95,14 @@ class CustIsActiveChanged extends CreateUpdateCustomerEvent {
   List<Object?> get props => [value];
 }
 
+class CustWithSapChanged extends CreateUpdateCustomerEvent {
+  final bool value;
+  const CustWithSapChanged(this.value);
+
+  @override
+  List<Object?> get props => [value];
+}
+
 class CustIsApprovedChanged extends CreateUpdateCustomerEvent {
   final bool value;
   const CustIsApprovedChanged(this.value);

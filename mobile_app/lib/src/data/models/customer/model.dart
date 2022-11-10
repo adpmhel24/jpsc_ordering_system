@@ -49,6 +49,9 @@ class CustomerModel {
   @JsonKey(name: "is_approved")
   bool? isApproved;
 
+  @JsonKey(name: "with_sap")
+  bool? withSap;
+
   @JsonKey(name: "date_created")
   DateTime? dateCreated;
 
@@ -75,6 +78,7 @@ class CustomerModel {
     this.location,
     this.paymentTerms,
     this.isApproved,
+    this.withSap,
     this.createdBy,
     this.dateCreated,
     this.updatedBy,

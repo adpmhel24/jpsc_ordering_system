@@ -6,6 +6,7 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../theme.dart';
 import '../global_blocs/blocs.dart';
+import '../global_blocs/main_nav_bloc/bloc.dart';
 import '../router/router.gr.dart';
 import '../shared/widgets/custom_button.dart';
 import 'menu_items.dart';
@@ -38,12 +39,10 @@ class _MainPageState extends State<MainPage> with WindowListener {
   }
 
   final routes = [
-    const DashboardRoute(),
-    // const PurchasingMenuRoute(),
-    const SalesMenuWrapperRoute(),
-    // const InventoryWrapperRoute(),
-    const MasterDataWrapperRoute(),
-    const MyProfileRoute(),
+    const DashboardPage(),
+    const SalesMainWrapperPage(),
+    const MasterDataMainWrapperPage(),
+    const MyProfilePage(),
   ];
 
   @override
@@ -52,74 +51,82 @@ class _MainPageState extends State<MainPage> with WindowListener {
     return MultiBlocProvider(
       providers: GlobalBlocs.blocs(context),
       child: SafeArea(
-        child: NavigationView(
-          key: viewKey,
-          appBar: NavigationAppBar(
-            automaticallyImplyLeading: false,
-            actions: [TargetPlatform.windows].contains(defaultTargetPlatform)
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [Spacer(), WindowButtons()],
-                  )
-                : null,
-          ),
-          pane: NavigationPane(
-            selected: index,
-            onChanged: (i) {
-              setState(() => index = i);
-              final router = context.innerRouterOf<StackRouter>(MainRoute.name);
+        child: Builder(builder: (context) {
+          return BlocBuilder<NavMenuCubit, int>(
+            builder: (context, state) {
+              return NavigationView(
+                key: viewKey,
+                appBar: NavigationAppBar(
+                  automaticallyImplyLeading: false,
+                  actions:
+                      [TargetPlatform.windows].contains(defaultTargetPlatform)
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [Spacer(), WindowButtons()],
+                            )
+                          : null,
+                ),
+                pane: NavigationPane(
+                  selected: state,
+                  onChanged: (i) {
+                    setState(() => index = i);
+                    final router =
+                        context.innerRouterOf<StackRouter>(MainRoute.name);
 
-              router!.popAndPush(
-                routes[i],
+                    router!.popAndPush(
+                      routes[i],
+                    );
+                  },
+                  size: const NavigationPaneSize(
+                    openMinWidth: 250,
+                    openMaxWidth: 250,
+                  ),
+                  header: Container(
+                    height: kOneLineTileHeight,
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Image.asset(
+                      "assets/images/logo.png",
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  displayMode: PaneDisplayMode.auto,
+                  indicator: () {
+                    switch (appTheme.indicator) {
+                      case NavigationIndicators.end:
+                        return const EndNavigationIndicator();
+                      case NavigationIndicators.sticky:
+                      default:
+                        return const StickyNavigationIndicator();
+                    }
+                  }(),
+                  items: [
+                    ...AppMenu.menuItems,
+                  ],
+                  footerItems: [
+                    PaneItemSeparator(),
+                    PaneItem(
+                      body: const SizedBox.expand(),
+                      icon: const Icon(FluentIcons.account_management),
+                      title: const Text("My Account"),
+                    ),
+                    PaneItemAction(
+                      icon: const Icon(FluentIcons.sign_out),
+                      title: const Text('Sign Out'),
+                      onTap: () {
+                        context.read<AuthBloc>().add(LogoutSubmitted());
+                      },
+                    ),
+                  ],
+                ),
+                paneBodyBuilder: (viewWidget) {
+                  return AutoRouter(
+                    key: _innerRouterKey,
+                  );
+                },
               );
             },
-            size: const NavigationPaneSize(
-              openMinWidth: 250,
-              openMaxWidth: 250,
-            ),
-            header: Container(
-              height: kOneLineTileHeight,
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Image.asset(
-                "assets/images/logo.png",
-                fit: BoxFit.cover,
-              ),
-            ),
-            displayMode: PaneDisplayMode.auto,
-            indicator: () {
-              switch (appTheme.indicator) {
-                case NavigationIndicators.end:
-                  return const EndNavigationIndicator();
-                case NavigationIndicators.sticky:
-                default:
-                  return const StickyNavigationIndicator();
-              }
-            }(),
-            items: [
-              ...AppMenu.menuItems,
-            ],
-            footerItems: [
-              PaneItemSeparator(),
-              PaneItem(
-                body: const SizedBox.expand(),
-                icon: const Icon(FluentIcons.account_management),
-                title: const Text("My Account"),
-              ),
-              PaneItemAction(
-                icon: const Icon(FluentIcons.sign_out),
-                title: const Text('Sign Out'),
-                onTap: () {
-                  context.read<AuthBloc>().add(LogoutSubmitted());
-                },
-              ),
-            ],
-          ),
-          paneBodyBuilder: (viewWidget) {
-            return AutoRouter(
-              key: _innerRouterKey,
-            );
-          },
-        ),
+          );
+        }),
       ),
     );
   }

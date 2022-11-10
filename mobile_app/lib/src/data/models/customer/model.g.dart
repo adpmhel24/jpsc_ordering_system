@@ -18,6 +18,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       location: json['location'] as String?,
       paymentTerms: json['payment_terms'] as String?,
       isApproved: json['is_approved'] as bool?,
+      withSap: json['with_sap'] as bool?,
       createdBy: json['created_by'] as int?,
       dateCreated: json['date_created'] == null
           ? null
@@ -42,6 +43,7 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'location': instance.location,
       'payment_terms': instance.paymentTerms,
       'is_approved': instance.isApproved,
+      'with_sap': instance.withSap,
       'date_created': instance.dateCreated?.toIso8601String(),
       'created_by': instance.createdBy,
       'date_updated': instance.dateUpdated?.toIso8601String(),

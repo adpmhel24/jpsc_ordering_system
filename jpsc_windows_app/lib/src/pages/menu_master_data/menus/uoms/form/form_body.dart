@@ -21,19 +21,18 @@ class UomFormBody extends StatefulWidget {
 class _UomFormBodyState extends State<UomFormBody> {
   final TextEditingController _codeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  late UomFormBloc formBloc;
+  late CreateUpdateUomBloc formBloc;
 
   bool _isActive = true;
 
   @override
   void initState() {
-    formBloc = context.read<UomFormBloc>();
+    formBloc = context.read<CreateUpdateUomBloc>();
     if (widget.selectedUom != null) {
       _codeController.text = widget.selectedUom?.code ?? "";
       _descriptionController.text = widget.selectedUom?.description ?? "";
       _isActive = widget.selectedUom?.isActive ?? true;
     }
-    formBloc.add(IsActiveChanged(_isActive));
     super.initState();
   }
 
@@ -91,8 +90,8 @@ class _UomFormBodyState extends State<UomFormBody> {
         header: "Uom Code *",
         autovalidateMode: AutovalidateMode.always,
         controller: _codeController,
-        onChanged: (_) {
-          formBloc.add(CodeChanged(_codeController));
+        onChanged: (v) {
+          formBloc.add(CodeChanged(v));
         },
         validator: (_) {
           return formBloc.state.code.invalid ? "Required field." : null;
@@ -106,8 +105,8 @@ class _UomFormBodyState extends State<UomFormBody> {
       child: TextFormBox(
         header: "Uom Description",
         controller: _descriptionController,
-        onChanged: (_) {
-          formBloc.add(DescriptionChanged(_descriptionController));
+        onChanged: (v) {
+          formBloc.add(DescriptionChanged(v));
         },
       ),
     );
@@ -117,23 +116,15 @@ class _UomFormBodyState extends State<UomFormBody> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: FilledButton(
-        onPressed: context.watch<UomFormBloc>().state.status.isValidated
+        onPressed: context.watch<CreateUpdateUomBloc>().state.status.isValidated
             ? () {
-                CustomDialogBox.warningMessage(
-                  context,
-                  message: "Are you sure you want to proceed?",
-                  onPositiveClick: (cntx) {
-                    if (widget.selectedUom != null) {
-                      formBloc.add(
-                        UpdateButtonSubmitted(),
-                      );
-                    } else {
-                      formBloc.add(
-                        CreateButtonSubmitted(),
-                      );
-                    }
-                  },
-                );
+                CustomDialogBox.warningMessage(context,
+                    message: "Are you sure you want to proceed?",
+                    onPositiveClick: (cntx) {
+                  formBloc.add(
+                    ButtonSubmitted(),
+                  );
+                });
               }
             : null,
         child: widget.selectedUom != null

@@ -13,9 +13,9 @@ class DioSettings {
     } else {
       // debug mode
       // url = "http://192.168.1.4:8001";
-      url = "http://122.54.198.84:8800";
+      // url = "http://122.54.198.84:8800";
 
-      // url = "http://122.54.198.84:8801";
+      url = "http://localhost:8800";
     }
     return Dio(
       BaseOptions(

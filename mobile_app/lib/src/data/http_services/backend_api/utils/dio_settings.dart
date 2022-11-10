@@ -15,6 +15,7 @@ class DioSettings {
       // url = "http://192.168.1.4:8001";
       // url = "http://192.168.2.251:8800";
       url = "http://192.168.2.245:8800";
+      // url = "http://122.54.198.84:8800";
     }
     return Dio(
       BaseOptions(

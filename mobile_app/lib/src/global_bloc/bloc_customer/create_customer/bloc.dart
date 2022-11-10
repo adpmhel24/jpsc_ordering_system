@@ -52,7 +52,7 @@ class CreateCustomerBloc
 
     emit(
       state.copyWith(
-        custCode: cardName,
+        cardName: cardName,
         status: Formz.validate([
           state.custCode,
           state.custBranch,
@@ -223,6 +223,7 @@ class CreateCustomerBloc
         if (state.custPaymentTerm.value.isNotEmpty)
           "payment_terms": state.custPaymentTerm.value,
         "credit_limit": state.custCreditLimit.value,
+        "is_active": false,
       },
       "addresses_schema": state.addresses.value,
     };

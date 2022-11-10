@@ -32,6 +32,7 @@ class _CustomersPageState extends State<CustomersPage> {
 
   bool isApproved = false;
   bool isActive = true;
+  bool withSap = false;
 
   Future<void> _openTextFile(BuildContext cntx) async {
     const XTypeGroup typeGroup = XTypeGroup(
@@ -88,6 +89,7 @@ class _CustomersPageState extends State<CustomersPage> {
                         params: {
                           "is_approved": isApproved,
                           "is_active": isActive,
+                          "with_sap": withSap,
                         },
                       ),
                     );
@@ -114,6 +116,7 @@ class _CustomersPageState extends State<CustomersPage> {
             params: {
               "is_approved": isApproved,
               "is_active": isActive,
+              "with_sap": withSap,
             },
           ),
         ),
@@ -164,13 +167,15 @@ class _CustomersPageState extends State<CustomersPage> {
                   currentTabIndex = index;
                 });
                 isApproved = index == 0 ? false : true;
-                isActive = index == 2 ? false : true;
+                withSap = index == 1 ? false : true;
+                isActive = index == 3 ? false : true;
 
                 context.read<CustomerFetchingBloc>().add(
                       FetchCustomers(
                         params: {
                           "is_approved": isApproved,
                           "is_active": isActive,
+                          "with_sap": withSap,
                         },
                       ),
                     );
@@ -189,6 +194,27 @@ class _CustomersPageState extends State<CustomersPage> {
                               params: {
                                 "is_approved": isApproved,
                                 "is_active": isActive,
+                                "with_sap": withSap,
+                              },
+                            ),
+                          );
+                    },
+                  ),
+                ),
+                Tab(
+                  icon: const ImageIcon(
+                    AssetImage('assets/icons/done_document.png'),
+                  ),
+                  text: const Text("For SAP"),
+                  body: CustomersTable(
+                    sfDataGridKey: sfDataGridKey,
+                    onRefresh: () {
+                      context.read<CustomerFetchingBloc>().add(
+                            FetchCustomers(
+                              params: {
+                                "is_approved": isApproved,
+                                "is_active": isActive,
+                                "with_sap": withSap,
                               },
                             ),
                           );
@@ -208,6 +234,7 @@ class _CustomersPageState extends State<CustomersPage> {
                               params: {
                                 "is_approved": isApproved,
                                 "is_active": isActive,
+                                "with_sap": withSap,
                               },
                             ),
                           );
@@ -227,6 +254,7 @@ class _CustomersPageState extends State<CustomersPage> {
                               params: {
                                 "is_approved": isApproved,
                                 "is_active": isActive,
+                                "with_sap": withSap,
                               },
                             ),
                           );

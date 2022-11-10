@@ -50,9 +50,12 @@ async def get_all_customer(
     *,
     is_active: Optional[bool] = Query(None),
     is_approved: Optional[bool] = Query(None),
+    with_sap: Optional[bool] = Query(None),
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
-    result_obj = crud_customer.get_all(is_active=is_active, is_approved=is_approved)
+    result_obj = crud_customer.get_all(
+        is_active=is_active, is_approved=is_approved, with_sap=with_sap
+    )
     return {"count": result_obj.count(), "data": result_obj.all()}
 
 
@@ -74,12 +77,14 @@ async def get_all_customer(
     branchCode: str,
     is_active: Optional[bool] = Query(True),
     is_approved: Optional[bool] = Query(True),
+    with_sap: Optional[bool] = Query(True),
     current_user: SystemUserRead = Depends(get_current_active_user),
 ):
     result = crud_customer.get_by_branch(
         branchCode=branchCode,
         is_active=is_active,
         is_approved=is_approved,
+        with_sap=with_sap,
     )
     return {"data": result}
 

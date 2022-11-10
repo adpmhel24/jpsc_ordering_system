@@ -21,10 +21,10 @@ class SalesMenuPage extends StatefulWidget {
   @override
   State<SalesMenuPage> createState() => _SalesMenuPageState();
 
-  static String snakeCasetoSentenceCase(String original) {
-    return '${original[0].toUpperCase()}${original.substring(1)}'
-        .replaceAll(RegExp(r'(_|-)+'), ' ');
-  }
+  // static String snakeCasetoSentenceCase(String original) {
+  //   return '${original[0].toUpperCase()}${original.substring(1)}'
+  //       .replaceAll(RegExp(r'(_|-)+'), ' ');
+  // }
 }
 
 class _SalesMenuPageState extends State<SalesMenuPage> {

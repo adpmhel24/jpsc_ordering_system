@@ -73,9 +73,7 @@ class UomRepo {
 
   Future<List<UomModel>> offlineSearch(String value) async {
     Future.delayed(const Duration(seconds: 5));
-    if (_datas.isEmpty) {
-      await getAll();
-    }
+
     if (value.isNotEmpty) {
       var filtered = _datas
           .where(
@@ -86,6 +84,6 @@ class UomRepo {
           .toList();
       return filtered;
     }
-    return datas;
+    return _datas;
   }
 }

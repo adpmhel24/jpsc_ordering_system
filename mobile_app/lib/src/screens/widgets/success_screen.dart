@@ -42,7 +42,6 @@ class SuccessScreen extends StatelessWidget {
                 Constant.heightSpacer,
                 Text(
                   submessage ?? "",
-                  style: const TextStyle(color: Color(0xFF164052)),
                 ),
               ],
             ),

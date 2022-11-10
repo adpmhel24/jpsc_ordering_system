@@ -42,7 +42,7 @@ class CRUDPriceQuotation(
 
         try:
             get_authorized_user(
-                objtype=ObjectTypesEnum.price_quotation,
+                objtype=ObjectTypesEnum.price_quotation.value,
                 current_user=current_user,
                 full=True,
                 create=True,

@@ -10,10 +10,11 @@ from sqlalchemy import and_
 
 from my_app.core.settings import settings
 
-from .core.modules.MasterData.system_user.cruds import crud_sys_user
+
 from my_app.shared.schemas.token_schema import TokenPayload
-from my_app.core.modules.MasterData.system_user import schemas
+from my_app.core.modules.MasterData.system_user.schemas import SystemUserRead
 from my_app.core.modules.MasterData.authorization.models import Authorization
+from .core.modules.MasterData.system_user.cruds import crud_sys_user
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -38,7 +39,7 @@ def get_current_user(token: str = Depends(reusable_oauth2)) -> Any:
 
 
 def get_current_active_user(
-    current_user: schemas.SystemUserRead = Depends(get_current_user),
+    current_user: SystemUserRead = Depends(get_current_user),
 ) -> Any:
     if not crud_sys_user.is_active(current_user):
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -46,8 +47,8 @@ def get_current_active_user(
 
 
 async def get_current_active_super_admin(
-    current_user: schemas.SystemUserRead = Depends(get_current_user),
-) -> schemas.SystemUserRead:
+    current_user: SystemUserRead = Depends(get_current_user),
+) -> SystemUserRead:
     if not crud_sys_user.isSuperAdmin(current_user):
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"
@@ -57,7 +58,7 @@ async def get_current_active_super_admin(
 
 def get_authorized_user(
     *,
-    current_user: schemas.SystemUserRead = Depends(get_current_user),
+    current_user: SystemUserRead = Depends(get_current_user),
     objtype: int,
     full=False,
     read=False,
@@ -70,20 +71,65 @@ def get_authorized_user(
     # for curr_auth in current_user.authorizations:
     #     if curr_auth.objtype == objtype.value and curr_auth.auth in auth:
     #         return current_user
+    auth: Authorization
 
-    auth = (
-        db.session.query(Authorization)
-        .filter(
-            Authorization.system_user_id == current_user.id,
-            Authorization.objtype == objtype,
-            Authorization.full == full,
-            Authorization.read == read,
-            Authorization.create == create,
-            Authorization.approve == approve,
-            Authorization.update == update,
+    if full:
+        temp_auth = (
+            db.session.query(Authorization)
+            .filter(
+                Authorization.system_user_id == current_user.id,
+                Authorization.objtype == objtype,
+                Authorization.full == full,
+            )
+            .first()
         )
-        .first()
-    )
+        auth = temp_auth
+    if read:
+        temp_auth = (
+            db.session.query(Authorization)
+            .filter(
+                Authorization.system_user_id == current_user.id,
+                Authorization.objtype == objtype,
+                Authorization.read == read,
+            )
+            .first()
+        )
+        auth = temp_auth
+    if create:
+
+        temp_auth = (
+            db.session.query(Authorization)
+            .filter(
+                Authorization.system_user_id == current_user.id,
+                Authorization.objtype == objtype,
+                Authorization.create == create,
+            )
+            .first()
+        )
+        auth = temp_auth
+    if approve:
+        temp_auth = (
+            db.session.query(Authorization)
+            .filter(
+                Authorization.system_user_id == current_user.id,
+                Authorization.objtype == objtype,
+                Authorization.approve == approve,
+            )
+            .first()
+        )
+        auth = temp_auth
+    if update:
+        temp_auth = (
+            db.session.query(Authorization)
+            .filter(
+                Authorization.system_user_id == current_user.id,
+                Authorization.objtype == objtype,
+                Authorization.update == update,
+            )
+            .first()
+        )
+        auth = temp_auth
+
     if auth or current_user.is_super_admin:
         return current_user
 
@@ -93,8 +139,8 @@ def get_authorized_user(
 
 
 async def get_current_active_admin(
-    current_user: schemas.SystemUserRead = Depends(get_current_user),
-) -> schemas.SystemUserRead:
+    current_user: SystemUserRead = Depends(get_current_user),
+) -> SystemUserRead:
     if not crud_sys_user.isSuperAdmin(current_user):
         raise HTTPException(
             status_code=400, detail="The user doesn't have enough privileges"

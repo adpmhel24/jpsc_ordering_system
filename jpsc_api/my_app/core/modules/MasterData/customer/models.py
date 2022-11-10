@@ -42,6 +42,7 @@ class CustomerOtherColumn(SQLModel):
         default=True, sa_column_kwargs={"server_default": text("true")}
     )
     is_approved: bool = Field(sa_column_kwargs={"server_default": text("false")})
+    with_sap: bool = Field(sa_column_kwargs={"server_default": text("false")})
 
 
 class Customer(UpdatedBase, CreatedBase, CustomerOtherColumn, CustomerBase, table=True):

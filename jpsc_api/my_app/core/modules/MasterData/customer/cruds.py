@@ -53,6 +53,7 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
         *,
         is_active: Optional[bool],
         is_approved: Optional[bool],
+        with_sap: Optional[bool],
     ) -> Any:
         db_obj = (
             db.session.query(self.model)
@@ -65,6 +66,10 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
                     or_(
                         is_approved == None,
                         self.model.is_approved.is_(is_approved),
+                    ),
+                    or_(
+                        with_sap == None,
+                        self.model.with_sap.is_(with_sap),
                     ),
                 )
             )
@@ -81,9 +86,11 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
         list_object_dict = []
 
         for i in schemas:
-            schema_dict = i.dict()
-            schema_dict["created_by"] = curr_user.id
-            list_object_dict.append(schema_dict)
+            exist_data = db.session.query(self.model).filter_by(code=i.code).first()
+            if not exist_data:
+                schema_dict = i.dict()
+                schema_dict["created_by"] = curr_user.id
+                list_object_dict.append(schema_dict)
 
         db.session.bulk_insert_mappings(self.model, list_object_dict)
         db.session.commit()
@@ -94,22 +101,17 @@ class CRUDCustomer(CRUDBase[Customer, CustomerCreate, CustomerUpdate, CustomerRe
         *,
         is_active: Optional[bool],
         is_approved: Optional[bool],
+        with_sap: Optional[bool],
         branchCode: str,
     ) -> Any:
         db_obj = (
             db.session.query(self.model)
             .filter(
                 and_(
-                    self.model.is_active.is_(True),
                     self.model.location == branchCode,
-                    or_(
-                        not is_active,
-                        self.model.is_active.is_(is_active),
-                    ),
-                    or_(
-                        not is_approved,
-                        self.model.is_approved.is_(is_approved),
-                    ),
+                    self.model.is_active.is_(is_active),
+                    self.model.is_approved.is_(is_approved),
+                    self.model.with_sap.is_(with_sap),
                 )
             )
             .order_by(self.model.code)

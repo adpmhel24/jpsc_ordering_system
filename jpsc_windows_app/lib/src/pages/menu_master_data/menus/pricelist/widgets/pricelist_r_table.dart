@@ -31,6 +31,7 @@ class _PricelistTableState extends State<PricelistRowTable> {
   late int _rowsPerPage = 20;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
+  final List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   final double _dataPagerHeight = 60.0;
   @override
@@ -94,17 +95,19 @@ class _PricelistTableState extends State<PricelistRowTable> {
           );
   }
 
-  SizedBox tableFooter(int pricelistLength) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: pricelistLength == 0
+        pageCount: dataLength == 0
             ? 1
-            : (pricelistLength / _rowsPerPage) +
-                ((pricelistLength % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: [10, 20, 30, 100, pricelistLength],
+        availableRowsPerPage: availableRowsPerPage.contains(dataLength)
+            ? availableRowsPerPage
+            : [...availableRowsPerPage, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;

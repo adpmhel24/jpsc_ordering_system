@@ -54,12 +54,12 @@ class SystemUserRead(SystemUserBase, PrimaryKeyBase):
 
     is_active: Optional[bool]
     assigned_branch: Optional[List["SystemUserBranch"]]
-    authorizations: Optional[List["schemas.AuthorizationRead"]]
+    authorizations: Optional[List["AuthorizationRead"]]
     item_group_auth: Optional[List["ItemGroupUserAuthRead"]]
 
 
+from ..authorization.schemas import AuthorizationRead
 from ..system_user_branch.models import SystemUserBranch
-from ..authorization import schemas
 from ..item_group_auth.schemas import ItemGroupUserAuthRead
 
 SystemUserRead.update_forward_refs()

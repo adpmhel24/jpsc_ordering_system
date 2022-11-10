@@ -31,7 +31,7 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       addresses: json['addresses'] == null
           ? const []
           : CustomerModel.customerAddressFromJson(json['addresses'] as List),
-    );
+    )..withSap = json['with_sap'] as bool?;
 
 Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
     <String, dynamic>{
@@ -47,6 +47,7 @@ Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
       'credit_limit': instance.creditLimit,
       'is_active': instance.isActive,
       'is_approved': instance.isApproved,
+      'with_sap': instance.withSap,
       'date_created': instance.dateCreated?.toIso8601String(),
       'created_by': instance.createdBy,
       'date_updated': instance.dateUpdated?.toIso8601String(),

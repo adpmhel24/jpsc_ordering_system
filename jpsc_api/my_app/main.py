@@ -15,7 +15,6 @@ from fastapi_sqlalchemy import db
 from my_app.core.settings.config import settings
 
 from my_app.shared.utils import logger
-from my_app.core.modules.routers import *
 
 from google.cloud import storage
 
@@ -102,6 +101,8 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+from my_app.core.modules.routers import *
 
 app.include_router(router)
 app.include_router(login_router, prefix=settings.API_V1_STR)

@@ -59,18 +59,12 @@ class _SystemUserAuthState extends State<SystemUserAuthDialog> {
   }
 
   Future<void> updateAuthorizations() async {
-    context.loaderOverlay.show();
-
     try {
       await widget.authorizationRepo
           .bulkUpdate(datas: sysAuthsObj.map((e) => e.toJson()).toList());
-      context.loaderOverlay.hide();
     } on HttpException catch (e) {
-      context.loaderOverlay.hide();
       CustomDialogBox.errorMessage(context, message: e.message);
     } on Exception catch (e) {
-      context.loaderOverlay.hide();
-
       CustomDialogBox.errorMessage(context, message: e.toString());
     }
   }

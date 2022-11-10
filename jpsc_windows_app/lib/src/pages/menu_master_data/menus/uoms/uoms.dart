@@ -12,11 +12,12 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../global_blocs/blocs.dart';
+import '../../../../data/repositories/repos.dart';
 import '../../../../router/router.gr.dart';
 import '../../../../utils/fetching_status.dart';
 import '../../../../shared/widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
+import 'blocs/fetching_bloc/bloc.dart';
 import 'widgets/table.dart';
 
 class UomsPage extends StatefulWidget {
@@ -28,12 +29,6 @@ class UomsPage extends StatefulWidget {
 
 class _UomsPageState extends State<UomsPage> {
   final GlobalKey<SfDataGridState> sfDataGridKey = GlobalKey<SfDataGridState>();
-
-  @override
-  void initState() {
-    context.read<UomsBloc>().add(LoadUoms());
-    super.initState();
-  }
 
   Future<void> _openTextFile(BuildContext context) async {
     const XTypeGroup typeGroup = XTypeGroup(
@@ -72,7 +67,7 @@ class _UomsPageState extends State<UomsPage> {
             UomsToUploadRoute(
               uoms: uoms,
               onRefresh: () {
-                context.read<UomsBloc>().add(LoadUoms());
+                context.read<FetchingUoMsBloc>().add(LoadUoms());
               },
             ),
           ],
@@ -87,40 +82,51 @@ class _UomsPageState extends State<UomsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UomsBloc, UomsBlocState>(
-      listenWhen: (prev, curr) => prev.status != curr.status,
-      listener: (context, state) {
-        if (state.status == FetchingStatus.loading) {
-          context.loaderOverlay.show();
-        } else if (state.status == FetchingStatus.error) {
-          context.loaderOverlay.hide();
-          CustomDialogBox.errorMessage(context, message: state.errorMessage);
-        } else if (state.status == FetchingStatus.success) {
-          context.loaderOverlay.hide();
-        } else if (state.status == FetchingStatus.unauthorized) {
-          context.loaderOverlay.hide();
-        }
-      },
-      child: BaseMasterDataScaffold(
-        title: "Unit Of Measures",
-        onNewButton: (context) {
-          context.router.navigate(
-            UomsWrapper(
-              children: [
-                UomCreateRoute(
-                  header: "UoM Create Form",
-                ),
-              ],
-            ),
-          );
+    return BlocProvider(
+      create: (context) => FetchingUoMsBloc(
+        uomRepo: context.read<UomRepo>(),
+        currUserRepo: context.read<CurrentUserRepo>(),
+        objectTypeRepo: context.read<ObjectTypeRepo>(),
+      )..add(LoadUoms()),
+      child: BlocListener<FetchingUoMsBloc, FetchingUoMsState>(
+        listenWhen: (prev, curr) => prev.status != curr.status,
+        listener: (context, state) {
+          if (state.status == FetchingStatus.loading) {
+            context.loaderOverlay.show();
+          } else if (state.status == FetchingStatus.error) {
+            context.loaderOverlay.hide();
+            CustomDialogBox.errorMessage(context, message: state.errorMessage);
+          } else if (state.status == FetchingStatus.success) {
+            context.loaderOverlay.hide();
+          } else if (state.status == FetchingStatus.unauthorized) {
+            context.loaderOverlay.hide();
+          }
         },
-        onRefreshButton: (context) {
-          context.read<UomsBloc>().add(LoadUoms());
-        },
-        onAttachButton: (cntx) => _openTextFile(cntx),
-        onSearchChanged: (context, value) {},
-        child: UomsTable(
-          sfDataGridKey: sfDataGridKey,
+        child: BaseMasterDataScaffold(
+          title: "Unit Of Measures",
+          onNewButton: (context) {
+            context.router.navigate(
+              UomsWrapper(
+                children: [
+                  UomCreateRoute(
+                    header: "UoM Create Form",
+                    onRefresh: () =>
+                        context.read<FetchingUoMsBloc>().add(LoadUoms()),
+                  ),
+                ],
+              ),
+            );
+          },
+          onRefreshButton: (context) {
+            context.read<FetchingUoMsBloc>().add(LoadUoms());
+          },
+          onAttachButton: (cntx) => _openTextFile(cntx),
+          onSearchChanged: (context, value) {
+            context.read<FetchingUoMsBloc>().add(SearchUomsByKeyword(value));
+          },
+          child: UomsTable(
+            sfDataGridKey: sfDataGridKey,
+          ),
         ),
       ),
     );

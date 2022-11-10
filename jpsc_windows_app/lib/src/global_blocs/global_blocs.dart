@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/repositories/repos.dart';
 import 'bloc_warehouses/bloc.dart';
-import 'blocs.dart';
 
 class GlobalBlocs {
   static List<BlocProvider> blocs(BuildContext context) {
@@ -11,13 +10,6 @@ class GlobalBlocs {
       BlocProvider<WarehousesBloc>(
         create: (_) => WarehousesBloc(
           warehouseRepo: context.read<WarehouseRepo>(),
-          currUserRepo: context.read<CurrentUserRepo>(),
-          objectTypeRepo: context.read<ObjectTypeRepo>(),
-        ),
-      ),
-      BlocProvider<UomsBloc>(
-        create: (_) => UomsBloc(
-          uomRepo: context.read<UomRepo>(),
           currUserRepo: context.read<CurrentUserRepo>(),
           objectTypeRepo: context.read<ObjectTypeRepo>(),
         ),

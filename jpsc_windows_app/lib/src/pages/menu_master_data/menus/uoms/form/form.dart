@@ -6,7 +6,6 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
-import '../../../../../global_blocs/blocs.dart';
 import '../../../../../shared/widgets/custom_dialog.dart';
 import '../blocs/create_update_bloc/bloc.dart';
 import 'form_body.dart';
@@ -16,23 +15,21 @@ class UomFormPage extends StatelessWidget {
     Key? key,
     required this.header,
     this.selectedUom,
+    required this.onRefresh,
   }) : super(key: key);
 
   final String header;
   final UomModel? selectedUom;
-
-  void _loadData(BuildContext context) {
-    context.read<UomsBloc>().add(LoadUoms());
-  }
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UomFormBloc(
+      create: (context) => CreateUpdateUomBloc(
         uomRepo: context.read<UomRepo>(),
         selectedUom: selectedUom,
       ),
-      child: BlocListener<UomFormBloc, UomFormBlocState>(
+      child: BlocListener<CreateUpdateUomBloc, CreateUpdateUomState>(
         listenWhen: (previous, current) =>
             current.status.isSubmissionFailure ||
             current.status.isSubmissionInProgress ||
@@ -49,7 +46,7 @@ class UomFormPage extends StatelessWidget {
               context,
               message: state.message,
               onPositiveClick: (cntx) {
-                _loadData(context);
+                onRefresh();
                 context.router.pop();
               },
             );

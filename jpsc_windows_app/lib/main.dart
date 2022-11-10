@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:window_manager/window_manager.dart';
 import 'src/data/repositories/app_repo_providers.dart';
 import 'src/data/repositories/repos.dart';
 import 'src/global_blocs/blocs.dart';
+import 'src/global_blocs/main_nav_bloc/bloc.dart';
 import 'src/router/router.gr.dart';
 import 'src/router/router_guard.dart';
 import 'theme.dart';
@@ -97,15 +99,23 @@ class _MyAppState extends State<MyApp> {
     LocalJsonLocalization.delegate.directories = ['assets/lang'];
     return MultiRepositoryProvider(
       providers: AppRepoProvider.repoProviders,
-      child: BlocProvider(
-        create: (context) => AuthBloc(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthBloc(),
+          ),
+          BlocProvider(
+            create: (_) => NavMenuCubit(),
+          )
+        ],
         child: MultiProvider(
           providers: [
             ChangeNotifierProvider(
               create: (_) => AppTheme(),
             ),
             ChangeNotifierProvider(
-              create: (_) => CurrentUserRepo(),
+              lazy: false,
+              create: (_) => CurrentUserRepo()..checkIfLoggedIn(),
             )
           ],
           builder: (context, _) {
@@ -159,8 +169,11 @@ class _MyAppState extends State<MyApp> {
                     glowFactor: is10footScreen() ? 2.0 : 0.0,
                   ),
                 ),
+                routerDelegate: AutoRouterDelegate(
+                  _appRouter,
+                  navigatorObservers: () => [AutoRouteObserver()],
+                ),
                 routeInformationParser: _appRouter.defaultRouteParser(),
-                routerDelegate: _appRouter.delegate(),
                 builder: (context, child) {
                   return ResponsiveWrapper.builder(
                     BouncingScrollWrapper.builder(context, child!),

@@ -28,7 +28,7 @@ class DataSource extends DataGridSource {
 
   void buildPaginatedDataGridRows() {
     dataGridRows = paginatedDatas.map((data) {
-      return TableSettings.dataGrid(cntx, data);
+      return TableSettings.dataGrid(data);
     }).toList(growable: false);
   }
 
@@ -105,8 +105,46 @@ class DataSource extends DataGridSource {
             ],
           ),
         );
-      } else if (dataGridCell.columnName == 'Cancel') {
-        return dataGridCell.value;
+      } else if (dataGridCell.columnName == 'Action') {
+        return Container(
+          alignment: Alignment.center,
+          child: DropDownButton(
+            disabled: dataGridCell.value.docstatus == 'N',
+            leading: const Icon(
+              FluentIcons.settings,
+              size: 15,
+            ),
+            items: [
+              MenuFlyoutItem(
+                leading: const Icon(
+                  FluentIcons.cancel,
+                  size: 15,
+                ),
+                text: const Text('Cancel'),
+                onPressed: () {
+                  CustomDialogBox.warningWithRemarks(
+                    cntx,
+                    message:
+                        "Are you sure you want to cancel this transaction?",
+                    onPositiveClick: (cntx, remarks) {
+                      cntx.read<PriceQuotationCancelBloc>().add(
+                            PriceQuotationCancelSubmitted(
+                                dataGridCell.value.id!, remarks),
+                          );
+                      cntx.router.pop();
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      } else if (dataGridCell.columnName == 'Subtotal') {
+        return Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.all(10),
+          child: SelectableText(formatStringToDecimal("${dataGridCell.value}")),
+        );
       }
       return Container(
         alignment: dataGridCell.value.runtimeType == double
@@ -119,7 +157,7 @@ class DataSource extends DataGridSource {
                 ? SelectableText(formatStringToDecimal("${dataGridCell.value}"))
                 : dataGridCell.value.runtimeType == DateTime
                     ? SelectableText(dateFormatter(dataGridCell.value))
-                    : dataGridCell.value,
+                    : SelectableText(dataGridCell.value.toString()),
       );
     }).toList());
   }
@@ -146,8 +184,7 @@ class TableSettings {
     "action": {"name": "Action", "width": double.nan},
   };
 
-  static DataGridRow dataGrid(
-      BuildContext context, PriceQuotationModel priceQuotation) {
+  static DataGridRow dataGrid(PriceQuotationModel priceQuotation) {
     return DataGridRow(
       cells: [
         DataGridCell<int>(
@@ -180,7 +217,7 @@ class TableSettings {
         ),
         DataGridCell<double>(
           columnName: columnName["subtotal"]["name"],
-          value: priceQuotation.subtotal,
+          value: priceQuotation.subtotal ?? 0.00,
         ),
         DataGridCell<String>(
           columnName: columnName["remarks"]["name"],
@@ -214,40 +251,9 @@ class TableSettings {
           columnName: columnName["canceledRemarks"]["name"],
           value: priceQuotation.canceledRemarks ?? "",
         ),
-        DataGridCell<SizedBox>(
+        DataGridCell(
           columnName: columnName["action"]["name"],
-          value: SizedBox(
-            child: DropDownButton(
-              disabled: priceQuotation.docstatus == 'N',
-              leading: const Icon(
-                FluentIcons.settings,
-                size: 15,
-              ),
-              items: [
-                MenuFlyoutItem(
-                  leading: const Icon(
-                    FluentIcons.cancel,
-                    size: 15,
-                  ),
-                  text: const Text('Cancel'),
-                  onPressed: () {
-                    CustomDialogBox.warningWithRemarks(
-                      context,
-                      message:
-                          "Are you sure you want to cancel this transaction?",
-                      onPositiveClick: (cntx, remarks) {
-                        context.read<PriceQuotationCancelBloc>().add(
-                              PriceQuotationCancelSubmitted(
-                                  priceQuotation.id!, remarks),
-                            );
-                        cntx.router.pop();
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
+          value: priceQuotation,
         ),
       ],
     );

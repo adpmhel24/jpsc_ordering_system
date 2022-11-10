@@ -171,6 +171,14 @@ class DataSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     double srpPrice = row.getCells()[3].value;
     double actualPrice = row.getCells()[4].value;
+
+    final List<String> doubleColumnNames = [
+      'Quantity',
+      'Srp Price',
+      'Actual Price',
+      'Total',
+    ];
+
     return DataGridRowAdapter(
         color: (srpPrice > actualPrice)
             ? Constant.belowSRPColor
@@ -178,6 +186,18 @@ class DataSource extends DataGridSource {
                 ? Constant.overSRPColor
                 : null,
         cells: row.getCells().map<Widget>((dataGridCell) {
+          if (doubleColumnNames.contains(dataGridCell.columnName)) {
+            return Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.all(10),
+              child: SelectableText(
+                formatStringToDecimal("${dataGridCell.value}"),
+                style: srpPrice != actualPrice
+                    ? const TextStyle(color: Colors.black)
+                    : null,
+              ),
+            );
+          }
           return Container(
             alignment: dataGridCell.value.runtimeType == double
                 ? Alignment.centerRight
@@ -198,7 +218,7 @@ class DataSource extends DataGridSource {
                             ? const TextStyle(color: Colors.black)
                             : null,
                       )
-                    : dataGridCell.value,
+                    : SelectableText(dataGridCell.value.toString()),
           );
         }).toList());
   }

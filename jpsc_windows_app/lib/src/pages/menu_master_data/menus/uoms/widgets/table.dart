@@ -3,10 +3,10 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/uoms/blocs/fetching_bloc/bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
-import '../../../../../global_blocs/blocs.dart';
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
@@ -29,6 +29,7 @@ class _UomsTableState extends State<UomsTable> {
   late int _rowsPerPage = 10;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
+  final List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _UomsTableState extends State<UomsTable> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: BlocBuilder<UomsBloc, UomsBlocState>(
+      child: BlocBuilder<FetchingUoMsBloc, FetchingUoMsState>(
         buildWhen: (prev, curr) =>
             curr.status == FetchingStatus.unauthorized ||
             curr.status == FetchingStatus.success,
@@ -62,7 +63,7 @@ class _UomsTableState extends State<UomsTable> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     tableBody(constraint),
-                    tableFooter(state),
+                    tableFooter(state.uoms.length),
                   ],
                 );
               },
@@ -112,17 +113,19 @@ class _UomsTableState extends State<UomsTable> {
           );
   }
 
-  SizedBox tableFooter(UomsBlocState state) {
+  SizedBox tableFooter(int dataLength) {
     return SizedBox(
       height: _dataPagerHeight,
       child: SfDataPager(
         delegate: _dataSource,
-        pageCount: state.uoms.isEmpty
+        pageCount: dataLength <= 0
             ? 1
-            : (state.uoms.length / _rowsPerPage) +
-                ((state.uoms.length % _rowsPerPage) > 0 ? 1 : 0),
+            : (dataLength / _rowsPerPage) +
+                ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: const [10, 20, 30],
+        availableRowsPerPage: availableRowsPerPage.contains(dataLength)
+            ? availableRowsPerPage
+            : [...availableRowsPerPage, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -166,7 +169,7 @@ class DataSource extends DataGridSource {
 
   @override
   Future<void> handleRefresh() async {
-    cntx.read<UomsBloc>().add(LoadUoms());
+    cntx.read<FetchingUoMsBloc>().add(LoadUoms());
     buildPaginatedDataGridRows();
     notifyListeners();
   }
@@ -218,6 +221,8 @@ class DataSource extends DataGridSource {
                           UomCreateRoute(
                             header: "UoM Update Form",
                             selectedUom: dataGridCell.value,
+                            onRefresh: () =>
+                                cntx.read<FetchingUoMsBloc>().add(LoadUoms()),
                           ),
                         ],
                       ),

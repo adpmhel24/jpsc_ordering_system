@@ -29,6 +29,7 @@ class _BranchesTableState extends State<BranchesTable> {
   late int _rowsPerPage = 10;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
+  List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   final double _dataPagerHeight = 60.0;
   @override
@@ -112,7 +113,9 @@ class _BranchesTableState extends State<BranchesTable> {
             : (dataLength / _rowsPerPage) +
                 ((dataLength % _rowsPerPage) > 0 ? 1 : 0),
         direction: Axis.horizontal,
-        availableRowsPerPage: [10, 20, 30, dataLength],
+        availableRowsPerPage: availableRowsPerPage.contains(dataLength)
+            ? availableRowsPerPage
+            : [...availableRowsPerPage, dataLength],
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
