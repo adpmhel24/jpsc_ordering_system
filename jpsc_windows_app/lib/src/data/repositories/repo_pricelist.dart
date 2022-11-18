@@ -44,8 +44,8 @@ class PricelistRepo {
   Future<List<PricelistRowModel>> getByItemCode(String itemCode) async {
     Response response;
 
-    response = await api.getByFk(_token,
-        urlPath: "${urlPath}rows/by_item/", fk: itemCode);
+    response = await api.getAll(_token,
+        urlPath: "${urlPath}rows/by_item/", params: {"item_code": itemCode});
     return List<PricelistRowModel>.from(
             response.data['data'].map((e) => PricelistRowModel.fromJson(e)))
         .toList();

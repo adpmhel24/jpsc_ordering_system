@@ -11,14 +11,18 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i25;
+import 'dart:async' as _i26;
 
-import 'package:auto_route/auto_route.dart' as _i20;
+import 'package:auto_route/auto_route.dart' as _i22;
 import 'package:auto_route/empty_router_widgets.dart' as _i5;
-import 'package:fluent_ui/fluent_ui.dart' as _i23;
-import 'package:flutter/material.dart' as _i21;
-import 'package:jpsc_windows_app/src/data/models/models.dart' as _i24;
+import 'package:fluent_ui/fluent_ui.dart' as _i24;
+import 'package:flutter/material.dart' as _i23;
+import 'package:jpsc_windows_app/src/data/models/models.dart' as _i25;
 import 'package:jpsc_windows_app/src/pages/exports.dart' as _i1;
+import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/app_versions/appversions.dart'
+    as _i17;
+import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/app_versions/components/version_form.dart'
+    as _i18;
 import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/customers/components/form/customer_form.dart'
     as _i8;
 import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/customers/components/upload_page.dart'
@@ -45,188 +49,193 @@ import 'package:jpsc_windows_app/src/pages/menu_profile/my_profile_page.dart'
     as _i4;
 import 'package:jpsc_windows_app/src/pages/menu_sales/main_wrapper.dart' as _i3;
 import 'package:jpsc_windows_app/src/pages/menu_sales/modules/price_quotation/components/details/pq_details.dart'
-    as _i19;
+    as _i21;
 import 'package:jpsc_windows_app/src/pages/menu_sales/modules/price_quotation/price_quotation.dart'
-    as _i18;
-import 'package:jpsc_windows_app/src/pages/menu_sales/sales_menu.dart' as _i17;
+    as _i20;
+import 'package:jpsc_windows_app/src/pages/menu_sales/sales_menu.dart' as _i19;
 import 'package:jpsc_windows_app/src/pages/unknown_page.dart' as _i2;
-import 'package:jpsc_windows_app/src/router/router_guard.dart' as _i22;
 
-class AppRouter extends _i20.RootStackRouter {
-  AppRouter({
-    _i21.GlobalKey<_i21.NavigatorState>? navigatorKey,
-    required this.routeGuard,
-  }) : super(navigatorKey);
-
-  final _i22.RouteGuard routeGuard;
+class AppRouter extends _i22.RootStackRouter {
+  AppRouter([_i23.GlobalKey<_i23.NavigatorState>? navigatorKey])
+      : super(navigatorKey);
 
   @override
-  final Map<String, _i20.PageFactory> pagesMap = {
+  final Map<String, _i22.PageFactory> pagesMap = {
     LoginRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     MainRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MainPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     UnknownRouteRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.UnknownRoutePage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     DashboardPage.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.DashboardPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     MasterDataMainWrapperPage.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MasterDataMainWrapper(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     SalesMainWrapperPage.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i3.SalesMainWrapper(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     MyProfilePage.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.MyProfile(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     MasterDataMenuRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.MasterDataMenuPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     SystemUsersWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     CustomerWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     BranchesWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     UomsWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     ItemGroupWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     PricelistWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     ProductsWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     PaymentTermWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 5,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    AppVersionsWrapper.name: (routeData) {
+      return _i22.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i5.EmptyRouterPage(),
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     SystemUsersRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.SystemUsersPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -234,14 +243,14 @@ class AppRouter extends _i20.RootStackRouter {
     },
     SystemUserFormRoute.name: (routeData) {
       final args = routeData.argsAs<SystemUserFormRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.SystemUserFormPage(
           key: args.key,
           selectedSystemUser: args.selectedSystemUser,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -249,24 +258,24 @@ class AppRouter extends _i20.RootStackRouter {
     },
     SystemUsersToUploadRoute.name: (routeData) {
       final args = routeData.argsAs<SystemUsersToUploadRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i6.SystemUsersToUploadPage(
           key: args.key,
           datas: args.datas,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     CustomersRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i7.CustomersPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -274,7 +283,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     CustomerFormRoute.name: (routeData) {
       final args = routeData.argsAs<CustomerFormRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i8.CustomerFormPage(
           key: args.key,
@@ -282,7 +291,7 @@ class AppRouter extends _i20.RootStackRouter {
           selectedCustomer: args.selectedCustomer,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -290,24 +299,24 @@ class AppRouter extends _i20.RootStackRouter {
     },
     CustomersBulkInsertRoute.name: (routeData) {
       final args = routeData.argsAs<CustomersBulkInsertRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i9.CustomersBulkInsertPage(
           key: args.key,
           datas: args.datas,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     BranchesRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.BranchesPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -315,7 +324,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     BranchCreateRoute.name: (routeData) {
       final args = routeData.argsAs<BranchCreateRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.BranchFormPage(
           key: args.key,
@@ -323,7 +332,7 @@ class AppRouter extends _i20.RootStackRouter {
           selectedBranch: args.selectedBranch,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -331,7 +340,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     BranchEditRoute.name: (routeData) {
       final args = routeData.argsAs<BranchEditRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.BranchFormPage(
           key: args.key,
@@ -339,17 +348,17 @@ class AppRouter extends _i20.RootStackRouter {
           selectedBranch: args.selectedBranch,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     UomsRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.UomsPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -357,7 +366,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     UomCreateRoute.name: (routeData) {
       final args = routeData.argsAs<UomCreateRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.UomFormPage(
           key: args.key,
@@ -365,7 +374,7 @@ class AppRouter extends _i20.RootStackRouter {
           selectedUom: args.selectedUom,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -373,7 +382,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     UomEditRoute.name: (routeData) {
       final args = routeData.argsAs<UomEditRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.UomFormPage(
           key: args.key,
@@ -381,7 +390,7 @@ class AppRouter extends _i20.RootStackRouter {
           selectedUom: args.selectedUom,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -389,24 +398,24 @@ class AppRouter extends _i20.RootStackRouter {
     },
     UomsToUploadRoute.name: (routeData) {
       final args = routeData.argsAs<UomsToUploadRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i10.UomsToUploadPage(
           key: args.key,
           uoms: args.uoms,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     ItemGroupRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i11.ItemGroupPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -414,14 +423,14 @@ class AppRouter extends _i20.RootStackRouter {
     },
     ItemGroupFormRoute.name: (routeData) {
       final args = routeData.argsAs<ItemGroupFormRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i12.ItemGroupFormPage(
           key: args.key,
           header: args.header,
           selectedItemGroup: args.selectedItemGroup,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -429,24 +438,24 @@ class AppRouter extends _i20.RootStackRouter {
     },
     ItemGroupsToUploadRoute.name: (routeData) {
       final args = routeData.argsAs<ItemGroupsToUploadRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i13.ItemGroupsToUploadPage(
           key: args.key,
           datas: args.datas,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     PricelistRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.PricelistPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -454,7 +463,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     PricelistFormRoute.name: (routeData) {
       final args = routeData.argsAs<PricelistFormRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.PricelistFormPage(
           key: args.key,
@@ -462,7 +471,7 @@ class AppRouter extends _i20.RootStackRouter {
           selectedPricelist: args.selectedPricelist,
           refresh: args.refresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -470,7 +479,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     PricelistRowRoute.name: (routeData) {
       final args = routeData.argsAs<PricelistRowRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.PricelistRowPage(
           key: args.key,
@@ -478,17 +487,17 @@ class AppRouter extends _i20.RootStackRouter {
           itemCode: args.itemCode,
           refresh: args.refresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     ProductRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.ProductPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -496,7 +505,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     ProductFormRoute.name: (routeData) {
       final args = routeData.argsAs<ProductFormRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i1.ProductFormPage(
           key: args.key,
@@ -504,7 +513,7 @@ class AppRouter extends _i20.RootStackRouter {
           selectedItem: args.selectedItem,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -512,24 +521,24 @@ class AppRouter extends _i20.RootStackRouter {
     },
     ProductBulkInsertRoute.name: (routeData) {
       final args = routeData.argsAs<ProductBulkInsertRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i14.ProductBulkInsertPage(
           key: args.key,
           datas: args.datas,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     PaymentTermsRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i15.PaymentTermsPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -537,7 +546,7 @@ class AppRouter extends _i20.RootStackRouter {
     },
     PaymentTermFormRoute.name: (routeData) {
       final args = routeData.argsAs<PaymentTermFormRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i16.PaymentTermFormPage(
           key: args.key,
@@ -545,37 +554,62 @@ class AppRouter extends _i20.RootStackRouter {
           selectedPayTermObj: args.selectedPayTermObj,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 5,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    AppVersionRoute.name: (routeData) {
+      return _i22.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i17.AppVersionPage(),
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
+        durationInMilliseconds: 5,
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    AppVersionFormRoute.name: (routeData) {
+      final args = routeData.argsAs<AppVersionFormRouteArgs>();
+      return _i22.CustomPage<dynamic>(
+        routeData: routeData,
+        child: _i18.AppVersionFormPage(
+          key: args.key,
+          header: args.header,
+          onRefresh: args.onRefresh,
+        ),
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     SalesMenuRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i17.SalesMenuPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        child: const _i19.SalesMenuPage(),
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     PriceQuotationWrapper.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.EmptyRouterPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
       );
     },
     PriceQuotationRoute.name: (routeData) {
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i18.PriceQuotationPage(),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        child: const _i20.PriceQuotationPage(),
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -583,15 +617,15 @@ class AppRouter extends _i20.RootStackRouter {
     },
     PriceQuotationHeaderDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<PriceQuotationHeaderDetailsRouteArgs>();
-      return _i20.CustomPage<dynamic>(
+      return _i22.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i19.PriceQuotationHeaderDetailsPage(
+        child: _i21.PriceQuotationHeaderDetailsPage(
           key: args.key,
           header: args.header,
           priceQuotation: args.priceQuotation,
           onRefresh: args.onRefresh,
         ),
-        transitionsBuilder: _i20.TransitionsBuilders.noTransition,
+        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
         opaque: true,
         barrierDismissible: false,
@@ -600,251 +634,267 @@ class AppRouter extends _i20.RootStackRouter {
   };
 
   @override
-  List<_i20.RouteConfig> get routes => [
-        _i20.RouteConfig(
+  List<_i22.RouteConfig> get routes => [
+        _i22.RouteConfig(
           LoginRoute.name,
           path: '/login',
         ),
-        _i20.RouteConfig(
+        _i22.RouteConfig(
           MainRoute.name,
           path: '/',
-          guards: [routeGuard],
           children: [
-            _i20.RouteConfig(
+            _i22.RouteConfig(
               '#redirect',
               path: '',
               parent: MainRoute.name,
               redirectTo: 'dashboard',
               fullMatch: true,
             ),
-            _i20.RouteConfig(
+            _i22.RouteConfig(
               DashboardPage.name,
               path: 'dashboard',
               parent: MainRoute.name,
             ),
-            _i20.RouteConfig(
+            _i22.RouteConfig(
               MasterDataMainWrapperPage.name,
               path: 'master_data',
               parent: MainRoute.name,
               children: [
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: MasterDataMainWrapperPage.name,
                   redirectTo: 'menu',
                   fullMatch: true,
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   MasterDataMenuRoute.name,
                   path: 'menu',
                   parent: MasterDataMainWrapperPage.name,
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   SystemUsersWrapper.name,
                   path: 'systemUsers',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       SystemUsersRoute.name,
                       path: '',
                       parent: SystemUsersWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       SystemUserFormRoute.name,
                       path: 'form',
                       parent: SystemUsersWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       SystemUsersToUploadRoute.name,
                       path: 'for_upload',
                       parent: SystemUsersWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   CustomerWrapper.name,
                   path: 'customer',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       CustomersRoute.name,
                       path: '',
                       parent: CustomerWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       CustomerFormRoute.name,
                       path: 'create',
                       parent: CustomerWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       CustomersBulkInsertRoute.name,
                       path: 'for_upload',
                       parent: CustomerWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   BranchesWrapper.name,
                   path: 'branches',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       BranchesRoute.name,
                       path: '',
                       parent: BranchesWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       BranchCreateRoute.name,
                       path: 'create',
                       parent: BranchesWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       BranchEditRoute.name,
                       path: 'edit',
                       parent: BranchesWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   UomsWrapper.name,
                   path: 'uoms',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       UomsRoute.name,
                       path: '',
                       parent: UomsWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       UomCreateRoute.name,
                       path: 'create',
                       parent: UomsWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       UomEditRoute.name,
                       path: 'edit',
                       parent: UomsWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       UomsToUploadRoute.name,
                       path: 'for_upload',
                       parent: UomsWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   ItemGroupWrapper.name,
                   path: 'itemGroup',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       ItemGroupRoute.name,
                       path: '',
                       parent: ItemGroupWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       ItemGroupFormRoute.name,
                       path: 'form',
                       parent: ItemGroupWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       ItemGroupsToUploadRoute.name,
                       path: 'for_upload',
                       parent: ItemGroupWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   PricelistWrapper.name,
                   path: 'pricelist',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PricelistRoute.name,
                       path: '',
                       parent: PricelistWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PricelistFormRoute.name,
                       path: 'create',
                       parent: PricelistWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PricelistRowRoute.name,
                       path: 'pricelist_row',
                       parent: PricelistWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   ProductsWrapper.name,
                   path: 'products',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       ProductRoute.name,
                       path: '',
                       parent: ProductsWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       ProductFormRoute.name,
                       path: 'form',
                       parent: ProductsWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       ProductBulkInsertRoute.name,
                       path: 'for_upload',
                       parent: ProductsWrapper.name,
                     ),
                   ],
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   PaymentTermWrapper.name,
                   path: 'payment_terms',
                   parent: MasterDataMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PaymentTermsRoute.name,
                       path: '',
                       parent: PaymentTermWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PaymentTermFormRoute.name,
                       path: 'form',
                       parent: PaymentTermWrapper.name,
                     ),
                   ],
                 ),
+                _i22.RouteConfig(
+                  AppVersionsWrapper.name,
+                  path: 'app_versions',
+                  parent: MasterDataMainWrapperPage.name,
+                  children: [
+                    _i22.RouteConfig(
+                      AppVersionRoute.name,
+                      path: '',
+                      parent: AppVersionsWrapper.name,
+                    ),
+                    _i22.RouteConfig(
+                      AppVersionFormRoute.name,
+                      path: 'form',
+                      parent: AppVersionsWrapper.name,
+                    ),
+                  ],
+                ),
               ],
             ),
-            _i20.RouteConfig(
+            _i22.RouteConfig(
               SalesMainWrapperPage.name,
               path: 'sales',
               parent: MainRoute.name,
               children: [
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: SalesMainWrapperPage.name,
                   redirectTo: 'menu',
                   fullMatch: true,
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   SalesMenuRoute.name,
                   path: 'menu',
                   parent: SalesMainWrapperPage.name,
                 ),
-                _i20.RouteConfig(
+                _i22.RouteConfig(
                   PriceQuotationWrapper.name,
                   path: 'price_quotation',
                   parent: SalesMainWrapperPage.name,
                   children: [
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PriceQuotationRoute.name,
                       path: '',
                       parent: PriceQuotationWrapper.name,
                     ),
-                    _i20.RouteConfig(
+                    _i22.RouteConfig(
                       PriceQuotationHeaderDetailsRoute.name,
                       path: '',
                       parent: PriceQuotationWrapper.name,
@@ -853,14 +903,14 @@ class AppRouter extends _i20.RootStackRouter {
                 ),
               ],
             ),
-            _i20.RouteConfig(
+            _i22.RouteConfig(
               MyProfilePage.name,
               path: 'my_account',
               parent: MainRoute.name,
             ),
           ],
         ),
-        _i20.RouteConfig(
+        _i22.RouteConfig(
           UnknownRouteRoute.name,
           path: '*',
         ),
@@ -869,7 +919,7 @@ class AppRouter extends _i20.RootStackRouter {
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginRoute extends _i20.PageRouteInfo<void> {
+class LoginRoute extends _i22.PageRouteInfo<void> {
   const LoginRoute()
       : super(
           LoginRoute.name,
@@ -881,8 +931,8 @@ class LoginRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.MainPage]
-class MainRoute extends _i20.PageRouteInfo<void> {
-  const MainRoute({List<_i20.PageRouteInfo>? children})
+class MainRoute extends _i22.PageRouteInfo<void> {
+  const MainRoute({List<_i22.PageRouteInfo>? children})
       : super(
           MainRoute.name,
           path: '/',
@@ -894,7 +944,7 @@ class MainRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.UnknownRoutePage]
-class UnknownRouteRoute extends _i20.PageRouteInfo<void> {
+class UnknownRouteRoute extends _i22.PageRouteInfo<void> {
   const UnknownRouteRoute()
       : super(
           UnknownRouteRoute.name,
@@ -906,7 +956,7 @@ class UnknownRouteRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.DashboardPage]
-class DashboardPage extends _i20.PageRouteInfo<void> {
+class DashboardPage extends _i22.PageRouteInfo<void> {
   const DashboardPage()
       : super(
           DashboardPage.name,
@@ -918,8 +968,8 @@ class DashboardPage extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.MasterDataMainWrapper]
-class MasterDataMainWrapperPage extends _i20.PageRouteInfo<void> {
-  const MasterDataMainWrapperPage({List<_i20.PageRouteInfo>? children})
+class MasterDataMainWrapperPage extends _i22.PageRouteInfo<void> {
+  const MasterDataMainWrapperPage({List<_i22.PageRouteInfo>? children})
       : super(
           MasterDataMainWrapperPage.name,
           path: 'master_data',
@@ -931,8 +981,8 @@ class MasterDataMainWrapperPage extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.SalesMainWrapper]
-class SalesMainWrapperPage extends _i20.PageRouteInfo<void> {
-  const SalesMainWrapperPage({List<_i20.PageRouteInfo>? children})
+class SalesMainWrapperPage extends _i22.PageRouteInfo<void> {
+  const SalesMainWrapperPage({List<_i22.PageRouteInfo>? children})
       : super(
           SalesMainWrapperPage.name,
           path: 'sales',
@@ -944,7 +994,7 @@ class SalesMainWrapperPage extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.MyProfile]
-class MyProfilePage extends _i20.PageRouteInfo<void> {
+class MyProfilePage extends _i22.PageRouteInfo<void> {
   const MyProfilePage()
       : super(
           MyProfilePage.name,
@@ -956,7 +1006,7 @@ class MyProfilePage extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.MasterDataMenuPage]
-class MasterDataMenuRoute extends _i20.PageRouteInfo<void> {
+class MasterDataMenuRoute extends _i22.PageRouteInfo<void> {
   const MasterDataMenuRoute()
       : super(
           MasterDataMenuRoute.name,
@@ -968,8 +1018,8 @@ class MasterDataMenuRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class SystemUsersWrapper extends _i20.PageRouteInfo<void> {
-  const SystemUsersWrapper({List<_i20.PageRouteInfo>? children})
+class SystemUsersWrapper extends _i22.PageRouteInfo<void> {
+  const SystemUsersWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           SystemUsersWrapper.name,
           path: 'systemUsers',
@@ -981,8 +1031,8 @@ class SystemUsersWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class CustomerWrapper extends _i20.PageRouteInfo<void> {
-  const CustomerWrapper({List<_i20.PageRouteInfo>? children})
+class CustomerWrapper extends _i22.PageRouteInfo<void> {
+  const CustomerWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           CustomerWrapper.name,
           path: 'customer',
@@ -994,8 +1044,8 @@ class CustomerWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class BranchesWrapper extends _i20.PageRouteInfo<void> {
-  const BranchesWrapper({List<_i20.PageRouteInfo>? children})
+class BranchesWrapper extends _i22.PageRouteInfo<void> {
+  const BranchesWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           BranchesWrapper.name,
           path: 'branches',
@@ -1007,8 +1057,8 @@ class BranchesWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class UomsWrapper extends _i20.PageRouteInfo<void> {
-  const UomsWrapper({List<_i20.PageRouteInfo>? children})
+class UomsWrapper extends _i22.PageRouteInfo<void> {
+  const UomsWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           UomsWrapper.name,
           path: 'uoms',
@@ -1020,8 +1070,8 @@ class UomsWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class ItemGroupWrapper extends _i20.PageRouteInfo<void> {
-  const ItemGroupWrapper({List<_i20.PageRouteInfo>? children})
+class ItemGroupWrapper extends _i22.PageRouteInfo<void> {
+  const ItemGroupWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           ItemGroupWrapper.name,
           path: 'itemGroup',
@@ -1033,8 +1083,8 @@ class ItemGroupWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class PricelistWrapper extends _i20.PageRouteInfo<void> {
-  const PricelistWrapper({List<_i20.PageRouteInfo>? children})
+class PricelistWrapper extends _i22.PageRouteInfo<void> {
+  const PricelistWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           PricelistWrapper.name,
           path: 'pricelist',
@@ -1046,8 +1096,8 @@ class PricelistWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class ProductsWrapper extends _i20.PageRouteInfo<void> {
-  const ProductsWrapper({List<_i20.PageRouteInfo>? children})
+class ProductsWrapper extends _i22.PageRouteInfo<void> {
+  const ProductsWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           ProductsWrapper.name,
           path: 'products',
@@ -1059,8 +1109,8 @@ class ProductsWrapper extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class PaymentTermWrapper extends _i20.PageRouteInfo<void> {
-  const PaymentTermWrapper({List<_i20.PageRouteInfo>? children})
+class PaymentTermWrapper extends _i22.PageRouteInfo<void> {
+  const PaymentTermWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           PaymentTermWrapper.name,
           path: 'payment_terms',
@@ -1071,8 +1121,21 @@ class PaymentTermWrapper extends _i20.PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [_i5.EmptyRouterPage]
+class AppVersionsWrapper extends _i22.PageRouteInfo<void> {
+  const AppVersionsWrapper({List<_i22.PageRouteInfo>? children})
+      : super(
+          AppVersionsWrapper.name,
+          path: 'app_versions',
+          initialChildren: children,
+        );
+
+  static const String name = 'AppVersionsWrapper';
+}
+
+/// generated route for
 /// [_i1.SystemUsersPage]
-class SystemUsersRoute extends _i20.PageRouteInfo<void> {
+class SystemUsersRoute extends _i22.PageRouteInfo<void> {
   const SystemUsersRoute()
       : super(
           SystemUsersRoute.name,
@@ -1084,11 +1147,11 @@ class SystemUsersRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.SystemUserFormPage]
-class SystemUserFormRoute extends _i20.PageRouteInfo<SystemUserFormRouteArgs> {
+class SystemUserFormRoute extends _i22.PageRouteInfo<SystemUserFormRouteArgs> {
   SystemUserFormRoute({
-    _i23.Key? key,
-    _i24.SystemUserModel? selectedSystemUser,
-    required void Function() onRefresh,
+    _i24.Key? key,
+    _i25.SystemUserModel? selectedSystemUser,
+    required dynamic onRefresh,
   }) : super(
           SystemUserFormRoute.name,
           path: 'form',
@@ -1109,11 +1172,11 @@ class SystemUserFormRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i24.SystemUserModel? selectedSystemUser;
+  final _i25.SystemUserModel? selectedSystemUser;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1124,11 +1187,11 @@ class SystemUserFormRouteArgs {
 /// generated route for
 /// [_i6.SystemUsersToUploadPage]
 class SystemUsersToUploadRoute
-    extends _i20.PageRouteInfo<SystemUsersToUploadRouteArgs> {
+    extends _i22.PageRouteInfo<SystemUsersToUploadRouteArgs> {
   SystemUsersToUploadRoute({
-    _i23.Key? key,
-    required List<_i24.CreateSystemUserModel> datas,
-    required void Function() onRefresh,
+    _i24.Key? key,
+    required List<_i25.CreateSystemUserModel> datas,
+    required dynamic onRefresh,
   }) : super(
           SystemUsersToUploadRoute.name,
           path: 'for_upload',
@@ -1149,11 +1212,11 @@ class SystemUsersToUploadRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final List<_i24.CreateSystemUserModel> datas;
+  final List<_i25.CreateSystemUserModel> datas;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1163,7 +1226,7 @@ class SystemUsersToUploadRouteArgs {
 
 /// generated route for
 /// [_i7.CustomersPage]
-class CustomersRoute extends _i20.PageRouteInfo<void> {
+class CustomersRoute extends _i22.PageRouteInfo<void> {
   const CustomersRoute()
       : super(
           CustomersRoute.name,
@@ -1175,11 +1238,11 @@ class CustomersRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.CustomerFormPage]
-class CustomerFormRoute extends _i20.PageRouteInfo<CustomerFormRouteArgs> {
+class CustomerFormRoute extends _i22.PageRouteInfo<CustomerFormRouteArgs> {
   CustomerFormRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.CustomerModel? selectedCustomer,
+    _i25.CustomerModel? selectedCustomer,
     required void Function() onRefresh,
   }) : super(
           CustomerFormRoute.name,
@@ -1203,11 +1266,11 @@ class CustomerFormRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.CustomerModel? selectedCustomer;
+  final _i25.CustomerModel? selectedCustomer;
 
   final void Function() onRefresh;
 
@@ -1220,11 +1283,11 @@ class CustomerFormRouteArgs {
 /// generated route for
 /// [_i9.CustomersBulkInsertPage]
 class CustomersBulkInsertRoute
-    extends _i20.PageRouteInfo<CustomersBulkInsertRouteArgs> {
+    extends _i22.PageRouteInfo<CustomersBulkInsertRouteArgs> {
   CustomersBulkInsertRoute({
-    _i23.Key? key,
-    required List<_i24.CustomerCreateModel> datas,
-    required void Function() onRefresh,
+    _i24.Key? key,
+    required List<_i25.CustomerCreateModel> datas,
+    required dynamic onRefresh,
   }) : super(
           CustomersBulkInsertRoute.name,
           path: 'for_upload',
@@ -1245,11 +1308,11 @@ class CustomersBulkInsertRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final List<_i24.CustomerCreateModel> datas;
+  final List<_i25.CustomerCreateModel> datas;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1259,7 +1322,7 @@ class CustomersBulkInsertRouteArgs {
 
 /// generated route for
 /// [_i1.BranchesPage]
-class BranchesRoute extends _i20.PageRouteInfo<void> {
+class BranchesRoute extends _i22.PageRouteInfo<void> {
   const BranchesRoute()
       : super(
           BranchesRoute.name,
@@ -1271,12 +1334,12 @@ class BranchesRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.BranchFormPage]
-class BranchCreateRoute extends _i20.PageRouteInfo<BranchCreateRouteArgs> {
+class BranchCreateRoute extends _i22.PageRouteInfo<BranchCreateRouteArgs> {
   BranchCreateRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.BranchModel? selectedBranch,
-    required void Function() onRefresh,
+    _i25.BranchModel? selectedBranch,
+    required dynamic onRefresh,
   }) : super(
           BranchCreateRoute.name,
           path: 'create',
@@ -1299,13 +1362,13 @@ class BranchCreateRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.BranchModel? selectedBranch;
+  final _i25.BranchModel? selectedBranch;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1315,12 +1378,12 @@ class BranchCreateRouteArgs {
 
 /// generated route for
 /// [_i1.BranchFormPage]
-class BranchEditRoute extends _i20.PageRouteInfo<BranchEditRouteArgs> {
+class BranchEditRoute extends _i22.PageRouteInfo<BranchEditRouteArgs> {
   BranchEditRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.BranchModel? selectedBranch,
-    required void Function() onRefresh,
+    _i25.BranchModel? selectedBranch,
+    required dynamic onRefresh,
   }) : super(
           BranchEditRoute.name,
           path: 'edit',
@@ -1343,13 +1406,13 @@ class BranchEditRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.BranchModel? selectedBranch;
+  final _i25.BranchModel? selectedBranch;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1359,7 +1422,7 @@ class BranchEditRouteArgs {
 
 /// generated route for
 /// [_i1.UomsPage]
-class UomsRoute extends _i20.PageRouteInfo<void> {
+class UomsRoute extends _i22.PageRouteInfo<void> {
   const UomsRoute()
       : super(
           UomsRoute.name,
@@ -1371,12 +1434,12 @@ class UomsRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.UomFormPage]
-class UomCreateRoute extends _i20.PageRouteInfo<UomCreateRouteArgs> {
+class UomCreateRoute extends _i22.PageRouteInfo<UomCreateRouteArgs> {
   UomCreateRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.UomModel? selectedUom,
-    required void Function() onRefresh,
+    _i25.UomModel? selectedUom,
+    required dynamic onRefresh,
   }) : super(
           UomCreateRoute.name,
           path: 'create',
@@ -1399,13 +1462,13 @@ class UomCreateRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.UomModel? selectedUom;
+  final _i25.UomModel? selectedUom;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1415,12 +1478,12 @@ class UomCreateRouteArgs {
 
 /// generated route for
 /// [_i1.UomFormPage]
-class UomEditRoute extends _i20.PageRouteInfo<UomEditRouteArgs> {
+class UomEditRoute extends _i22.PageRouteInfo<UomEditRouteArgs> {
   UomEditRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.UomModel? selectedUom,
-    required void Function() onRefresh,
+    _i25.UomModel? selectedUom,
+    required dynamic onRefresh,
   }) : super(
           UomEditRoute.name,
           path: 'edit',
@@ -1443,13 +1506,13 @@ class UomEditRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.UomModel? selectedUom;
+  final _i25.UomModel? selectedUom;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1459,11 +1522,11 @@ class UomEditRouteArgs {
 
 /// generated route for
 /// [_i10.UomsToUploadPage]
-class UomsToUploadRoute extends _i20.PageRouteInfo<UomsToUploadRouteArgs> {
+class UomsToUploadRoute extends _i22.PageRouteInfo<UomsToUploadRouteArgs> {
   UomsToUploadRoute({
-    _i23.Key? key,
-    required List<_i24.UomModel> uoms,
-    required void Function() onRefresh,
+    _i24.Key? key,
+    required List<_i25.UomModel> uoms,
+    required dynamic onRefresh,
   }) : super(
           UomsToUploadRoute.name,
           path: 'for_upload',
@@ -1484,11 +1547,11 @@ class UomsToUploadRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final List<_i24.UomModel> uoms;
+  final List<_i25.UomModel> uoms;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1498,7 +1561,7 @@ class UomsToUploadRouteArgs {
 
 /// generated route for
 /// [_i11.ItemGroupPage]
-class ItemGroupRoute extends _i20.PageRouteInfo<void> {
+class ItemGroupRoute extends _i22.PageRouteInfo<void> {
   const ItemGroupRoute()
       : super(
           ItemGroupRoute.name,
@@ -1510,11 +1573,11 @@ class ItemGroupRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.ItemGroupFormPage]
-class ItemGroupFormRoute extends _i20.PageRouteInfo<ItemGroupFormRouteArgs> {
+class ItemGroupFormRoute extends _i22.PageRouteInfo<ItemGroupFormRouteArgs> {
   ItemGroupFormRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.ItemGroupModel? selectedItemGroup,
+    _i25.ItemGroupModel? selectedItemGroup,
   }) : super(
           ItemGroupFormRoute.name,
           path: 'form',
@@ -1535,11 +1598,11 @@ class ItemGroupFormRouteArgs {
     this.selectedItemGroup,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.ItemGroupModel? selectedItemGroup;
+  final _i25.ItemGroupModel? selectedItemGroup;
 
   @override
   String toString() {
@@ -1550,11 +1613,11 @@ class ItemGroupFormRouteArgs {
 /// generated route for
 /// [_i13.ItemGroupsToUploadPage]
 class ItemGroupsToUploadRoute
-    extends _i20.PageRouteInfo<ItemGroupsToUploadRouteArgs> {
+    extends _i22.PageRouteInfo<ItemGroupsToUploadRouteArgs> {
   ItemGroupsToUploadRoute({
-    _i23.Key? key,
-    required List<_i24.ItemGroupModel> datas,
-    required void Function() onRefresh,
+    _i24.Key? key,
+    required List<_i25.ItemGroupModel> datas,
+    required dynamic onRefresh,
   }) : super(
           ItemGroupsToUploadRoute.name,
           path: 'for_upload',
@@ -1575,11 +1638,11 @@ class ItemGroupsToUploadRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final List<_i24.ItemGroupModel> datas;
+  final List<_i25.ItemGroupModel> datas;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1589,7 +1652,7 @@ class ItemGroupsToUploadRouteArgs {
 
 /// generated route for
 /// [_i1.PricelistPage]
-class PricelistRoute extends _i20.PageRouteInfo<void> {
+class PricelistRoute extends _i22.PageRouteInfo<void> {
   const PricelistRoute()
       : super(
           PricelistRoute.name,
@@ -1601,12 +1664,12 @@ class PricelistRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.PricelistFormPage]
-class PricelistFormRoute extends _i20.PageRouteInfo<PricelistFormRouteArgs> {
+class PricelistFormRoute extends _i22.PageRouteInfo<PricelistFormRouteArgs> {
   PricelistFormRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.PricelistModel? selectedPricelist,
-    required _i25.Future<void> Function() refresh,
+    _i25.PricelistModel? selectedPricelist,
+    required _i26.Future<void> Function() refresh,
   }) : super(
           PricelistFormRoute.name,
           path: 'create',
@@ -1629,13 +1692,13 @@ class PricelistFormRouteArgs {
     required this.refresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.PricelistModel? selectedPricelist;
+  final _i25.PricelistModel? selectedPricelist;
 
-  final _i25.Future<void> Function() refresh;
+  final _i26.Future<void> Function() refresh;
 
   @override
   String toString() {
@@ -1645,12 +1708,12 @@ class PricelistFormRouteArgs {
 
 /// generated route for
 /// [_i1.PricelistRowPage]
-class PricelistRowRoute extends _i20.PageRouteInfo<PricelistRowRouteArgs> {
+class PricelistRowRoute extends _i22.PageRouteInfo<PricelistRowRouteArgs> {
   PricelistRowRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     String? pricelistCode,
     String? itemCode,
-    required _i25.Future<void> Function() refresh,
+    required _i26.Future<void> Function() refresh,
   }) : super(
           PricelistRowRoute.name,
           path: 'pricelist_row',
@@ -1673,13 +1736,13 @@ class PricelistRowRouteArgs {
     required this.refresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String? pricelistCode;
 
   final String? itemCode;
 
-  final _i25.Future<void> Function() refresh;
+  final _i26.Future<void> Function() refresh;
 
   @override
   String toString() {
@@ -1689,7 +1752,7 @@ class PricelistRowRouteArgs {
 
 /// generated route for
 /// [_i1.ProductPage]
-class ProductRoute extends _i20.PageRouteInfo<void> {
+class ProductRoute extends _i22.PageRouteInfo<void> {
   const ProductRoute()
       : super(
           ProductRoute.name,
@@ -1701,12 +1764,12 @@ class ProductRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i1.ProductFormPage]
-class ProductFormRoute extends _i20.PageRouteInfo<ProductFormRouteArgs> {
+class ProductFormRoute extends _i22.PageRouteInfo<ProductFormRouteArgs> {
   ProductFormRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.ProductModel? selectedItem,
-    required void Function() onRefresh,
+    _i25.ProductModel? selectedItem,
+    required dynamic onRefresh,
   }) : super(
           ProductFormRoute.name,
           path: 'form',
@@ -1729,13 +1792,13 @@ class ProductFormRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.ProductModel? selectedItem;
+  final _i25.ProductModel? selectedItem;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1746,11 +1809,11 @@ class ProductFormRouteArgs {
 /// generated route for
 /// [_i14.ProductBulkInsertPage]
 class ProductBulkInsertRoute
-    extends _i20.PageRouteInfo<ProductBulkInsertRouteArgs> {
+    extends _i22.PageRouteInfo<ProductBulkInsertRouteArgs> {
   ProductBulkInsertRoute({
-    _i23.Key? key,
-    required List<_i24.CreateProductModel> datas,
-    required void Function() onRefresh,
+    _i24.Key? key,
+    required List<_i25.CreateProductModel> datas,
+    required dynamic onRefresh,
   }) : super(
           ProductBulkInsertRoute.name,
           path: 'for_upload',
@@ -1771,11 +1834,11 @@ class ProductBulkInsertRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final List<_i24.CreateProductModel> datas;
+  final List<_i25.CreateProductModel> datas;
 
-  final void Function() onRefresh;
+  final dynamic onRefresh;
 
   @override
   String toString() {
@@ -1785,7 +1848,7 @@ class ProductBulkInsertRouteArgs {
 
 /// generated route for
 /// [_i15.PaymentTermsPage]
-class PaymentTermsRoute extends _i20.PageRouteInfo<void> {
+class PaymentTermsRoute extends _i22.PageRouteInfo<void> {
   const PaymentTermsRoute()
       : super(
           PaymentTermsRoute.name,
@@ -1798,11 +1861,11 @@ class PaymentTermsRoute extends _i20.PageRouteInfo<void> {
 /// generated route for
 /// [_i16.PaymentTermFormPage]
 class PaymentTermFormRoute
-    extends _i20.PageRouteInfo<PaymentTermFormRouteArgs> {
+    extends _i22.PageRouteInfo<PaymentTermFormRouteArgs> {
   PaymentTermFormRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    _i24.PaymentTermModel? selectedPayTermObj,
+    _i25.PaymentTermModel? selectedPayTermObj,
     required void Function() onRefresh,
   }) : super(
           PaymentTermFormRoute.name,
@@ -1826,11 +1889,11 @@ class PaymentTermFormRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.PaymentTermModel? selectedPayTermObj;
+  final _i25.PaymentTermModel? selectedPayTermObj;
 
   final void Function() onRefresh;
 
@@ -1841,8 +1904,59 @@ class PaymentTermFormRouteArgs {
 }
 
 /// generated route for
-/// [_i17.SalesMenuPage]
-class SalesMenuRoute extends _i20.PageRouteInfo<void> {
+/// [_i17.AppVersionPage]
+class AppVersionRoute extends _i22.PageRouteInfo<void> {
+  const AppVersionRoute()
+      : super(
+          AppVersionRoute.name,
+          path: '',
+        );
+
+  static const String name = 'AppVersionRoute';
+}
+
+/// generated route for
+/// [_i18.AppVersionFormPage]
+class AppVersionFormRoute extends _i22.PageRouteInfo<AppVersionFormRouteArgs> {
+  AppVersionFormRoute({
+    _i24.Key? key,
+    required String header,
+    required dynamic onRefresh,
+  }) : super(
+          AppVersionFormRoute.name,
+          path: 'form',
+          args: AppVersionFormRouteArgs(
+            key: key,
+            header: header,
+            onRefresh: onRefresh,
+          ),
+        );
+
+  static const String name = 'AppVersionFormRoute';
+}
+
+class AppVersionFormRouteArgs {
+  const AppVersionFormRouteArgs({
+    this.key,
+    required this.header,
+    required this.onRefresh,
+  });
+
+  final _i24.Key? key;
+
+  final String header;
+
+  final dynamic onRefresh;
+
+  @override
+  String toString() {
+    return 'AppVersionFormRouteArgs{key: $key, header: $header, onRefresh: $onRefresh}';
+  }
+}
+
+/// generated route for
+/// [_i19.SalesMenuPage]
+class SalesMenuRoute extends _i22.PageRouteInfo<void> {
   const SalesMenuRoute()
       : super(
           SalesMenuRoute.name,
@@ -1854,8 +1968,8 @@ class SalesMenuRoute extends _i20.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.EmptyRouterPage]
-class PriceQuotationWrapper extends _i20.PageRouteInfo<void> {
-  const PriceQuotationWrapper({List<_i20.PageRouteInfo>? children})
+class PriceQuotationWrapper extends _i22.PageRouteInfo<void> {
+  const PriceQuotationWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           PriceQuotationWrapper.name,
           path: 'price_quotation',
@@ -1866,8 +1980,8 @@ class PriceQuotationWrapper extends _i20.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i18.PriceQuotationPage]
-class PriceQuotationRoute extends _i20.PageRouteInfo<void> {
+/// [_i20.PriceQuotationPage]
+class PriceQuotationRoute extends _i22.PageRouteInfo<void> {
   const PriceQuotationRoute()
       : super(
           PriceQuotationRoute.name,
@@ -1878,13 +1992,13 @@ class PriceQuotationRoute extends _i20.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i19.PriceQuotationHeaderDetailsPage]
+/// [_i21.PriceQuotationHeaderDetailsPage]
 class PriceQuotationHeaderDetailsRoute
-    extends _i20.PageRouteInfo<PriceQuotationHeaderDetailsRouteArgs> {
+    extends _i22.PageRouteInfo<PriceQuotationHeaderDetailsRouteArgs> {
   PriceQuotationHeaderDetailsRoute({
-    _i23.Key? key,
+    _i24.Key? key,
     required String header,
-    required _i24.PriceQuotationModel priceQuotation,
+    required _i25.PriceQuotationModel priceQuotation,
     required void Function() onRefresh,
   }) : super(
           PriceQuotationHeaderDetailsRoute.name,
@@ -1908,11 +2022,11 @@ class PriceQuotationHeaderDetailsRouteArgs {
     required this.onRefresh,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String header;
 
-  final _i24.PriceQuotationModel priceQuotation;
+  final _i25.PriceQuotationModel priceQuotation;
 
   final void Function() onRefresh;
 

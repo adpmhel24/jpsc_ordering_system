@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -26,14 +27,22 @@ class CurrentUserRepo extends ChangeNotifier {
     notifyListeners();
   }
 
-  void checkIfLoggedIn() {
+  void checkIfLoggedIn() async {
     String user = localStorage.getString('userData') ?? "";
-    if (user.isEmpty) {
+    String accessToken = localStorage.getString("access_token") ?? "";
+    try {
+      if (accessToken.isEmpty) {
+        _isAuthenticated = false;
+        notifyListeners();
+      } else {
+        await loginApi.tryLogin(accessToken);
+
+        _currentUser = SystemUserModel.fromJson(json.decode(user));
+        _isAuthenticated = true;
+        notifyListeners();
+      }
+    } on HttpException catch (_) {
       _isAuthenticated = false;
-      notifyListeners();
-    } else {
-      _currentUser = SystemUserModel.fromJson(json.decode(user));
-      _isAuthenticated = true;
       notifyListeners();
     }
   }

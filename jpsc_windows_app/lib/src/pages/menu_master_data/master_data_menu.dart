@@ -72,6 +72,14 @@ class MasterDataMenuPage extends StatefulWidget {
       ),
       route: const ItemGroupWrapper(),
     ),
+    MenuItems(
+      name: "App Versions",
+      icon: const ImageIcon(
+        AssetImage('assets/icons/code-version.png'),
+        size: 40,
+      ),
+      route: const AppVersionsWrapper(),
+    ),
   ];
 
   @override

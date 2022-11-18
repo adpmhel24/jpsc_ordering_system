@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:csv/csv.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jpsc_windows_app/src/router/router.gr.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:path_provider/path_provider.dart';
+
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../data/models/models.dart';
@@ -16,7 +19,7 @@ import '../../../../data/repositories/repos.dart';
 import '../../../../utils/fetching_status.dart';
 import '../../../../shared/widgets/custom_dialog.dart';
 import '../scaffold_base.dart';
-import 'blocs/fetching_bloc/bloc.dart';
+import 'blocs/fetching_customers_bloc/bloc.dart';
 import 'components/customers_table.dart';
 
 class CustomersPage extends StatefulWidget {
@@ -35,33 +38,51 @@ class _CustomersPageState extends State<CustomersPage> {
   bool withSap = false;
 
   Future<void> _openTextFile(BuildContext cntx) async {
-    const XTypeGroup typeGroup = XTypeGroup(
-      label: 'csv',
-      extensions: <String>['csv'],
-    );
-    // This demonstrates using an initial directory for the prompt, which should
-    // only be done in cases where the application can likely predict where the
-    // file would be. In most cases, this parameter should not be provided.
-    final String initialDirectory =
-        (await getApplicationDocumentsDirectory()).path;
-    final XFile? file = await openFile(
-      acceptedTypeGroups: <XTypeGroup>[typeGroup],
-      initialDirectory: initialDirectory,
-    );
-    if (file == null) {
-      // Operation was canceled by the user.
-      return;
-    }
-    final String filePath = file.path;
-
-    final csvFile = File(filePath).openRead();
-    var data = await csvFile
-        .transform(utf8.decoder)
-        .transform(
-          const CsvToListConverter(),
-        )
-        .toList();
+    List<List<dynamic>>? data;
     try {
+      if (kIsWeb) {
+        FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['csv'],
+        );
+
+        if (pickedFile != null && pickedFile.files.isNotEmpty) {
+          final bytes = utf8.decode((pickedFile.files.first.bytes)!.toList());
+          data = const CsvToListConverter().convert(bytes);
+        }
+      } else {
+        const XTypeGroup typeGroup = XTypeGroup(
+          label: 'csv',
+          extensions: <String>['csv'],
+        );
+        // This demonstrates using an initial directory for the prompt, which should
+        // only be done in cases where the application can likely predict where the
+        // file would be. In most cases, this parameter should not be provided.
+        final String initialDirectory =
+            (await getApplicationDocumentsDirectory()).path;
+        final XFile? file = await openFile(
+          acceptedTypeGroups: <XTypeGroup>[typeGroup],
+          initialDirectory: initialDirectory,
+        );
+        if (file == null) {
+          // Operation was canceled by the user.
+          return;
+        }
+        final String filePath = file.path;
+
+        final csvFile = File(filePath).openRead();
+        data = await csvFile
+            .transform(utf8.decoder)
+            .transform(
+              const CsvToListConverter(),
+            )
+            .toList();
+      }
+
+      if (data == null) {
+        return;
+      }
+
       List<CustomerCreateModel> dataObj = data
           .map(
             (e) => CustomerCreateModel(
@@ -84,7 +105,7 @@ class _CustomersPageState extends State<CustomersPage> {
             CustomersBulkInsertRoute(
               datas: dataObj,
               onRefresh: () {
-                cntx.read<CustomerFetchingBloc>().add(
+                cntx.read<FetchingCustomersBloc>().add(
                       FetchCustomers(
                         params: {
                           "is_approved": isApproved,
@@ -107,7 +128,7 @@ class _CustomersPageState extends State<CustomersPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => CustomerFetchingBloc(
+      create: (_) => FetchingCustomersBloc(
         customerRepo: context.read<CustomerRepo>(),
         currUserRepo: context.read<CurrentUserRepo>(),
         objectTypeRepo: context.read<ObjectTypeRepo>(),
@@ -139,11 +160,11 @@ class _CustomersPageState extends State<CustomersPage> {
         },
         onAttachButton: (context) => _openTextFile(context),
         onSearchChanged: (context, value) {
-          context.read<CustomerFetchingBloc>().add(
+          context.read<FetchingCustomersBloc>().add(
                 OfflineSearchCustomerByKeyword(value),
               );
         },
-        child: BlocListener<CustomerFetchingBloc, CustomerFetchingState>(
+        child: BlocListener<FetchingCustomersBloc, FetchingCustomersStates>(
           listenWhen: (prev, curr) => prev.status != curr.status,
           listener: (context, state) {
             if (state.status == FetchingStatus.loading) {
@@ -170,7 +191,7 @@ class _CustomersPageState extends State<CustomersPage> {
                 withSap = index == 1 ? false : true;
                 isActive = index == 3 ? false : true;
 
-                context.read<CustomerFetchingBloc>().add(
+                context.read<FetchingCustomersBloc>().add(
                       FetchCustomers(
                         params: {
                           "is_approved": isApproved,
@@ -189,7 +210,7 @@ class _CustomersPageState extends State<CustomersPage> {
                   body: CustomersTable(
                     sfDataGridKey: sfDataGridKey,
                     onRefresh: () {
-                      context.read<CustomerFetchingBloc>().add(
+                      context.read<FetchingCustomersBloc>().add(
                             FetchCustomers(
                               params: {
                                 "is_approved": isApproved,
@@ -209,7 +230,7 @@ class _CustomersPageState extends State<CustomersPage> {
                   body: CustomersTable(
                     sfDataGridKey: sfDataGridKey,
                     onRefresh: () {
-                      context.read<CustomerFetchingBloc>().add(
+                      context.read<FetchingCustomersBloc>().add(
                             FetchCustomers(
                               params: {
                                 "is_approved": isApproved,
@@ -229,7 +250,7 @@ class _CustomersPageState extends State<CustomersPage> {
                   body: CustomersTable(
                     sfDataGridKey: sfDataGridKey,
                     onRefresh: () {
-                      context.read<CustomerFetchingBloc>().add(
+                      context.read<FetchingCustomersBloc>().add(
                             FetchCustomers(
                               params: {
                                 "is_approved": isApproved,
@@ -249,7 +270,7 @@ class _CustomersPageState extends State<CustomersPage> {
                   body: CustomersTable(
                     sfDataGridKey: sfDataGridKey,
                     onRefresh: () {
-                      context.read<CustomerFetchingBloc>().add(
+                      context.read<FetchingCustomersBloc>().add(
                             FetchCustomers(
                               params: {
                                 "is_approved": isApproved,

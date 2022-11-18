@@ -2,53 +2,46 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:jpsc_windows_app/src/utils/fetching_status.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:jpsc_windows_app/src/pages/menu_master_data/menus/app_versions/blocs/fetching_versions_bloc/bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
-
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
-import '../blocs/fetching_bloc/bloc.dart';
-import 'table_settings.dart';
+import '../../../../../utils/fetching_status.dart';
 
-class ItemsTable extends StatefulWidget {
-  const ItemsTable({
+class AppVersionsTable extends StatefulWidget {
+  const AppVersionsTable({
     Key? key,
     required this.sfDataGridKey,
   }) : super(key: key);
 
   final GlobalKey<SfDataGridState> sfDataGridKey;
+
   @override
-  State<ItemsTable> createState() => _ItemsTableState();
+  State<AppVersionsTable> createState() => _AppVersionsTableState();
 }
 
-class _ItemsTableState extends State<ItemsTable> {
+class _AppVersionsTableState extends State<AppVersionsTable> {
   late DataSource _dataSource;
   late int _rowsPerPage = 10;
   final int _startIndex = 0;
   final int _endIndex = 10; // this should be equal to rows per page
-  final List<int> availableRowsPerPage = [10, 20, 50, 100];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  List<int> availableRowsPerPage = [10, 20, 50, 100];
 
   final double _dataPagerHeight = 60.0;
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: BlocBuilder<FetchingProductsBloc, FetchingProductsState>(
+      child: BlocBuilder<FetchingAppVersionsBloc, FetchingAppVersionsState>(
         buildWhen: (prev, curr) =>
             curr.status == FetchingStatus.unauthorized ||
             curr.status == FetchingStatus.success,
         builder: (context, state) {
           if (state.status == FetchingStatus.unauthorized) {
             return Center(
-              child: Text(state.errorMessage),
+              child: Text(state.message),
             );
           } else if (state.status == FetchingStatus.success) {
             _dataSource = DataSource(
@@ -87,28 +80,27 @@ class _ItemsTableState extends State<ItemsTable> {
               key: widget.sfDataGridKey,
               source: _dataSource,
               allowSorting: true,
-              allowFiltering: true,
               allowMultiColumnSorting: true,
+              allowFiltering: true,
               selectionMode: SelectionMode.single,
               navigationMode: GridNavigationMode.cell,
               allowColumnsResizing: true,
               isScrollbarAlwaysShown: true,
               allowPullToRefresh: true,
-              frozenColumnsCount: 1,
-              columns: ItemsTableSettings.columns,
+              columns: TableSettings.columns,
               columnWidthMode: ColumnWidthMode.auto,
+              onQueryRowHeight: (details) {
+                return details.getIntrinsicRowHeight(details.rowIndex);
+              },
               onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
-                var column = ItemsTableSettings.columnName.values
-                    .firstWhere((e) => e['name'] == details.column.columnName);
+                var column = TableSettings.tableColumns
+                    .firstWhere((e) => e.name == details.column.columnName);
                 setState(() {
-                  column["width"] = details.width;
+                  column.width = details.width;
                 });
 
                 return true;
               },
-              onCellDoubleTap: (
-                details,
-              ) async {},
             ),
           );
   }
@@ -139,8 +131,8 @@ class _ItemsTableState extends State<ItemsTable> {
 
 class DataSource extends DataGridSource {
   late BuildContext cntx;
-  List<ProductModel> datas;
-  late List<ProductModel> paginatedDatas;
+  List<AppVersionModel> datas;
+  late List<AppVersionModel> paginatedDatas;
   int startIndex;
   int endIndex;
   int rowsPerPage;
@@ -162,14 +154,14 @@ class DataSource extends DataGridSource {
   }
 
   void buildPaginatedDataGridRows() {
-    dataGridRows = paginatedDatas.map((whse) {
-      return ItemsTableSettings.dataGrid(whse);
+    dataGridRows = paginatedDatas.map((e) {
+      return TableSettings.dataGrid(e);
     }).toList(growable: false);
   }
 
   @override
   Future<void> handleRefresh() async {
-    cntx.read<FetchingProductsBloc>().add(LoadProductsOnline());
+    cntx.read<FetchingAppVersionsBloc>().add(LoadAppVersions());
     buildPaginatedDataGridRows();
     notifyListeners();
   }
@@ -206,7 +198,7 @@ class DataSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((dataGridCell) {
-      if (dataGridCell.columnName == 'Code') {
+      if (dataGridCell.columnName == 'Id') {
         return Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(Constant.minPadding),
@@ -215,19 +207,20 @@ class DataSource extends DataGridSource {
               m.Material(
                 child: m.InkWell(
                   onTap: () {
-                    cntx.router.navigate(
-                      ProductsWrapper(
-                        children: [
-                          ProductFormRoute(
-                            header: "Product Form",
-                            selectedItem: dataGridCell.value,
-                            onRefresh: () => cntx
-                                .read<FetchingProductsBloc>()
-                                .add(LoadProductsOnline()),
-                          ),
-                        ],
-                      ),
-                    );
+                    // cntx.router.navigate(
+                    //   BranchesWrapper(
+                    //     children: [
+                    //       BranchCreateRoute(
+                    //           header: "Branch Update Form",
+                    //           selectedBranch: dataGridCell.value,
+                    //           onRefresh: () {
+                    //             cntx
+                    //                 .read<FetchingBranchesBloc>()
+                    //                 .add(LoadBranches());
+                    //           }),
+                    //     ],
+                    //   ),
+                    // );
                   },
                   child: SvgPicture.asset(
                     "assets/icons/sm_right_arrow.svg",
@@ -235,7 +228,7 @@ class DataSource extends DataGridSource {
                   ),
                 ),
               ),
-              Flexible(child: SelectableText(dataGridCell.value.code)),
+              Flexible(child: SelectableText(dataGridCell.value.toString())),
             ],
           ),
         );
@@ -260,7 +253,7 @@ class DataSource extends DataGridSource {
                     PricelistWrapper(
                       children: [
                         PricelistRowRoute(
-                          itemCode: dataGridCell.value,
+                          pricelistCode: dataGridCell.value.code,
                           refresh: handleRefresh,
                         ),
                       ],
@@ -270,6 +263,16 @@ class DataSource extends DataGridSource {
               ),
             ],
           ),
+        );
+      } else if (dataGridCell.columnName == "Is Active") {
+        return Container(
+          alignment: Alignment.center,
+          child: dataGridCell.value
+              ? const Icon(FluentIcons.check_mark)
+              : Icon(
+                  FluentIcons.status_circle_error_x,
+                  color: Colors.red.light,
+                ),
         );
       }
       return Container(
@@ -281,4 +284,85 @@ class DataSource extends DataGridSource {
       );
     }).toList());
   }
+}
+
+class TableSettings {
+  static final tableColumns = [
+    ColumnModel(name: "Id", width: double.nan),
+    ColumnModel(name: "Platform", width: double.nan),
+    ColumnModel(name: "App Name", width: double.nan),
+    ColumnModel(name: "Package Name", width: double.nan),
+    ColumnModel(name: "Version", width: double.nan),
+    ColumnModel(name: "Build Number", width: double.nan),
+    ColumnModel(name: "Link", width: double.nan),
+    ColumnModel(name: "Is Active", width: double.nan),
+  ];
+
+  static DataGridRow dataGrid(AppVersionModel data) {
+    return DataGridRow(
+      cells: [
+        DataGridCell(
+          columnName: tableColumns[0].name,
+          value: data.id,
+        ),
+        DataGridCell(
+          columnName: tableColumns[1].name,
+          value: data.platform,
+        ),
+        DataGridCell(
+          columnName: tableColumns[2].name,
+          value: data.appName,
+        ),
+        DataGridCell(
+          columnName: tableColumns[3].name,
+          value: data.packageName,
+        ),
+        DataGridCell(
+          columnName: tableColumns[4].name,
+          value: data.version,
+        ),
+        DataGridCell(
+          columnName: tableColumns[5].name,
+          value: data.buildNumber,
+        ),
+        DataGridCell(
+          columnName: tableColumns[6].name,
+          value: data.link,
+        ),
+        DataGridCell<bool>(
+          columnName: tableColumns[7].name,
+          value: data.isActive,
+        ),
+      ],
+    );
+  }
+
+  static List<GridColumn> get columns {
+    return tableColumns.map(
+      (e) {
+        return GridColumn(
+          width: e.width,
+          columnName: e.name,
+          label: Container(
+            padding: const EdgeInsets.all(8.0),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              e.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        );
+      },
+    ).toList();
+  }
+}
+
+class ColumnModel {
+  final String name;
+  double width;
+
+  ColumnModel({
+    required this.name,
+    required this.width,
+  });
 }

@@ -19,7 +19,6 @@ import 'src/data/repositories/repos.dart';
 import 'src/global_blocs/blocs.dart';
 import 'src/global_blocs/main_nav_bloc/bloc.dart';
 import 'src/router/router.gr.dart';
-import 'src/router/router_guard.dart';
 import 'theme.dart';
 
 /// Checks if the current environment is a desktop environment.
@@ -74,7 +73,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final AppRouter _appRouter = AppRouter(routeGuard: RouteGuard());
+  // final AppRouter _appRouter = AppRouter(routeGuard: RouteGuard());
+  final AppRouter _appRouter = AppRouter();
   Locale? _locale;
 
   changeLocale(Locale locale) {
@@ -114,7 +114,6 @@ class _MyAppState extends State<MyApp> {
               create: (_) => AppTheme(),
             ),
             ChangeNotifierProvider(
-              lazy: false,
               create: (_) => CurrentUserRepo()..checkIfLoggedIn(),
             )
           ],
@@ -169,8 +168,16 @@ class _MyAppState extends State<MyApp> {
                     glowFactor: is10footScreen() ? 2.0 : 0.0,
                   ),
                 ),
-                routerDelegate: AutoRouterDelegate(
+                routerDelegate: AutoRouterDelegate.declarative(
                   _appRouter,
+                  routes: (_) => [
+                    // if the user is logged in, they may proceed to the main App
+                    if (Provider.of<CurrentUserRepo>(context).isAuthenticated)
+                      const MainRoute()
+                    // if they are not logged in, bring them to the Login page
+                    else
+                      const LoginRoute(),
+                  ],
                   navigatorObservers: () => [AutoRouteObserver()],
                 ),
                 routeInformationParser: _appRouter.defaultRouteParser(),

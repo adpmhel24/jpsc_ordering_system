@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../http_services/ph_location_api/ph_location_api.dart';
+import 'repo_app_version.dart';
 import 'repos.dart';
 
 class AppRepoProvider {
@@ -91,6 +92,11 @@ List<RepositoryProvider> masterDataProviders = [
   ),
   RepositoryProvider<ItemGroupAuthRepo>(
     create: (context) => ItemGroupAuthRepo(
+      localStorage: context.read<LocalStorageRepo>().localStorage,
+    ),
+  ),
+  RepositoryProvider<AppVersionRepo>(
+    create: (context) => AppVersionRepo(
       localStorage: context.read<LocalStorageRepo>().localStorage,
     ),
   ),

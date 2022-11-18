@@ -35,3 +35,4 @@ export 'pricelist/row_log_model.dart';
 export 'system_user/create_model.dart';
 export 'item_group_auth/model.dart';
 export 'customer/create_model.dart';
+export 'app_version/model.dart';

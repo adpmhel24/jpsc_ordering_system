@@ -6,7 +6,6 @@ import '../pages/menu_master_data/routers.dart';
 import '../pages/menu_profile/my_profile_page.dart';
 import '../pages/menu_sales/routers.dart';
 import '../pages/unknown_page.dart';
-import 'router_guard.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -21,7 +20,7 @@ import 'router_guard.dart';
       durationInMilliseconds: 5,
       page: MainPage,
       path: '/',
-      guards: [RouteGuard],
+      // guards: [RouteGuard],
       initial: true,
       children: [
         CustomRoute(

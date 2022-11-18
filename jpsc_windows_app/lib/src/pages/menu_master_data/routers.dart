@@ -3,6 +3,8 @@ import 'package:auto_route/empty_router_widgets.dart';
 
 import 'main_wrapper.dart';
 import 'master_data_menu.dart';
+import 'menus/app_versions/appversions.dart';
+import 'menus/app_versions/components/version_form.dart';
 import 'menus/branches/routes.dart';
 import 'menus/customers/components/form/customer_form.dart';
 import 'menus/customers/components/upload_page.dart';
@@ -247,6 +249,27 @@ const masterDataMenuRouters = CustomRoute(
           transitionsBuilder: TransitionsBuilders.noTransition,
           durationInMilliseconds: 5,
           page: PaymentTermFormPage,
+          path: "form",
+        ),
+      ],
+    ),
+    CustomRoute(
+      transitionsBuilder: TransitionsBuilders.noTransition,
+      durationInMilliseconds: 5,
+      page: EmptyRouterPage,
+      name: "AppVersionsWrapper",
+      path: "app_versions",
+      children: [
+        CustomRoute(
+            transitionsBuilder: TransitionsBuilders.noTransition,
+            durationInMilliseconds: 5,
+            page: AppVersionPage,
+            path: "",
+            initial: true),
+        CustomRoute(
+          transitionsBuilder: TransitionsBuilders.noTransition,
+          durationInMilliseconds: 5,
+          page: AppVersionFormPage,
           path: "form",
         ),
       ],

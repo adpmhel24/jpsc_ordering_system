@@ -126,12 +126,12 @@ class DataSource extends DataGridSource {
                     cntx,
                     message:
                         "Are you sure you want to cancel this transaction?",
-                    onPositiveClick: (cntx, remarks) {
+                    onPositiveClick: (dialogContext, remarks) {
                       cntx.read<PriceQuotationCancelBloc>().add(
                             PriceQuotationCancelSubmitted(
                                 dataGridCell.value.id!, remarks),
                           );
-                      cntx.router.pop();
+                      dialogContext.router.pop();
                     },
                   );
                 },

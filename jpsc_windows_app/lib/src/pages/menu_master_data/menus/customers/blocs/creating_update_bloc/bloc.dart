@@ -297,8 +297,6 @@ class CreateUpdateCustomerBloc
       CustAddressUpdated event, Emitter<CreateUpdateCustomerState> emit) {
     List<CustomerAddressModel> addresses = [];
 
-    addresses.addAll(state.addresses.value);
-
     if (event.value.isDefault!) {
       addresses.addAll(state.addresses.value.map((element) {
         element.isDefault = false;

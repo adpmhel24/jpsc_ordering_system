@@ -125,6 +125,7 @@ class _LogsTableState extends State<LogsTable> {
               allowPullToRefresh: true,
               columns: TableSettings.columns,
               columnWidthMode: ColumnWidthMode.auto,
+              frozenColumnsCount: 1,
               onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
                 var column = TableSettings.columNames()
                     .firstWhere((e) => e.name == details.column.columnName);
@@ -276,9 +277,12 @@ class DataSource extends DataGridSource {
             ? SelectableText(dataGridCell.value)
             : dataGridCell.value.runtimeType == double
                 ? SelectableText(formatStringToDecimal("${dataGridCell.value}"))
-                : dataGridCell.value.runtimeType == DateTime
-                    ? SelectableText(dateFormatter(dataGridCell.value))
-                    : dataGridCell.value,
+                : dataGridCell.value.runtimeType == int
+                    ? SelectableText(
+                        formatStringToDecimal('${dataGridCell.value}'))
+                    : dataGridCell.value.runtimeType == DateTime
+                        ? SelectableText(dateFormatter(dataGridCell.value))
+                        : SelectableText(dataGridCell.value.toString()),
       );
     }).toList());
   }

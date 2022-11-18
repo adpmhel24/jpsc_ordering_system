@@ -1,12 +1,12 @@
 part of 'bloc.dart';
 
-abstract class CustomerFetchingEvent extends Equatable {
-  const CustomerFetchingEvent();
+abstract class FetchingCustomersEvents extends Equatable {
+  const FetchingCustomersEvents();
   @override
   List<Object?> get props => [];
 }
 
-class FetchCustomers extends CustomerFetchingEvent {
+class FetchCustomers extends FetchingCustomersEvents {
   final Map<String, dynamic>? params;
 
   const FetchCustomers({this.params});
@@ -14,7 +14,7 @@ class FetchCustomers extends CustomerFetchingEvent {
   List<Object?> get props => [params];
 }
 
-class OfflineSearchCustomerByKeyword extends CustomerFetchingEvent {
+class OfflineSearchCustomerByKeyword extends FetchingCustomersEvents {
   final String value;
   const OfflineSearchCustomerByKeyword(this.value);
 

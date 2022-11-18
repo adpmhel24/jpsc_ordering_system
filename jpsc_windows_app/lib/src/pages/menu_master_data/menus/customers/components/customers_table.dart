@@ -9,7 +9,7 @@ import 'package:flutter/material.dart' as m;
 import '../../../../../router/router.gr.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
-import '../blocs/fetching_bloc/bloc.dart';
+import '../blocs/fetching_customers_bloc/bloc.dart';
 
 class CustomersTable extends StatefulWidget {
   const CustomersTable({
@@ -35,7 +35,7 @@ class _CustomersTableState extends State<CustomersTable> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CustomerFetchingBloc, CustomerFetchingState>(
+    return BlocBuilder<FetchingCustomersBloc, FetchingCustomersStates>(
       buildWhen: (prev, curr) =>
           curr.status == FetchingStatus.unauthorized ||
           curr.status == FetchingStatus.success,

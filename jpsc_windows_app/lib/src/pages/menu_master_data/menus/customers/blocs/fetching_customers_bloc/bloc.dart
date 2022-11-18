@@ -10,22 +10,22 @@ import '../../../../../../utils/fetching_status.dart';
 part 'event.dart';
 part 'state.dart';
 
-class CustomerFetchingBloc
-    extends Bloc<CustomerFetchingEvent, CustomerFetchingState> {
+class FetchingCustomersBloc
+    extends Bloc<FetchingCustomersEvents, FetchingCustomersStates> {
   CustomerRepo customerRepo;
   final CurrentUserRepo currUserRepo;
   final ObjectTypeRepo objectTypeRepo;
-  CustomerFetchingBloc({
+  FetchingCustomersBloc({
     required this.customerRepo,
     required this.currUserRepo,
     required this.objectTypeRepo,
-  }) : super(const CustomerFetchingState()) {
+  }) : super(const FetchingCustomersStates()) {
     on<FetchCustomers>(_onFetchCustomers);
     on<OfflineSearchCustomerByKeyword>(_onOfflineSearchCustomerByKeyword);
   }
 
   void _onFetchCustomers(
-      FetchCustomers event, Emitter<CustomerFetchingState> emit) async {
+      FetchCustomers event, Emitter<FetchingCustomersStates> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
 
     try {
@@ -71,7 +71,7 @@ class CustomerFetchingBloc
   }
 
   void _onOfflineSearchCustomerByKeyword(OfflineSearchCustomerByKeyword event,
-      Emitter<CustomerFetchingState> emit) async {
+      Emitter<FetchingCustomersStates> emit) async {
     emit(state.copyWith(status: FetchingStatus.loading));
 
     try {

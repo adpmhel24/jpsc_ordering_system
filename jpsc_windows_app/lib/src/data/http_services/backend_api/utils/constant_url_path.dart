@@ -20,4 +20,5 @@ class ConstantURLPath {
   static const String pricelist = '/api/v1/master_data/pricelist/';
   static const String paymentTerm = '/api/v1/master_data/payment_terms/';
   static const String pqRepo = '/api/v1/sales/pq/';
+  static const String appVersion = '/api/v1/master_data/app_version';
 }

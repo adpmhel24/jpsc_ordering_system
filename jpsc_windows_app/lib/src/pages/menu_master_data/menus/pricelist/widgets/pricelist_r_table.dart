@@ -77,6 +77,7 @@ class _PricelistTableState extends State<PricelistRowTable> {
               allowColumnsResizing: true,
               isScrollbarAlwaysShown: true,
               allowPullToRefresh: true,
+              frozenColumnsCount: 1,
               columns: PricelistTableSettings.columns,
               columnWidthMode: ColumnWidthMode.auto,
               onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
@@ -316,7 +317,7 @@ class DataSource extends DataGridSource {
     final currUserRepo = cntx.read<CurrentUserRepo>();
 
     return DataGridRowAdapter(
-        cells: row.getCells().map<Widget>((dataGridCell) {
+        cells: row.getCells().map<Widget>((DataGridCell dataGridCell) {
       final int dataRowIndex = dataGridRows.indexOf(row);
 
       if (dataGridCell.columnName == "Logs") {
@@ -374,15 +375,19 @@ class DataSource extends DataGridSource {
         );
       }
       return Container(
-        alignment: dataGridCell.value.runtimeType == double
+        alignment: dataGridCell.value.runtimeType == double ||
+                dataGridCell.value.runtimeType == int
             ? Alignment.centerRight
             : Alignment.centerLeft,
         padding: const EdgeInsets.all(16.0),
         child: dataGridCell.value.runtimeType == String
             ? SelectableText(dataGridCell.value.toString())
             : dataGridCell.value.runtimeType == double
-                ? Text(formatStringToDecimal('${dataGridCell.value}'))
-                : dataGridCell.value,
+                ? SelectableText(formatStringToDecimal('${dataGridCell.value}'))
+                : dataGridCell.value.runtimeType == int
+                    ? SelectableText(
+                        formatStringToDecimal('${dataGridCell.value}'))
+                    : SelectableText(dataGridCell.value.toString()),
       );
     }).toList());
   }
@@ -415,23 +420,23 @@ class PricelistTableSettings {
             value: data.item?.itemGroupCode),
         DataGridCell<double>(
           columnName: columnName["lastPurchasedPrice"]["name"],
-          value: data.lastPurchasedPrice,
+          value: double.parse(data.lastPurchasedPrice.toStringAsFixed(2)),
         ),
         DataGridCell<double>(
           columnName: columnName["avgSapValue"]["name"],
-          value: data.avgSapValue,
+          value: double.parse(data.avgSapValue.toStringAsFixed(2)),
         ),
         DataGridCell<double>(
           columnName: columnName["price"]["name"],
-          value: data.price,
+          value: double.parse(data.price.toStringAsFixed(2)),
         ),
         DataGridCell<double>(
           columnName: columnName["logisticsCost"]["name"],
-          value: data.logisticsCost,
+          value: double.parse(data.logisticsCost.toStringAsFixed(2)),
         ),
         DataGridCell<double>(
           columnName: columnName["profit"]["name"],
-          value: data.profit,
+          value: double.parse(data.profit.toStringAsFixed(2)),
         ),
         DataGridCell<String>(
           columnName: columnName["uom"]["name"],

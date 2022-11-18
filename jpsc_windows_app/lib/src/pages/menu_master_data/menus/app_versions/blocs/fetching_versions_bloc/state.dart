@@ -1,22 +1,22 @@
 part of 'bloc.dart';
 
-class CustomerFetchingState extends Equatable {
+class FetchingAppVersionsState extends Equatable {
   final FetchingStatus status;
-  final List<CustomerModel> datas;
+  final List<AppVersionModel> datas;
   final String message;
 
-  const CustomerFetchingState({
+  const FetchingAppVersionsState({
     this.status = FetchingStatus.init,
     this.datas = const [],
     this.message = "",
   });
 
-  CustomerFetchingState copyWith({
+  FetchingAppVersionsState copyWith({
     FetchingStatus? status,
-    List<CustomerModel>? datas,
+    List<AppVersionModel>? datas,
     String? message,
   }) =>
-      CustomerFetchingState(
+      FetchingAppVersionsState(
         status: status ?? this.status,
         datas: datas ?? this.datas,
         message: message ?? this.message,
