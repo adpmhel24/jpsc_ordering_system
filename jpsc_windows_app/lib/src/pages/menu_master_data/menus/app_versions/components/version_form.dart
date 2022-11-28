@@ -7,6 +7,7 @@ import 'package:jpsc_windows_app/src/utils/responsive.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../data/repositories/repo_app_version.dart';
+import '../../../../../shared/widgets/custom_button.dart';
 import '../../../../../shared/widgets/custom_dialog.dart';
 import '../../../../../utils/constant.dart';
 import '../blocs/create_update_version_bloc/bloc.dart';
@@ -195,8 +196,8 @@ class _AppVersionFormContentState extends State<AppVersionFormContent> {
                 ),
                 Constant.widthSpacer,
                 Flexible(
-                  child: SelectableText(
-                    pickedFile?.files.single.name ?? "",
+                  child: CopyButton(
+                    value: pickedFile?.files.single.name ?? "",
                   ),
                 ),
               ],

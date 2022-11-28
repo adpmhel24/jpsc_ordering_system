@@ -12,10 +12,8 @@ class DioSettings {
       url = "https://api.jpoonandsons.com";
     } else {
       // debug mode
+      // url = "http://192.168.0.113:8800";
       url = "http://localhost:8800";
-      // url = "https://api.jpoonandsons.com";
-
-      // url = "https://api.jpoonandsons.com";
     }
     return Dio(
       BaseOptions(

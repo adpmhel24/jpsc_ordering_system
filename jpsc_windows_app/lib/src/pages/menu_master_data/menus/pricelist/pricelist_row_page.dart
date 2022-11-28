@@ -9,6 +9,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../data/repositories/repos.dart';
 import '../../../../global_blocs/blocs.dart';
+import '../../../../shared/widgets/custom_button.dart';
 import '../../../../utils/constant.dart';
 import '../../../../shared/widgets/custom_dialog.dart';
 import 'blocs/fetching_pricelistRow_bloc/bloc.dart';
@@ -96,8 +97,8 @@ class PricelistRowPage extends StatelessWidget {
                 ),
               ],
             ),
-            title: SelectableText(
-                pricelistCode ?? "Update '$itemCode' Pricelists"),
+            title: CopyButton(
+                value: pricelistCode ?? "Update '$itemCode' Pricelists"),
           ),
           content:
               BlocBuilder<FetchingPriceListRowBloc, FetchingPriceListRowState>(

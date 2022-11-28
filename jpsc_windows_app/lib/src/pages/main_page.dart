@@ -89,7 +89,7 @@ class _MainPageState extends State<MainPage> with WindowListener {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  displayMode: PaneDisplayMode.auto,
+                  displayMode: PaneDisplayMode.compact,
                   indicator: () {
                     switch (appTheme.indicator) {
                       case NavigationIndicators.end:

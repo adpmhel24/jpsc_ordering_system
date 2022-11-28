@@ -190,8 +190,8 @@ class DataSource extends DataGridSource {
             return Container(
               alignment: Alignment.centerRight,
               padding: const EdgeInsets.all(10),
-              child: SelectableText(
-                formatStringToDecimal("${dataGridCell.value}"),
+              child: CopyButton(
+                value: formatStringToDecimal("${dataGridCell.value}"),
                 style: srpPrice != actualPrice
                     ? const TextStyle(color: Colors.black)
                     : null,
@@ -205,20 +205,20 @@ class DataSource extends DataGridSource {
             padding:
                 const EdgeInsets.symmetric(horizontal: Constant.minPadding),
             child: dataGridCell.value.runtimeType == String
-                ? SelectableText(
-                    dataGridCell.value,
+                ? CopyButton(
+                    value: dataGridCell.value,
                     style: srpPrice != actualPrice
                         ? const TextStyle(color: Colors.black)
                         : null,
                   )
                 : dataGridCell.value.runtimeType == double
-                    ? SelectableText(
-                        formatStringToDecimal("${dataGridCell.value}"),
+                    ? CopyButton(
+                        value: formatStringToDecimal("${dataGridCell.value}"),
                         style: srpPrice != actualPrice
                             ? const TextStyle(color: Colors.black)
                             : null,
                       )
-                    : SelectableText(dataGridCell.value.toString()),
+                    : CopyButton(value: dataGridCell.value.toString()),
           );
         }).toList());
   }
@@ -232,7 +232,7 @@ class TableSettings {
     "srpPrice": {"name": "Srp Price", "width": double.nan},
     "unitPrice": {"name": "Actual Price", "width": double.nan},
     "uom": {"name": "UoM", "width": double.nan},
-    "total": {"name": "Total", "width": double.nan},
+    "total": {"name": "Total", "width": 150.0},
   };
 
   static DataGridRow dataGrid(

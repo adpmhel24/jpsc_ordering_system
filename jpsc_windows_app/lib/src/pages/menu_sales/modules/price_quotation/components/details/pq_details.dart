@@ -11,6 +11,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 
 import '../../../../../../data/models/models.dart';
 
+import '../../../../../../global_blocs/bloc_price_quotation/details_pq_bloc/bloc.dart';
 import '../../../../../../global_blocs/blocs.dart';
 import '../../../../../../shared/widgets/bordered_text.dart';
 import '../../../../../../shared/widgets/custom_button.dart';
@@ -24,25 +25,21 @@ import 'pq_details_table.dart';
 class PriceQuotationHeaderDetailsPage extends StatelessWidget {
   const PriceQuotationHeaderDetailsPage({
     Key? key,
-    required this.header,
-    required this.priceQuotation,
-    required this.onRefresh,
+    @pathParam required this.id,
+    @queryParam this.header = "",
+    // required this.onRefresh,
   }) : super(key: key);
 
   final String header;
-  final PriceQuotationModel priceQuotation;
-  final void Function() onRefresh;
+  final int id;
+  // final void Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      lazy: false,
-      create: (_) => PriceQuotationUpdateBloc(
-        salesOrdeRepo: context.read<PriceQuotationRepo>(),
-        selectedPriceQuotation: PriceQuotationModel.fromJson(
-          priceQuotation.toJson(),
-        ),
-      ),
+      create: (context) => FetchingPQDetailsBloc(
+        context.read<PriceQuotationRepo>(),
+      )..add(FetchedPQDetails(id)),
       child: ScaffoldPage.withPadding(
         header: PageHeader(
           leading: CommandBar(
@@ -63,9 +60,28 @@ class PriceQuotationHeaderDetailsPage extends StatelessWidget {
           ),
           title: Text(header),
         ),
-        content: PriceQuotationHeaderDetailsBody(
-          priceQuotation: priceQuotation,
-          onRefresh: onRefresh,
+        content: BlocListener<FetchingPQDetailsBloc, FetchingPQDetailsState>(
+          listener: (context, state) {
+            if (state.status == FetchingStatus.loading) {
+              context.loaderOverlay.show();
+            } else if (state.status == FetchingStatus.error) {
+              context.loaderOverlay.hide();
+              CustomDialogBox.errorMessage(context, message: state.message);
+            } else if (state.status == FetchingStatus.success) {
+              context.loaderOverlay.hide();
+            }
+          },
+          child: BlocBuilder<FetchingPQDetailsBloc, FetchingPQDetailsState>(
+            builder: (context, state) {
+              if (state.status == FetchingStatus.success &&
+                  state.data != null) {
+                return PriceQuotationHeaderDetailsBody(
+                  priceQuotation: state.data!,
+                );
+              }
+              return const SizedBox.expand();
+            },
+          ),
         ),
       ),
     );
@@ -74,11 +90,10 @@ class PriceQuotationHeaderDetailsPage extends StatelessWidget {
 
 class PriceQuotationHeaderDetailsBody extends StatefulWidget {
   const PriceQuotationHeaderDetailsBody(
-      {Key? key, required this.priceQuotation, required this.onRefresh})
+      {Key? key, required this.priceQuotation})
       : super(key: key);
 
   final PriceQuotationModel priceQuotation;
-  final void Function() onRefresh;
 
   @override
   State<PriceQuotationHeaderDetailsBody> createState() =>
@@ -147,284 +162,300 @@ class _PriceQuotationHeaderDetailsBodyState
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PriceQuotationUpdateBloc, PriceQuotationUpdateState>(
-      buildWhen: (prev, curr) {
-        return prev != curr;
-      },
-      listenWhen: (prev, curr) => prev.status != curr.status,
-      listener: (_, state) {
-        if (state.status == FetchingStatus.loading) {
-          context.loaderOverlay.show();
-        } else if (state.status == FetchingStatus.error) {
-          context.loaderOverlay.hide();
-          CustomDialogBox.errorMessage(context, message: state.message);
-        } else if (state.status == FetchingStatus.success) {
-          context.loaderOverlay.hide();
-          CustomDialogBox.successMessage(
-            context,
-            message: state.message,
-            onPositiveClick: (cntx) {
-              widget.onRefresh();
-              cntx.router.pop(); // To pop the Dialog box.
-              context.router.pop(); // To pop the Details Page.
-            },
-          );
-        }
-      },
-      builder: (context, state) {
-        return LayoutBuilder(
-          builder: (_, constraints) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flex(
-                  mainAxisSize: Responsive.isMobile(context)
-                      ? MainAxisSize.min
-                      : MainAxisSize.max,
-                  direction: Axis.horizontal,
+    return BlocProvider(
+      create: (_) => PriceQuotationUpdateBloc(
+        salesOrdeRepo: context.read<PriceQuotationRepo>(),
+        selectedPriceQuotation: PriceQuotationModel.fromJson(
+          widget.priceQuotation.toJson(),
+        ),
+      ),
+      child: BlocConsumer<PriceQuotationUpdateBloc, PriceQuotationUpdateState>(
+        buildWhen: (prev, curr) {
+          return prev != curr;
+        },
+        listenWhen: (prev, curr) => prev.status != curr.status,
+        listener: (_, state) {
+          if (state.status == FetchingStatus.loading) {
+            context.loaderOverlay.show();
+          } else if (state.status == FetchingStatus.error) {
+            context.loaderOverlay.hide();
+            CustomDialogBox.errorMessage(context, message: state.message);
+          } else if (state.status == FetchingStatus.success) {
+            context.loaderOverlay.hide();
+            CustomDialogBox.successMessage(
+              context,
+              message: state.message,
+              onPositiveClick: (cntx) {
+                context.router.pop(); // To pop the Details Page.
+              },
+            );
+          }
+        },
+        builder: (context, state) {
+          return LayoutBuilder(
+            builder: (_, constraints) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Flexible(
-                      child: SizedBox(
-                        width: constraints.maxWidth * .5,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            labeledSelectableText(
-                              label: "Reference :",
-                              value: widget.priceQuotation.reference,
-                            ),
-                            Constant.heightSpacer,
-                            labeledSelectableText(
-                              label: "Posting Date :",
-                              value: dateFormatter(
-                                  widget.priceQuotation.transdate),
-                            ),
-                            Constant.heightSpacer,
-                            labeledSelectableText(
-                              label: "Delivery Date :",
-                              value: dateFormatter(
-                                widget.priceQuotation.deliveryDate,
-                                DateFormat(
-                                  'MM/dd/yyyy',
+                    Flex(
+                      mainAxisSize: Responsive.isMobile(context)
+                          ? MainAxisSize.min
+                          : MainAxisSize.max,
+                      direction: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: SizedBox(
+                            width: constraints.maxWidth * .5,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                labeledCopyButton(
+                                  label: "Reference :",
+                                  value: widget.priceQuotation.reference,
                                 ),
-                              ),
+                                Constant.heightSpacer,
+                                labeledCopyButton(
+                                  label: "Posting Date :",
+                                  value: dateFormatter(
+                                      widget.priceQuotation.transdate),
+                                ),
+                                Constant.heightSpacer,
+                                labeledCopyButton(
+                                  label: "Delivery Date :",
+                                  value: dateFormatter(
+                                    widget.priceQuotation.deliveryDate,
+                                    DateFormat(
+                                      'MM/dd/yyyy',
+                                    ),
+                                  ),
+                                ),
+                                Constant.heightSpacer,
+                                labeledCopyButton(
+                                  label: "Customer Code :",
+                                  value: widget.priceQuotation.customerCode,
+                                ),
+                              ],
                             ),
-                            Constant.heightSpacer,
-                            labeledSelectableText(
-                              label: "Customer Code :",
-                              value: widget.priceQuotation.customerCode,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Flexible(
-                      child: SizedBox(
-                        width: constraints.maxWidth * .5,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            labeledWidget(
-                              label: "Dispatching Branch :",
-                              child: ValueListenableBuilder<List<BranchModel>>(
-                                valueListenable: _branches,
-                                builder: (context, datas, _) {
-                                  return ComboBox<String>(
-                                      value: selectedBranch,
-                                      items: datas
-                                          .map(
-                                            (e) => ComboBoxItem(
-                                              value: e.code,
-                                              child: Text(e.description ?? ""),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: isDisable
-                                          ? null
-                                          : (value) {
-                                              setState(() {
-                                                selectedBranch = value;
-                                              });
-                                              context
-                                                  .read<
-                                                      PriceQuotationUpdateBloc>()
-                                                  .add(
-                                                    DispatchBranchChanged(
-                                                        value ?? ""),
-                                                  );
+                        Flexible(
+                          child: SizedBox(
+                            width: constraints.maxWidth * .5,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                labeledWidget(
+                                  label: "Dispatching Branch :",
+                                  child:
+                                      ValueListenableBuilder<List<BranchModel>>(
+                                    valueListenable: _branches,
+                                    builder: (context, datas, _) {
+                                      return ComboBox<String>(
+                                          value: selectedBranch,
+                                          items: datas
+                                              .map(
+                                                (e) => ComboBoxItem(
+                                                  value: e.code,
+                                                  child:
+                                                      Text(e.description ?? ""),
+                                                ),
+                                              )
+                                              .toList(),
+                                          onChanged: isDisable
+                                              ? null
+                                              : (value) {
+                                                  setState(() {
+                                                    selectedBranch = value;
+                                                  });
+                                                  context
+                                                      .read<
+                                                          PriceQuotationUpdateBloc>()
+                                                      .add(
+                                                        DispatchBranchChanged(
+                                                            value ?? ""),
+                                                      );
+                                                });
+                                    },
+                                  ),
+                                ),
+                                Constant.heightSpacer,
+                                labeledWidget(
+                                  label: "PQ Status :",
+                                  child: ComboBox<String>(
+                                    value: selectedOrderStatus,
+                                    items: _pqStatus
+                                        .map(
+                                          (e) => ComboBoxItem(
+                                            value: e,
+                                            child: Text(e),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: isDisable
+                                        ? null
+                                        : (value) {
+                                            int pqStatus = 0;
+                                            if (value == "Price Confirmed") {
+                                              pqStatus = 1;
+                                            }
+                                            if (value == "With SAP SQ") {
+                                              pqStatus = 2;
+                                            }
+                                            setState(() {
+                                              selectedOrderStatus = value;
                                             });
-                                },
-                              ),
-                            ),
-                            Constant.heightSpacer,
-                            labeledWidget(
-                              label: "PQ Status :",
-                              child: ComboBox<String>(
-                                value: selectedOrderStatus,
-                                items: _pqStatus
-                                    .map(
-                                      (e) => ComboBoxItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ),
-                                    )
-                                    .toList(),
-                                onChanged: isDisable
-                                    ? null
-                                    : (value) {
-                                        int pqStatus = 0;
-                                        if (value == "Price Confirmed") {
-                                          pqStatus = 1;
-                                        }
-                                        if (value == "With SAP SQ") {
-                                          pqStatus = 2;
-                                        }
-                                        setState(() {
-                                          selectedOrderStatus = value;
-                                        });
+                                            context
+                                                .read<
+                                                    PriceQuotationUpdateBloc>()
+                                                .add(
+                                                  OrderStatusChanged(pqStatus),
+                                                );
+                                          },
+                                  ),
+                                ),
+                                Constant.heightSpacer,
+                                labeledWidget(
+                                  label: "Payment Terms:",
+                                  child: ValueListenableBuilder<
+                                      List<PaymentTermModel>>(
+                                    valueListenable: _paymentTerms,
+                                    builder: (context, datas, _) {
+                                      return ComboBox<String>(
+                                          value: selectedPaymentTerms,
+                                          items: datas
+                                              .map(
+                                                (e) => ComboBoxItem(
+                                                  value: e.code,
+                                                  child:
+                                                      Text(e.description ?? ""),
+                                                ),
+                                              )
+                                              .toList(),
+                                          onChanged: isDisable
+                                              ? null
+                                              : (value) {
+                                                  setState(() {
+                                                    selectedPaymentTerms =
+                                                        value;
+                                                  });
+                                                  context
+                                                      .read<
+                                                          PriceQuotationUpdateBloc>()
+                                                      .add(
+                                                        PaymentTermsChanged(
+                                                            value ?? ""),
+                                                      );
+                                                });
+                                    },
+                                  ),
+                                ),
+                                Constant.heightSpacer,
+                                labeledWidget(
+                                  label: "SQ Number :",
+                                  child: SizedBox(
+                                    width: 150,
+                                    child: TextBox(
+                                      controller: _sqNumberController,
+                                      enabled:
+                                          selectedOrderStatus == 'With SAP SQ',
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d+')),
+                                      ],
+                                      onChanged: (v) {
                                         context
                                             .read<PriceQuotationUpdateBloc>()
                                             .add(
-                                              OrderStatusChanged(pqStatus),
+                                              SQNumberChanged(int.tryParse(v)),
                                             );
                                       },
-                              ),
-                            ),
-                            Constant.heightSpacer,
-                            labeledWidget(
-                              label: "Payment Terms:",
-                              child: ValueListenableBuilder<
-                                  List<PaymentTermModel>>(
-                                valueListenable: _paymentTerms,
-                                builder: (context, datas, _) {
-                                  return ComboBox<String>(
-                                      value: selectedPaymentTerms,
-                                      items: datas
-                                          .map(
-                                            (e) => ComboBoxItem(
-                                              value: e.code,
-                                              child: Text(e.description ?? ""),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: isDisable
-                                          ? null
-                                          : (value) {
-                                              setState(() {
-                                                selectedPaymentTerms = value;
-                                              });
-                                              context
-                                                  .read<
-                                                      PriceQuotationUpdateBloc>()
-                                                  .add(
-                                                    PaymentTermsChanged(
-                                                        value ?? ""),
-                                                  );
-                                            });
-                                },
-                              ),
-                            ),
-                            Constant.heightSpacer,
-                            labeledWidget(
-                              label: "SQ Number :",
-                              child: SizedBox(
-                                width: 150,
-                                child: TextBox(
-                                  controller: _sqNumberController,
-                                  inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^\d+')),
-                                  ],
-                                  onChanged: (v) {
-                                    context
-                                        .read<PriceQuotationUpdateBloc>()
-                                        .add(
-                                          SQNumberChanged(int.tryParse(v)),
-                                        );
-                                  },
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Constant.heightSpacer,
+                              ],
                             ),
-                            Constant.heightSpacer,
-                          ],
+                          ),
                         ),
+                      ],
+                    ),
+                    Constant.heightSpacer,
+                    legends(),
+                    Constant.heightSpacer,
+                    SizedBox(
+                      height: 400,
+                      child: DetailsTable(
+                        itemRows: widget.priceQuotation.rows,
                       ),
                     ),
-                  ],
-                ),
-                Constant.heightSpacer,
-                legends(),
-                Constant.heightSpacer,
-                Expanded(
-                  child: DetailsTable(
-                    itemRows: widget.priceQuotation.rows,
-                  ),
-                ),
-                Constant.heightSpacer,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    labeledWidget(
-                      label: "Remarks: ",
-                      child: SizedBox(
-                        width: constraints.maxHeight * .5,
-                        child: TextFormBox(
-                          controller: _remarksController,
-                          minLines: 2,
-                          maxLines: 5,
-                          onChanged: (val) {
+                    Constant.heightSpacer,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        labeledWidget(
+                          label: "Remarks: ",
+                          child: SizedBox(
+                            width: constraints.maxHeight * .5,
+                            child: TextFormBox(
+                              controller: _remarksController,
+                              minLines: 2,
+                              maxLines: 5,
+                              onChanged: (val) {
+                                context.read<PriceQuotationUpdateBloc>().add(
+                                      PriceQuotationRemarksChanged(
+                                          _remarksController.text),
+                                    );
+                              },
+                            ),
+                          ),
+                        ),
+                        labeledCopyButton(
+                          label: "Subtotal :",
+                          value: formatStringToDecimal(
+                              "${state.priceQuotation.subtotal}"),
+                        ),
+                      ],
+                    ),
+                    Constant.heightSpacer,
+                    SizedBox(
+                      width: 100,
+                      height: 30,
+                      child: CustomFilledButton(
+                        onPressed: () {
+                          CustomDialogBox.warningMessage(context,
+                              message:
+                                  "Are you sure you want to update this transaction?",
+                              onPositiveClick: (cntx) {
                             context.read<PriceQuotationUpdateBloc>().add(
-                                  PriceQuotationRemarksChanged(
-                                      _remarksController.text),
+                                  PriceQuotationUpdateSubmitted(),
                                 );
-                          },
+                          });
+                        },
+                        child: const Center(
+                          child: Text(
+                            "Update",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: .5,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    labeledSelectableText(
-                      label: "Subtotal :",
-                      value: formatStringToDecimal(
-                          "${state.priceQuotation.subtotal}"),
-                    ),
+                    )
                   ],
                 ),
-                Constant.heightSpacer,
-                SizedBox(
-                  width: 100,
-                  height: 30,
-                  child: CustomFilledButton(
-                    onPressed: () {
-                      CustomDialogBox.warningMessage(context,
-                          message:
-                              "Are you sure you want to update this transaction?",
-                          onPositiveClick: (cntx) {
-                        context.read<PriceQuotationUpdateBloc>().add(
-                              PriceQuotationUpdateSubmitted(),
-                            );
-                      });
-                    },
-                    child: const Center(
-                      child: Text(
-                        "Update",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: .5,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            );
-          },
-        );
-      },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -456,16 +487,14 @@ class _PriceQuotationHeaderDetailsBodyState
     );
   }
 
-  SizedBox labeledSelectableText(
-      {required String label, required String value}) {
+  SizedBox labeledCopyButton({required String label, required String value}) {
     return SizedBox(
       width: 200.0,
       child: InfoLabel(
         label: label,
         child: BorderedText(
-          child: SelectableText(
-            value,
-            toolbarOptions: const ToolbarOptions(copy: true, selectAll: true),
+          child: CopyButton(
+            value: value,
           ),
         ),
       ),

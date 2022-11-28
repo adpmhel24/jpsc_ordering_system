@@ -40,6 +40,7 @@ class FetchingPriceQuotationHeaderBloc extends Bloc<
       "to_date": event.toDate,
       if (event.pqStatus != null) "pq_status": event.pqStatus,
       "docstatus": event.docStatus,
+      "branch": event.branch == "All" ? "" : event.branch,
     };
 
     try {

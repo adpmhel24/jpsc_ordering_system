@@ -154,7 +154,7 @@ class BaseAPI {
   Future<Response> getByFk(
     String token, {
     required String urlPath,
-    required String fk,
+    required dynamic fk,
   }) async {
     Response response;
 

@@ -26,9 +26,11 @@ class PriceQuotationHeaderTable extends StatefulWidget {
     required this.pqStatus,
     required this.fromDate,
     required this.toDate,
+    required this.branch,
   }) : super(key: key);
 
   final GlobalKey<SfDataGridState> sfDataGridKey;
+  final String branch;
   final String docStatus;
   final int? pqStatus;
   final String fromDate;
@@ -68,6 +70,7 @@ class _PriceQuotationHeaderTableState extends State<PriceQuotationHeaderTable> {
               onRefresh: () {
                 context.read<FetchingPriceQuotationHeaderBloc>().add(
                       FetchAllPriceQuotationHeader(
+                        branch: widget.branch,
                         docStatus: widget.docStatus,
                         pqStatus: widget.pqStatus,
                         fromDate: widget.fromDate,

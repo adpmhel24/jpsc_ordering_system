@@ -24,7 +24,7 @@ const salesMenuRouters = CustomRoute(
       durationInMilliseconds: 5,
       page: EmptyRouterPage,
       name: 'PriceQuotationWrapper',
-      path: "price_quotation",
+      path: "price_quotation/",
       children: [
         CustomRoute(
             transitionsBuilder: TransitionsBuilders.noTransition,
@@ -33,10 +33,11 @@ const salesMenuRouters = CustomRoute(
             path: "",
             initial: true),
         CustomRoute(
-            transitionsBuilder: TransitionsBuilders.noTransition,
-            durationInMilliseconds: 5,
-            page: PriceQuotationHeaderDetailsPage,
-            path: ""),
+          transitionsBuilder: TransitionsBuilders.noTransition,
+          durationInMilliseconds: 5,
+          page: PriceQuotationHeaderDetailsPage,
+          path: ":id",
+        ),
       ],
     )
   ],

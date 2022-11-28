@@ -20,7 +20,6 @@ import '../pages/unknown_page.dart';
       durationInMilliseconds: 5,
       page: MainPage,
       path: '/',
-      // guards: [RouteGuard],
       initial: true,
       children: [
         CustomRoute(

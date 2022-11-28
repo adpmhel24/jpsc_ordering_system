@@ -3,6 +3,7 @@ import 'package:badges/badges.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:jpsc_windows_app/src/utils/responsive.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -27,6 +28,8 @@ class PriceQuotationPage extends StatefulWidget {
 
 class _PriceQuotationPageState extends State<PriceQuotationPage> {
   final GlobalKey<SfDataGridState> sfDataGridKey = GlobalKey<SfDataGridState>();
+  final List<String> _branches = ["All"];
+  String _selectedBranch = "All";
 
   DateTime? fromDate;
   DateTime? toDate;
@@ -42,6 +45,19 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
   int currentIndex = 0;
 
   @override
+  void initState() {
+    _branches.addAll(context
+        .read<CurrentUserRepo>()
+        .currentUser
+        .assignedBranch
+        .where((e) => e.isAssigned)
+        .toList()
+        .map((e) => e.branchCode)
+        .toList());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -52,6 +68,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
             objectTypeRepo: context.read<ObjectTypeRepo>(),
           )..add(
               FetchAllPriceQuotationHeader(
+                branch: _selectedBranch,
                 docStatus: docStatus,
                 pqStatus: pqStatus,
                 fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
@@ -110,12 +127,31 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
+                  Flex(
+                    direction: Responsive.isMobile(context)
+                        ? Axis.vertical
+                        : Axis.horizontal,
+                    mainAxisSize: Responsive.isMobile(context)
+                        ? MainAxisSize.min
+                        : MainAxisSize.max,
+                    crossAxisAlignment: Responsive.isMobile(context)
+                        ? CrossAxisAlignment.start
+                        : CrossAxisAlignment.end,
                     children: [
-                      _fromDatePicker(),
-                      Constant.widthSpacer,
-                      Constant.widthSpacer,
-                      _toDatePicker(),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(child: _fromDatePicker()),
+                          Constant.widthSpacer,
+                          Constant.widthSpacer,
+                          Flexible(child: _toDatePicker()),
+                        ],
+                      ),
+                      if (!Responsive.isMobile(context))
+                        const Spacer()
+                      else
+                        Constant.heightSpacer,
+                      _branchField()
                     ],
                   ),
                   Constant.heightSpacer,
@@ -130,6 +166,38 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Flexible _branchField() {
+    return Flexible(
+      child: SizedBox(
+        width: 150,
+        child: InfoLabel(
+          label: "Branch",
+          child: StatefulBuilder(builder: (context, setState) {
+            return ComboboxFormField<String>(
+              autovalidateMode: AutovalidateMode.always,
+              placeholder: const Text('Branch'),
+              isExpanded: true,
+              value: _selectedBranch,
+              items: _branches
+                  .map(
+                    (e) => ComboBoxItem<String>(
+                      value: e,
+                      child: Text(e),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedBranch = value!;
+                });
+              },
+            );
+          }),
         ),
       ),
     );
@@ -169,6 +237,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
 
         bloc.add(
           FetchAllPriceQuotationHeader(
+            branch: _selectedBranch,
             docStatus: docStatus,
             pqStatus: pqStatus,
             fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
@@ -202,6 +271,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
           ),
           body: PriceQuotationHeaderTable(
             sfDataGridKey: sfDataGridKey,
+            branch: _selectedBranch,
             docStatus: docStatus,
             fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
             toDate: toDate == null ? "" : dateFormat.format(toDate!),
@@ -233,6 +303,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
           ),
           body: PriceQuotationHeaderTable(
             sfDataGridKey: sfDataGridKey,
+            branch: _selectedBranch,
             docStatus: docStatus,
             fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
             toDate: toDate == null ? "" : dateFormat.format(toDate!),
@@ -253,6 +324,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
           ),
           body: PriceQuotationHeaderTable(
             sfDataGridKey: sfDataGridKey,
+            branch: _selectedBranch,
             docStatus: docStatus,
             fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
             toDate: toDate == null ? "" : dateFormat.format(toDate!),
@@ -294,6 +366,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
           ),
           body: PriceQuotationHeaderTable(
             sfDataGridKey: sfDataGridKey,
+            branch: _selectedBranch,
             docStatus: "N",
             fromDate: fromDate == null ? "" : dateFormat.format(fromDate!),
             toDate: toDate == null ? "" : dateFormat.format(toDate!),
@@ -325,6 +398,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
               onPressed: () {
                 bloc.add(
                   FetchAllPriceQuotationHeader(
+                    branch: _selectedBranch,
                     docStatus: docStatus,
                     pqStatus: pqStatus,
                     fromDate:
@@ -343,6 +417,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
               onPressed: () {
                 bloc.add(
                   FetchAllPriceQuotationHeader(
+                    branch: _selectedBranch,
                     docStatus: docStatus,
                     pqStatus: pqStatus,
                     fromDate:

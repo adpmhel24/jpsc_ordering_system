@@ -6,6 +6,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/repositories/repos.dart';
+import '../../../../../shared/widgets/custom_button.dart';
 import '../../../../../utils/currency_formater.dart';
 import '../../../../../utils/date_formatter.dart';
 import '../../../../../utils/fetching_status.dart';
@@ -274,15 +275,16 @@ class DataSource extends DataGridSource {
             : Alignment.centerLeft,
         padding: const EdgeInsets.all(10),
         child: dataGridCell.value.runtimeType == String
-            ? SelectableText(dataGridCell.value)
+            ? CopyButton(value: dataGridCell.value)
             : dataGridCell.value.runtimeType == double
-                ? SelectableText(formatStringToDecimal("${dataGridCell.value}"))
+                ? CopyButton(
+                    value: formatStringToDecimal("${dataGridCell.value}"))
                 : dataGridCell.value.runtimeType == int
-                    ? SelectableText(
-                        formatStringToDecimal('${dataGridCell.value}'))
+                    ? CopyButton(
+                        value: formatStringToDecimal('${dataGridCell.value}'))
                     : dataGridCell.value.runtimeType == DateTime
-                        ? SelectableText(dateFormatter(dataGridCell.value))
-                        : SelectableText(dataGridCell.value.toString()),
+                        ? CopyButton(value: dateFormatter(dataGridCell.value))
+                        : CopyButton(value: dataGridCell.value.toString()),
       );
     }).toList());
   }

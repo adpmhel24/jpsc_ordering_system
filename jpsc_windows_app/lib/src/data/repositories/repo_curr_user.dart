@@ -1,49 +1,44 @@
 import 'dart:convert';
-import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../http_services/backend_api/login.dart';
 import '../models/models.dart';
 import 'repos.dart';
 
-class CurrentUserRepo extends ChangeNotifier {
+enum LoginStatus { init, checking, loggedin, loggedout, error }
+
+class CurrentUserRepo {
   late LoginAPI loginApi = LoginAPI();
   late SharedPreferences localStorage = LocalStorageRepo().localStorage;
 
   SystemUserModel? _currentUser;
-  bool _isAuthenticated = false;
+  LoginStatus _loginStatus = LoginStatus.init;
 
   // Getter
-  bool get isAuthenticated => _isAuthenticated;
+  LoginStatus get loginStatus => _loginStatus;
   SystemUserModel get currentUser => _currentUser!;
 
   // Setter
-  set(bool value) {
-    _isAuthenticated = value;
-    notifyListeners();
-  }
+  // set(bool value) {
+  //   _isAuthenticated = value;
+  //   notifyListeners();
+  // }
 
-  void checkIfLoggedIn() async {
+  Future<void> checkIfLoggedIn() async {
     String user = localStorage.getString('userData') ?? "";
     String accessToken = localStorage.getString("access_token") ?? "";
-    try {
-      if (accessToken.isEmpty) {
-        _isAuthenticated = false;
-        notifyListeners();
-      } else {
-        await loginApi.tryLogin(accessToken);
+    if (accessToken.isEmpty) {
+      _loginStatus = LoginStatus.loggedout;
+    } else if (accessToken.isNotEmpty) {
+      await loginApi.tryLogin(accessToken);
 
-        _currentUser = SystemUserModel.fromJson(json.decode(user));
-        _isAuthenticated = true;
-        notifyListeners();
-      }
-    } on HttpException catch (_) {
-      _isAuthenticated = false;
-      notifyListeners();
+      _currentUser = SystemUserModel.fromJson(json.decode(user));
+      _loginStatus = LoginStatus.loggedin;
+    } else {
+      _loginStatus = LoginStatus.loggedout;
     }
   }
 
@@ -98,10 +93,7 @@ class CurrentUserRepo extends ChangeNotifier {
 
     // Load or resources after autheticate
     // await AppRepo().init();
-
-    // Change the value of authenticated then notify
-    _isAuthenticated = true;
-    notifyListeners();
+    _loginStatus = LoginStatus.loggedout;
   }
 
   Future<void> logout() async {
@@ -112,8 +104,7 @@ class CurrentUserRepo extends ChangeNotifier {
     _currentUser = null;
 
     // Change the value of authenticated then notify
-    _isAuthenticated = false;
-    notifyListeners();
+    _loginStatus = LoginStatus.loggedout;
   }
 
   ///Singleton factory

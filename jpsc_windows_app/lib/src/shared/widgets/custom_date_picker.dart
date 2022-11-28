@@ -39,12 +39,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         child: Row(
           children: [
             Expanded(
-              child: SelectableText(
+              child: Text(
                 widget.date != null
                     ? widget.dateFormat.format(widget.date!)
                     : "",
-                toolbarOptions:
-                    const ToolbarOptions(copy: true, selectAll: true),
               ),
             ),
             IconButton(

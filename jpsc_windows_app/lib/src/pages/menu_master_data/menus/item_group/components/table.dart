@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../router/router.gr.dart';
+import '../../../../../shared/widgets/custom_button.dart';
 import '../../../../../utils/constant.dart';
 import '../../../../../utils/fetching_status.dart';
 import '../../../../../utils/responsive.dart';
@@ -229,16 +230,16 @@ class DataSource extends DataGridSource {
                   ),
                 ),
               ),
-              Flexible(child: SelectableText(dataGridCell.value.code)),
+              Flexible(child: CopyButton(value: dataGridCell.value.code)),
             ],
           ),
         );
       }
       return Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(5.0),
         child: dataGridCell.value.runtimeType != Icon
-            ? SelectableText(dataGridCell.value.toString())
+            ? CopyButton(value: dataGridCell.value.toString())
             : dataGridCell.value,
       );
     }).toList());

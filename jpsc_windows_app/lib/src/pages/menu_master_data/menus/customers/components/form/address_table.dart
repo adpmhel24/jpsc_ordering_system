@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../../data/models/models.dart';
+import '../../../../../../shared/widgets/custom_button.dart';
 import '../../../../../../shared/widgets/custom_dialog.dart';
 import '../../blocs/creating_update_bloc/bloc.dart';
 import 'address_form_modal.dart';
@@ -213,9 +214,9 @@ class DataSource extends DataGridSource {
       }
       return Container(
         alignment: Alignment.centerLeft,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(5.0),
         child: dataGridCell.value.runtimeType == String
-            ? SelectableText(dataGridCell.value)
+            ? CopyButton(value: dataGridCell.value)
             : dataGridCell.value,
       );
     }).toList());

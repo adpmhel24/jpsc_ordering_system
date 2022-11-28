@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../../data/models/models.dart';
 import '../../../../../../global_blocs/blocs.dart';
+import '../../../../../../shared/widgets/custom_button.dart';
 import '../../../../../../utils/constant.dart';
 
 part 'pq_datasource.dart';
@@ -78,6 +79,10 @@ class _DetailsTableState extends State<DetailsTable> {
               allowColumnsResizing: true,
               columns: TableSettings.columns,
               columnWidthMode: ColumnWidthMode.auto,
+              frozenColumnsCount: 1,
+              onQueryRowHeight: (details) {
+                return details.getIntrinsicRowHeight(details.rowIndex);
+              },
               onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
                 var column = TableSettings.columnName.values
                     .firstWhere((e) => e['name'] == details.column.columnName);

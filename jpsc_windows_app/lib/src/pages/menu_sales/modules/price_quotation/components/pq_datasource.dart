@@ -80,20 +80,22 @@ class DataSource extends DataGridSource {
               m.Material(
                 child: m.InkWell(
                   onTap: () {
-                    PriceQuotationModel priceQuotation =
-                        datas.firstWhere((i) => i.id == dataGridCell.value);
+                    // PriceQuotationModel priceQuotation =
+                    //     datas.firstWhere((i) => i.id == dataGridCell.value);
 
-                    cntx.router.navigate(
-                      PriceQuotationWrapper(
-                        children: [
-                          PriceQuotationHeaderDetailsRoute(
-                            header: "Price Quotation Details",
-                            priceQuotation: priceQuotation,
-                            onRefresh: handleRefresh,
+                    cntx.router
+                        .push(
+                          PriceQuotationWrapper(
+                            children: [
+                              PriceQuotationHeaderDetailsRoute(
+                                header: "Price Quotation Details",
+                                id: dataGridCell.value,
+                                // onRefresh: handleRefresh,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
+                        )
+                        .then((value) => handleRefresh());
                   },
                   child: SvgPicture.asset(
                     "assets/icons/sm_right_arrow.svg",
@@ -173,7 +175,7 @@ class TableSettings {
     "customerCode": {"name": "Customer Code", "width": double.nan},
     "details": {"name": "Details", "width": double.nan},
     "subtotal": {"name": "Subtotal", "width": double.nan},
-    "remarks": {"name": "Remarks", "width": double.nan},
+    "remarks": {"name": "Remarks", "width": 250.0},
     "contactNumber": {"name": "Contact Number", "width": double.nan},
     "address": {"name": "Address", "width": double.nan},
     "createdBy": {"name": "Created By", "width": double.nan},
@@ -181,7 +183,7 @@ class TableSettings {
     "updatedBy": {"name": "Updated By", "width": double.nan},
     "canceledBy": {"name": "Canceled By", "width": double.nan},
     "canceledRemarks": {"name": "Canceled Remarks", "width": double.nan},
-    "action": {"name": "Action", "width": double.nan},
+    "action": {"name": "Action", "width": 150.0},
   };
 
   static DataGridRow dataGrid(PriceQuotationModel priceQuotation) {

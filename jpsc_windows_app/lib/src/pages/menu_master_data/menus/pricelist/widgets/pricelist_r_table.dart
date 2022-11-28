@@ -379,15 +379,16 @@ class DataSource extends DataGridSource {
                 dataGridCell.value.runtimeType == int
             ? Alignment.centerRight
             : Alignment.centerLeft,
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(5.0),
         child: dataGridCell.value.runtimeType == String
-            ? SelectableText(dataGridCell.value.toString())
+            ? CopyButton(value: dataGridCell.value.toString())
             : dataGridCell.value.runtimeType == double
-                ? SelectableText(formatStringToDecimal('${dataGridCell.value}'))
+                ? CopyButton(
+                    value: formatStringToDecimal('${dataGridCell.value}'))
                 : dataGridCell.value.runtimeType == int
-                    ? SelectableText(
-                        formatStringToDecimal('${dataGridCell.value}'))
-                    : SelectableText(dataGridCell.value.toString()),
+                    ? CopyButton(
+                        value: formatStringToDecimal('${dataGridCell.value}'))
+                    : CopyButton(value: dataGridCell.value.toString()),
       );
     }).toList());
   }

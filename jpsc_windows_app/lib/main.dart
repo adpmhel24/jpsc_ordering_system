@@ -102,7 +102,8 @@ class _MyAppState extends State<MyApp> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => AuthBloc(),
+            create: (context) =>
+                AuthBloc(context.read<CurrentUserRepo>())..add(TryToLogin()),
           ),
           BlocProvider(
             create: (_) => NavMenuCubit(),
@@ -113,9 +114,6 @@ class _MyAppState extends State<MyApp> {
             ChangeNotifierProvider(
               create: (_) => AppTheme(),
             ),
-            ChangeNotifierProvider(
-              create: (_) => CurrentUserRepo()..checkIfLoggedIn(),
-            )
           ],
           builder: (context, _) {
             final appTheme = context.watch<AppTheme>();
@@ -170,17 +168,24 @@ class _MyAppState extends State<MyApp> {
                 ),
                 routerDelegate: AutoRouterDelegate.declarative(
                   _appRouter,
-                  routes: (_) => [
-                    // if the user is logged in, they may proceed to the main App
-                    if (Provider.of<CurrentUserRepo>(context).isAuthenticated)
-                      const MainRoute()
-                    // if they are not logged in, bring them to the Login page
-                    else
-                      const LoginRoute(),
-                  ],
+                  routes: (resolver) {
+                    final authStatus = context.watch<AuthBloc>().state.status;
+
+                    return [
+                      // if the user is logged in, they may proceed to the main App
+                      if (authStatus == AuthStateStatus.loggedIn)
+                        // const MainRoute()
+                        ...resolver.initialPendingRoutes ?? [const MainRoute()]
+                      // if they are not logged in, bring them to the Login page
+                      else
+                        const LoginRoute(),
+                    ];
+                  },
                   navigatorObservers: () => [AutoRouteObserver()],
                 ),
-                routeInformationParser: _appRouter.defaultRouteParser(),
+                routeInformationParser: _appRouter.defaultRouteParser(
+                  includePrefixMatches: true,
+                ),
                 builder: (context, child) {
                   return ResponsiveWrapper.builder(
                     BouncingScrollWrapper.builder(context, child!),

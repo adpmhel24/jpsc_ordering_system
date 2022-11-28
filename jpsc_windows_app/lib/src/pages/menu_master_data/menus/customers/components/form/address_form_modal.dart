@@ -292,55 +292,60 @@ class _CustomerAddressFormModalState extends State<CustomerAddressFormModal> {
     );
   }
 
-  ValueListenableBuilder provinceField(BuildContext context) {
-    return ValueListenableBuilder<List<ProvinceModel>>(
-      valueListenable: _provinces,
-      builder: (_, provincesObj, __) {
-        return AutoSuggestBox(
-          controller: _provinceController,
-          trailingIcon: const Icon(FluentIcons.caret_down8),
-          items: provincesObj
-              .map<AutoSuggestBoxItem>(
-                (provinceObj) => AutoSuggestBoxItem(
-                  label: "Province",
-                  value: decodeNCRProvinces(provinceObj.code!) ??
-                      provinceObj.name!,
-                  child: Text(
-                    decodeNCRProvinces(provinceObj.code!) ?? provinceObj.name!,
-                    overflow: TextOverflow.ellipsis,
+  InfoLabel provinceField(BuildContext context) {
+    return InfoLabel(
+      label: "Province",
+      child: ValueListenableBuilder<List<ProvinceModel>>(
+        valueListenable: _provinces,
+        builder: (_, provincesObj, __) {
+          return AutoSuggestBox(
+            controller: _provinceController,
+            trailingIcon: const Icon(FluentIcons.caret_down8),
+            items: provincesObj
+                .map<AutoSuggestBoxItem>(
+                  (provinceObj) => AutoSuggestBoxItem(
+                    label: decodeNCRProvinces(provinceObj.code!) ??
+                        provinceObj.name!,
+                    value: decodeNCRProvinces(provinceObj.code!) ??
+                        provinceObj.name!,
+                    child: Text(
+                      decodeNCRProvinces(provinceObj.code!) ??
+                          provinceObj.name!,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onSelected: () async {
+                      context.loaderOverlay.show();
+
+                      await fetchCityMunicipality(provinceObj);
+                      selectedProvince = provinceObj;
+                      await fetchBrgys(
+                        selectedProvince,
+                        selectedCityMunicipality,
+                      );
+
+                      context.loaderOverlay.hide();
+                    },
                   ),
-                  onSelected: () async {
-                    context.loaderOverlay.show();
-
-                    await fetchCityMunicipality(provinceObj);
-                    selectedProvince = provinceObj;
-                    await fetchBrgys(
-                      selectedProvince,
-                      selectedCityMunicipality,
-                    );
-
-                    context.loaderOverlay.hide();
-                  },
-                ),
-              )
-              .toList(),
-          onChanged: (_, reason) {
-            if (reason.name == "cleared") {
-              setState(() {
-                _cityMunicipalityController.text = "";
-                selectedProvince = null;
-                selectedCityMunicipality = null;
-                _citiesMunicipalities.value = [];
-                if (selectedCityMunicipality == null) {
+                )
+                .toList(),
+            onChanged: (_, reason) {
+              if (reason.name == "cleared") {
+                setState(() {
+                  _cityMunicipalityController.text = "";
+                  selectedProvince = null;
+                  selectedCityMunicipality = null;
                   _citiesMunicipalities.value = [];
-                  _brgyController.text = "";
-                  selectedBrgy = null;
-                }
-              });
-            }
-          },
-        );
-      },
+                  if (selectedCityMunicipality == null) {
+                    _citiesMunicipalities.value = [];
+                    _brgyController.text = "";
+                    selectedBrgy = null;
+                  }
+                });
+              }
+            },
+          );
+        },
+      ),
     );
   }
 }

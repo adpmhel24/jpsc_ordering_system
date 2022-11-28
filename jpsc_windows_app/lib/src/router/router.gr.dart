@@ -616,14 +616,22 @@ class AppRouter extends _i22.RootStackRouter {
       );
     },
     PriceQuotationHeaderDetailsRoute.name: (routeData) {
-      final args = routeData.argsAs<PriceQuotationHeaderDetailsRouteArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final queryParams = routeData.queryParams;
+      final args = routeData.argsAs<PriceQuotationHeaderDetailsRouteArgs>(
+          orElse: () => PriceQuotationHeaderDetailsRouteArgs(
+                id: pathParams.getInt('id'),
+                header: queryParams.getString(
+                  'header',
+                  "",
+                ),
+              ));
       return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i21.PriceQuotationHeaderDetailsPage(
           key: args.key,
+          id: args.id,
           header: args.header,
-          priceQuotation: args.priceQuotation,
-          onRefresh: args.onRefresh,
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
         durationInMilliseconds: 5,
@@ -886,7 +894,7 @@ class AppRouter extends _i22.RootStackRouter {
                 ),
                 _i22.RouteConfig(
                   PriceQuotationWrapper.name,
-                  path: 'price_quotation',
+                  path: 'price_quotation/',
                   parent: SalesMainWrapperPage.name,
                   children: [
                     _i22.RouteConfig(
@@ -896,7 +904,7 @@ class AppRouter extends _i22.RootStackRouter {
                     ),
                     _i22.RouteConfig(
                       PriceQuotationHeaderDetailsRoute.name,
-                      path: '',
+                      path: ':id',
                       parent: PriceQuotationWrapper.name,
                     ),
                   ],
@@ -1972,7 +1980,7 @@ class PriceQuotationWrapper extends _i22.PageRouteInfo<void> {
   const PriceQuotationWrapper({List<_i22.PageRouteInfo>? children})
       : super(
           PriceQuotationWrapper.name,
-          path: 'price_quotation',
+          path: 'price_quotation/',
           initialChildren: children,
         );
 
@@ -1997,18 +2005,18 @@ class PriceQuotationHeaderDetailsRoute
     extends _i22.PageRouteInfo<PriceQuotationHeaderDetailsRouteArgs> {
   PriceQuotationHeaderDetailsRoute({
     _i24.Key? key,
-    required String header,
-    required _i25.PriceQuotationModel priceQuotation,
-    required void Function() onRefresh,
+    required int id,
+    String header = "",
   }) : super(
           PriceQuotationHeaderDetailsRoute.name,
-          path: '',
+          path: ':id',
           args: PriceQuotationHeaderDetailsRouteArgs(
             key: key,
+            id: id,
             header: header,
-            priceQuotation: priceQuotation,
-            onRefresh: onRefresh,
           ),
+          rawPathParams: {'id': id},
+          rawQueryParams: {'header': header},
         );
 
   static const String name = 'PriceQuotationHeaderDetailsRoute';
@@ -2017,21 +2025,18 @@ class PriceQuotationHeaderDetailsRoute
 class PriceQuotationHeaderDetailsRouteArgs {
   const PriceQuotationHeaderDetailsRouteArgs({
     this.key,
-    required this.header,
-    required this.priceQuotation,
-    required this.onRefresh,
+    required this.id,
+    this.header = "",
   });
 
   final _i24.Key? key;
 
+  final int id;
+
   final String header;
-
-  final _i25.PriceQuotationModel priceQuotation;
-
-  final void Function() onRefresh;
 
   @override
   String toString() {
-    return 'PriceQuotationHeaderDetailsRouteArgs{key: $key, header: $header, priceQuotation: $priceQuotation, onRefresh: $onRefresh}';
+    return 'PriceQuotationHeaderDetailsRouteArgs{key: $key, id: $id, header: $header}';
   }
 }

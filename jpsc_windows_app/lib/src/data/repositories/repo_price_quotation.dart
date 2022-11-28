@@ -85,21 +85,18 @@ class PriceQuotationRepo {
     return response.data['message'];
   }
 
-  // Future<InventoryAdjustmentInModel> getDetails({
-  //   required int fk,
-  // }) async {
-  //   Response response;
-  //   try {
-  //     response = await api.getByFk(
-  //       _token,
-  //       urlPath: _urlPath,
-  //       fk: fk.toString(),
-  //     );
-  //   } on HttpException catch (e) {
-  //     throw HttpException(e.message);
-  //   }
-  //   return InventoryAdjustmentInModel.fromJson(response.data['data']);
-  // }
+  Future<PriceQuotationModel> getDetails({
+    required int fk,
+  }) async {
+    Response response;
+    response = await api.getByFk(
+      _token,
+      urlPath: _urlPath,
+      fk: fk.toString(),
+    );
+
+    return PriceQuotationModel.fromJson(response.data['data']);
+  }
 
   Future<String> cancel({
     required int fk,
