@@ -6,6 +6,7 @@ part 'model.g.dart';
 
 @JsonSerializable()
 class CustomerModel extends CustomerBaseModel {
+  static toNull(_) => null;
   static List<CustomerAddressModel> customerAddressFromJson(
       List<dynamic> data) {
     if (data.isNotEmpty) {
@@ -46,6 +47,9 @@ class CustomerModel extends CustomerBaseModel {
 
   @JsonKey(fromJson: customerAddressFromJson, toJson: _rowsToJson)
   List<CustomerAddressModel> addresses;
+
+  @JsonKey(name: "created_by_user", toJson: toNull, includeIfNull: false)
+  SystemUserModel? createdByUser;
 
   CustomerModel({
     required super.code,

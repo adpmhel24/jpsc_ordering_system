@@ -31,26 +31,41 @@ CustomerModel _$CustomerModelFromJson(Map<String, dynamic> json) =>
       addresses: json['addresses'] == null
           ? const []
           : CustomerModel.customerAddressFromJson(json['addresses'] as List),
-    )..withSap = json['with_sap'] as bool?;
+    )
+      ..withSap = json['with_sap'] as bool?
+      ..createdByUser = json['created_by_user'] == null
+          ? null
+          : SystemUserModel.fromJson(
+              json['created_by_user'] as Map<String, dynamic>);
 
-Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) =>
-    <String, dynamic>{
-      'code': instance.code,
-      'card_name': instance.cardName,
-      'location': instance.location,
-      'first_name': instance.firstName,
-      'middle_initial': instance.middleInitial,
-      'last_name': instance.lastName,
-      'contact_number': instance.contactNumber,
-      'email': instance.email,
-      'payment_terms': instance.paymentTerm,
-      'credit_limit': instance.creditLimit,
-      'is_active': instance.isActive,
-      'is_approved': instance.isApproved,
-      'with_sap': instance.withSap,
-      'date_created': instance.dateCreated?.toIso8601String(),
-      'created_by': instance.createdBy,
-      'date_updated': instance.dateUpdated?.toIso8601String(),
-      'updated_by': instance.updatedBy,
-      'addresses': CustomerModel._rowsToJson(instance.addresses),
-    };
+Map<String, dynamic> _$CustomerModelToJson(CustomerModel instance) {
+  final val = <String, dynamic>{
+    'code': instance.code,
+    'card_name': instance.cardName,
+    'location': instance.location,
+    'first_name': instance.firstName,
+    'middle_initial': instance.middleInitial,
+    'last_name': instance.lastName,
+    'contact_number': instance.contactNumber,
+    'email': instance.email,
+    'payment_terms': instance.paymentTerm,
+    'credit_limit': instance.creditLimit,
+    'is_active': instance.isActive,
+    'is_approved': instance.isApproved,
+    'with_sap': instance.withSap,
+    'date_created': instance.dateCreated?.toIso8601String(),
+    'created_by': instance.createdBy,
+    'date_updated': instance.dateUpdated?.toIso8601String(),
+    'updated_by': instance.updatedBy,
+    'addresses': CustomerModel._rowsToJson(instance.addresses),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('created_by_user', CustomerModel.toNull(instance.createdByUser));
+  return val;
+}

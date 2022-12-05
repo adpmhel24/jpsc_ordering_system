@@ -51,7 +51,7 @@ class CurrentUserRepo {
       return true;
     }
     AuthorizationModel? authorization = currentUser.authorizations
-        .firstWhereOrNull((e) => e.objtype == objtype);
+        ?.firstWhereOrNull((e) => e.objtype == objtype);
 
     if (authorization != null) {
       auths.forEach(
@@ -68,7 +68,7 @@ class CurrentUserRepo {
 
   bool checkIfGrantToViewLastPurch(String itemGroupCode) {
     return _currentUser?.itemGroupAuth
-            .firstWhereOrNull(
+            ?.firstWhereOrNull(
                 (element) => element.itemGroupCode == itemGroupCode)
             ?.grantLastPurc ??
         false;
@@ -76,7 +76,7 @@ class CurrentUserRepo {
 
   bool checkIfGrantToViewAvgSAP(String itemGroupCode) {
     return _currentUser?.itemGroupAuth
-            .firstWhereOrNull(
+            ?.firstWhereOrNull(
                 (element) => element.itemGroupCode == itemGroupCode)
             ?.grantAvgValue ??
         false;

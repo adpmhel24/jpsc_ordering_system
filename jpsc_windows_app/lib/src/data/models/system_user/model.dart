@@ -7,8 +7,8 @@ part 'model.g.dart';
 
 @JsonSerializable()
 class SystemUserModel extends SystemUserBaseModel {
-  static List<AuthorizationModel> _authFromJson(List<dynamic> data) {
-    if (data.isNotEmpty) {
+  static List<AuthorizationModel>? _authFromJson(List<dynamic>? data) {
+    if (data != null && data.isNotEmpty) {
       return data.map((e) => AuthorizationModel.fromJson(e!)).toList();
     } else {
       return [];
@@ -16,8 +16,8 @@ class SystemUserModel extends SystemUserBaseModel {
   }
 
   static List<Map<String, dynamic>>? _authToJson(
-      List<AuthorizationModel> rows) {
-    if (rows.isNotEmpty) {
+      List<AuthorizationModel>? rows) {
+    if (rows != null && rows.isNotEmpty) {
       return rows.map((e) => e.toJson()).toList();
     }
     return [];
@@ -26,13 +26,13 @@ class SystemUserModel extends SystemUserBaseModel {
   int id;
 
   @JsonKey(name: "assigned_branch")
-  List<SystemUserBranchModel> assignedBranch;
+  List<SystemUserBranchModel>? assignedBranch;
 
   @JsonKey(fromJson: _authFromJson, toJson: _authToJson)
-  List<AuthorizationModel> authorizations;
+  List<AuthorizationModel>? authorizations;
 
   @JsonKey(name: "item_group_auth")
-  List<AuthItemGroupModel> itemGroupAuth;
+  List<AuthItemGroupModel>? itemGroupAuth;
 
   SystemUserModel({
     required this.id,

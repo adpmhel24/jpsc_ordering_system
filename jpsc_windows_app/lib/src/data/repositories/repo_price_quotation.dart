@@ -47,6 +47,18 @@ class PriceQuotationRepo {
     _forDispatch = response.data["others"]["for_dispatch"];
   }
 
+  Future<Map<String, dynamic>> getByCustomerCode(String customerCode,
+      {Map<String, dynamic>? params}) async {
+    Response response;
+
+    response = await api.getAll(
+      _token,
+      urlPath: "${_urlPath}by_customer/$customerCode",
+      params: params,
+    );
+    return response.data;
+  }
+
   Future<String> create(Map<String, dynamic> data) async {
     Response response;
 

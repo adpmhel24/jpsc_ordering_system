@@ -181,3 +181,37 @@ class _CopyButtonState extends State<CopyButton> {
     );
   }
 }
+
+class CustomIconButton extends StatelessWidget {
+  const CustomIconButton({
+    Key? key,
+    required this.icon,
+    required this.onPressed,
+    this.onLongPress,
+    this.focusNode,
+    this.autoFocus = false,
+    this.style,
+  }) : super(key: key);
+
+  final Widget icon;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  final FocusNode? focusNode;
+  final bool autoFocus;
+  final ButtonStyle? style;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: IconButton(
+        onPressed: onPressed,
+        onLongPress: onLongPress,
+        focusNode: focusNode,
+        autofocus: autoFocus,
+        style: style,
+        icon: icon,
+      ),
+    );
+  }
+}

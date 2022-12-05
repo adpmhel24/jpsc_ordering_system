@@ -12,6 +12,7 @@ class NavMenuCubit extends Cubit<int> {
     DashboardPage.routeName,
     SalesMainWrapper.routeName,
     MasterDataMainWrapper.routeName,
+    // ReportMainWrapper.routeName,
     MyProfile.routeName,
   ];
 

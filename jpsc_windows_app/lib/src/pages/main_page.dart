@@ -42,6 +42,7 @@ class _MainPageState extends State<MainPage> with WindowListener {
     const DashboardPage(),
     const SalesMainWrapperPage(),
     const MasterDataMainWrapperPage(),
+    // const ReportMainWrapperPage(),
     const MyProfilePage(),
   ];
 

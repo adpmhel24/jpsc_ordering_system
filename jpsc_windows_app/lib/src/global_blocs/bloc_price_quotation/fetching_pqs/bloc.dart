@@ -70,7 +70,7 @@ class FetchingPriceQuotationHeaderBloc extends Bloc<
       }
     } on HttpException catch (e) {
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(
         state.copyWith(
           status: FetchingStatus.error,

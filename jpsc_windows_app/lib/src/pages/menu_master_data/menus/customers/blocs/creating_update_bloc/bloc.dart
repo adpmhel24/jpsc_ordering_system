@@ -71,8 +71,7 @@ class CreateUpdateCustomerBloc
 
   void _onCustCodeChanged(
       CustCodeChanged event, Emitter<CreateUpdateCustomerState> emit) {
-    final custCode = FormzString.dirty(
-        event.value.isNotEmpty ? "C_${event.value}" : event.value);
+    final custCode = FormzString.dirty(event.value);
 
     emit(
       state.copyWith(

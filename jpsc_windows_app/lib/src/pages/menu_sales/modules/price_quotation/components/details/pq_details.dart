@@ -362,8 +362,7 @@ class _PriceQuotationHeaderDetailsBodyState
                                     width: 150,
                                     child: TextBox(
                                       controller: _sqNumberController,
-                                      enabled:
-                                          selectedOrderStatus == 'With SAP SQ',
+                                      enabled: !isDisable,
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
                                             RegExp(r'^\d+')),
@@ -503,7 +502,7 @@ class _PriceQuotationHeaderDetailsBodyState
 
   SizedBox labeledWidget({required String label, required Widget child}) {
     return SizedBox(
-      width: 200.0,
+      width: 250.0,
       child: InfoLabel(
         label: label,
         child: child,

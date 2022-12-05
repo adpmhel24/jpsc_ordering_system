@@ -119,6 +119,9 @@ class _CustomersTableState extends State<CustomersTable> {
         availableRowsPerPage: availableRowsPerPage.contains(dataLength)
             ? availableRowsPerPage
             : [...availableRowsPerPage, dataLength],
+        pageItemBuilder: (String itemName) {
+          return null;
+        },
         onRowsPerPageChanged: (int? rowsPerPage) {
           setState(() {
             _rowsPerPage = rowsPerPage!;
@@ -176,6 +179,7 @@ class DataSource extends DataGridSource {
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     startIndex = newPageIndex * rowsPerPage;
     endIndex = startIndex + rowsPerPage;
+
     if (startIndex < datas.length && endIndex <= datas.length) {
       paginatedDatas =
           datas.getRange(startIndex, endIndex).toList(growable: false);
@@ -234,6 +238,25 @@ class DataSource extends DataGridSource {
             ],
           ),
         );
+      } else if (dataGridCell.columnName == "Transactions") {
+        return Container(
+          alignment: Alignment.center,
+          child: IconButton(
+            icon: SvgPicture.asset(
+              "assets/icons/Documents.svg",
+              color: Colors.green,
+            ),
+            onPressed: () {
+              cntx.router.navigate(
+                CustomerWrapper(
+                  children: [
+                    CustomerTransactionsRoute(customerCode: dataGridCell.value)
+                  ],
+                ),
+              );
+            },
+          ),
+        );
       }
       return Container(
         alignment: Alignment.centerLeft,
@@ -255,6 +278,8 @@ class TableSettings {
     "location": {"name": "Location", "width": double.nan},
     "paymentTerm": {"name": "Payment term", "width": double.nan},
     "isActive": {"name": "Is Active", "width": Constant.minPadding * 15},
+    "transactions": {"name": "Transactions", "width": Constant.minPadding * 15},
+    "createdBy": {"name": "Created By", "width": double.nan},
   };
 
   static DataGridRow dataGrid(CustomerModel customer) {
@@ -285,7 +310,19 @@ class TableSettings {
         ),
         DataGridCell(
           columnName: columnName["isActive"]["name"],
-          value: customer.isActive,
+          value: Icon(
+            customer.isActive!
+                ? FluentIcons.check_mark
+                : FluentIcons.status_circle_error_x,
+          ),
+        ),
+        DataGridCell(
+          columnName: columnName["transactions"]["name"],
+          value: customer.code,
+        ),
+        DataGridCell(
+          columnName: columnName["createdBy"]["name"],
+          value: customer.createdByUser?.email ?? "",
         ),
       ],
     );

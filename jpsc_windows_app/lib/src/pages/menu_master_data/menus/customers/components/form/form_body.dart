@@ -281,7 +281,6 @@ class _CustomerFormBodyState extends State<CustomerFormBody> {
         header: "Card Code *",
         autovalidateMode: AutovalidateMode.always,
         controller: _codeController,
-        prefix: widget.selectedCustomer != null ? null : const Text("C_"),
         maxLength: 15,
         onChanged: (value) {
           bloc.add(CustCodeChanged(value.trim()));

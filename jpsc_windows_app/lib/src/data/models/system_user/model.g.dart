@@ -26,7 +26,7 @@ SystemUserModel _$SystemUserModelFromJson(Map<String, dynamic> json) =>
       isActive: json['is_active'] as bool,
       isSuperAdmin: json['is_super_admin'] as bool,
       authorizations:
-          SystemUserModel._authFromJson(json['authorizations'] as List),
+          SystemUserModel._authFromJson(json['authorizations'] as List?),
     );
 
 Map<String, dynamic> _$SystemUserModelToJson(SystemUserModel instance) =>

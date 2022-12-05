@@ -23,6 +23,10 @@ class AppMenu {
       svgSrc: "assets/icons/database.svg",
       title: "Master Data",
     ),
+    // _paneItemBuilder(
+    //   svgSrc: "assets/icons/report.svg",
+    //   title: "Reports",
+    // ),
   ];
 }
 

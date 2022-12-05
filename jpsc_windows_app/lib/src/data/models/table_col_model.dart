@@ -5,3 +5,13 @@ class ColumnName<T> {
 
   ColumnName({required this.name, required this.width, required this.value});
 }
+
+class ColumnModel {
+  final String name;
+  double width;
+
+  ColumnModel({
+    required this.name,
+    required this.width,
+  });
+}

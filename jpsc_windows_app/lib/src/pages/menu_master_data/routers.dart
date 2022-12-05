@@ -6,6 +6,7 @@ import 'master_data_menu.dart';
 import 'menus/app_versions/appversions.dart';
 import 'menus/app_versions/components/version_form.dart';
 import 'menus/branches/routes.dart';
+import 'menus/customers/components/customer_trans.dart';
 import 'menus/customers/components/form/customer_form.dart';
 import 'menus/customers/components/upload_page.dart';
 import 'menus/customers/customers.dart';
@@ -83,6 +84,11 @@ const masterDataMenuRouters = CustomRoute(
             durationInMilliseconds: 5,
             page: CustomersBulkInsertPage,
             path: "for_upload"),
+        CustomRoute(
+            transitionsBuilder: TransitionsBuilders.noTransition,
+            durationInMilliseconds: 5,
+            page: CustomerTransactionsPage,
+            path: "transactions/:customerCode"),
       ],
     ),
     CustomRoute(

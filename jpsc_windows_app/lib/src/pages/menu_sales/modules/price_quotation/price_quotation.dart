@@ -49,7 +49,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
     _branches.addAll(context
         .read<CurrentUserRepo>()
         .currentUser
-        .assignedBranch
+        .assignedBranch!
         .where((e) => e.isAssigned)
         .toList()
         .map((e) => e.branchCode)
@@ -220,7 +220,7 @@ class _PriceQuotationPageState extends State<PriceQuotationPage> {
             } else if (index == 2) {
               fromDate = DateTime.now();
               toDate = DateTime.now();
-              docStatus = "O";
+              docStatus = "C";
             } else {
               fromDate = DateTime.now();
               toDate = DateTime.now();
