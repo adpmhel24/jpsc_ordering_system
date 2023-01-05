@@ -27,8 +27,8 @@ class SystemUserBranchRepo {
   Future<void> getAssignedBranchesByEmail(String email) async {
     Response response;
 
-    response = await api.getAll(
-      "",
+    response = await api.get(
+      token: _token,
       pathUrl: "$_urlPath/by_email/$email",
     );
     _datas = List<SystemUserBranchModel>.from(
@@ -39,8 +39,8 @@ class SystemUserBranchRepo {
   Future<List<String>> getAssignedBranches(int userId) async {
     Response response;
 
-    response = await api.getAll(
-      _token,
+    response = await api.get(
+      token: _token,
       pathUrl: "$_urlPath$userId",
     );
     _datas = List<SystemUserBranchModel>.from(

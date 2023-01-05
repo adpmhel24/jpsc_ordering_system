@@ -54,7 +54,8 @@ class SystemUserRepo {
     Response response;
 
     try {
-      response = await api.getAll(_token, pathUrl: _urlPath, params: params);
+      response =
+          await api.get(token: _token, pathUrl: _urlPath, params: params);
       _datas = List<SystemUserModel>.from(
         response.data['data'].map(
           (systemUser) {

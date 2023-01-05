@@ -64,7 +64,6 @@ class PriceQuotationCardItem extends StatelessWidget {
                   Text(
                     "${pq.remarks}",
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                        color: const Color(0xFF632626),
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold),
                     softWrap: true,
@@ -77,7 +76,7 @@ class PriceQuotationCardItem extends StatelessWidget {
           ),
           collapsed: WithLabel(
             labelText: 'Subtotal:',
-            textData: "${pq.gross}",
+            textData: formatStringToDecimal("${pq.gross}"),
           ),
           expanded: Column(
             mainAxisSize: MainAxisSize.min,
@@ -85,7 +84,7 @@ class PriceQuotationCardItem extends StatelessWidget {
             children: [
               WithLabel(
                 labelText: 'Subtotal:',
-                textData: "${pq.gross}",
+                textData: formatStringToDecimal("${pq.gross}"),
               ),
               const Divider(thickness: 2),
               ListView.separated(
@@ -134,7 +133,6 @@ class PriceQuotationCardItem extends StatelessWidget {
                     Text(
                       formatStringToDecimal("${pq.gross}"),
                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color: const Color(0xFF632626),
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0),

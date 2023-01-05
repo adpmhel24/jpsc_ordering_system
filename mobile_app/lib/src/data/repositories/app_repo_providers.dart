@@ -9,8 +9,12 @@ class AppRepoProvider {
       lazy: false,
       create: (context) => LocalStorageRepo()..init(),
     ),
+    RepositoryProvider<AppVersionRepo>(
+      lazy: false,
+      create: (_) => AppVersionRepo()..init(),
+    ),
     RepositoryProvider<CurrentUserRepo>(
-      create: (context) => CurrentUserRepo()..checkIfLoggedIn(),
+      create: (context) => CurrentUserRepo(),
     ),
     RepositoryProvider<PhLocationRepo>(
       create: (context) => PhLocationRepo(PhLocationApiService()),
@@ -48,6 +52,11 @@ class AppRepoProvider {
     ),
     RepositoryProvider<PaymentTermRepo>(
       create: (context) => PaymentTermRepo(
+        localStorage: context.read<LocalStorageRepo>().localStorage,
+      ),
+    ),
+    RepositoryProvider<CustomerAddressRepo>(
+      create: (context) => CustomerAddressRepo(
         localStorage: context.read<LocalStorageRepo>().localStorage,
       ),
     ),

@@ -49,6 +49,8 @@ class BranchesBloc extends Bloc<BranchesBlocEvent, BranchesBlocState> {
     } on HttpException catch (e) {
       // _periodicSubscription?.pause();
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
+    } catch (e) {
+      emit(state.copyWith(status: FetchingStatus.error, message: e.toString()));
     }
   }
 

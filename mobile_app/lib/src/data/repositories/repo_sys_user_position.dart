@@ -23,7 +23,7 @@ class SystemUserPositionRepo {
   Future<void> getAll() async {
     Response response;
 
-    response = await api.getAll(_token, pathUrl: _urlPath);
+    response = await api.get(token: _token, pathUrl: _urlPath);
     _datas = List<SystemUserPositionModel>.from(response.data['data']
         .map((e) => SystemUserPositionModel.fromJson(e))).toList();
   }

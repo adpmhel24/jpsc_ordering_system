@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile_app/src/router/router.gr.dart';
@@ -93,6 +94,55 @@ class SideMenu extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Divider(),
+                DrawerListTile(
+                  title: "App Info",
+                  svgSrc: "assets/icons/menu_setting.svg",
+                  press: () {
+                    showAnimatedDialog(
+                      context: context,
+                      builder: (cntx) {
+                        final appInfo =
+                            context.read<AppVersionRepo>().packageInfo;
+                        return AlertDialog(
+                          title: const Text("App Info !"),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(cntx).pop();
+                                },
+                                child: const Text("Close"))
+                          ],
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Wrap(
+                                children: [
+                                  const Text("App Name: "),
+                                  Text(appInfo.appName),
+                                ],
+                              ),
+                              Constant.heightSpacer,
+                              Wrap(
+                                children: [
+                                  const Text("Version: "),
+                                  Text(appInfo.version),
+                                ],
+                              ),
+                              Constant.heightSpacer,
+                              Wrap(
+                                children: [
+                                  const Text("Build Number: "),
+                                  Text(appInfo.buildNumber),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
                 DrawerListTile(
                   title: "My Profile",
                   svgSrc: "assets/icons/menu_profile.svg",

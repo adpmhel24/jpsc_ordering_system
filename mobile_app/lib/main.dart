@@ -1,23 +1,29 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:localization/localization.dart';
 import 'package:mobile_app/src/data/repositories/app_repo_providers.dart';
-import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 // import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'src/data/repositories/repos.dart';
 import 'src/global_bloc/bloc_auth/bloc.dart';
+import 'src/global_bloc/bloc_check_app_version/bloc.dart';
 import 'src/router/router.gr.dart';
-import 'src/router/router_guard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Provider.debugCheckInvalidValueType = null;
-
   await LocalStorageRepo().init();
+  // runZonedGuarded(() {
+  //   runApp(const MainApp());
+  // }, (error, stackTrace) {
+  //   print("Error FROM OUT_SIDE FRAMEWORK ");
+  //   print("--------------------------------");
+  //   print("Error :  $error");
+  //   print("StackTrace :  $stackTrace");
+  // });
   runApp(const MainApp());
 }
 
@@ -30,7 +36,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   Locale? _locale;
-  final AppRouter _appRouter = AppRouter(routeGuard: RouteGuard());
+  final AppRouter _appRouter = AppRouter();
 
   changeLocale(Locale locale) {
     setState(() {
@@ -60,62 +66,87 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: AppRepoProvider.repoProviders,
-      child: BlocProvider(
-        create: (context) => AuthBloc(),
-        child: Provider(
-            create: (_) => CurrentUserRepo(),
-            builder: (context, _) {
-              return GlobalLoaderOverlay(
-                child: MaterialApp.router(
-                  themeMode: ThemeMode.system,
-                  title: "JPSC Ordering App",
-                  debugShowCheckedModeBanner: false,
-                  locale: _locale,
-                  localizationsDelegates: [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                    LocalJsonLocalization.delegate,
-                  ],
-                  localeResolutionCallback: (locale, supportedLocales) {
-                    if (supportedLocales.contains(locale)) {
-                      return locale;
-                    }
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (cntx) => CheckAppVersionBloc(
+              cntx.read<AppVersionRepo>(),
+            )..add(CheckingNewVersion()),
+          ),
+          BlocProvider(
+            create: (cntx) => AuthBloc(cntx.read<CheckAppVersionBloc>()),
+          ),
+        ],
+        child: Builder(builder: (context) {
+          return GlobalLoaderOverlay(
+            child: MaterialApp.router(
+              themeMode: ThemeMode.system,
+              title: "JPSC Ordering App",
+              debugShowCheckedModeBanner: false,
+              locale: _locale,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                LocalJsonLocalization.delegate,
+              ],
+              localeResolutionCallback: (locale, supportedLocales) {
+                if (supportedLocales.contains(locale)) {
+                  return locale;
+                }
 
-                    return const Locale('en', 'US');
-                  },
-                  supportedLocales: const [
-                    Locale('en', 'US'),
-                  ],
-                  // themeMode: appTheme.mode,
-                  // color: appTheme.color,
-                  darkTheme: ThemeData(
-                    brightness: Brightness.dark,
-                    colorScheme: const ColorScheme.dark(),
-                    visualDensity: VisualDensity.standard,
-                    elevatedButtonTheme: elevatedButtonTheme(),
-                  ),
-                  theme: ThemeData(
-                      elevatedButtonTheme: elevatedButtonTheme(),
-                      brightness: Brightness.light,
-                      colorScheme: const ColorScheme.light(),
-                      visualDensity: VisualDensity.standard,
-                      appBarTheme: const AppBarTheme(
-                          backgroundColor: Colors.lightGreen)),
-                  builder: (_, child) {
-                    return ResponsiveWrapper.builder(
-                      BouncingScrollWrapper.builder(context, child!),
-                      maxWidth: maxWidth,
-                      minWidth: minWidth,
-                      defaultScale: defaultScale,
-                      breakpoints: breakpoints,
-                    );
-                  },
-                  routeInformationParser: _appRouter.defaultRouteParser(),
-                  routerDelegate: _appRouter.delegate(),
-                ),
-              );
-            }),
+                return const Locale('en', 'US');
+              },
+              supportedLocales: const [
+                Locale('en', 'US'),
+              ],
+              theme: ThemeData.light().copyWith(
+                appBarTheme:
+                    const AppBarTheme(backgroundColor: Colors.lightGreen),
+                visualDensity: VisualDensity.standard,
+                colorScheme: const ColorScheme.light(),
+                elevatedButtonTheme: elevatedButtonTheme(),
+              ),
+              darkTheme: ThemeData.dark().copyWith(
+                brightness: Brightness.dark,
+                colorScheme: const ColorScheme.dark(),
+                visualDensity: VisualDensity.standard,
+                elevatedButtonTheme: elevatedButtonTheme(),
+              ),
+              builder: (_, child) {
+                return ResponsiveWrapper.builder(
+                  BouncingScrollWrapper.builder(context, child!),
+                  maxWidth: maxWidth,
+                  minWidth: minWidth,
+                  defaultScale: defaultScale,
+                  breakpoints: breakpoints,
+                );
+              },
+              routeInformationParser: _appRouter.defaultRouteParser(
+                includePrefixMatches: true,
+              ),
+              routerDelegate:
+                  AutoRouterDelegate.declarative(_appRouter, routes: (r) {
+                bool hasNewVersion =
+                    context.watch<CheckAppVersionBloc>().state.status ==
+                        AppVersionStatus.available;
+                final authStatus = context.watch<AuthBloc>().state.status;
+
+                return [
+                  if (authStatus == AuthStateStatus.loggedIn && !hasNewVersion)
+                    ...r.initialPendingRoutes ??
+                        [const NavigationHandlerRoute()]
+                  else if (hasNewVersion)
+                    NewVersionScreenRoute(
+                        activeVersion:
+                            context.read<CheckAppVersionBloc>().state.data!)
+                  else
+                    const LoginScreenRoute()
+                ];
+              }),
+            ),
+          );
+        }),
       ),
     );
   }

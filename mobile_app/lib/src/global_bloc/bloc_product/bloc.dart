@@ -29,6 +29,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           status: FetchingStatus.success, products: _productsRepo.datas));
     } on HttpException catch (e) {
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
+    } catch (e) {
+      emit(state.copyWith(status: FetchingStatus.error, message: e.toString()));
     }
   }
 
@@ -42,6 +44,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
           status: FetchingStatus.success, products: _productsRepo.datas));
     } on HttpException catch (e) {
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
+    } catch (e) {
+      emit(state.copyWith(status: FetchingStatus.error, message: e.toString()));
     }
   }
 
@@ -54,6 +58,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       emit(state.copyWith(status: FetchingStatus.success, products: datas));
     } on HttpException catch (e) {
       emit(state.copyWith(status: FetchingStatus.error, message: e.message));
+    } catch (e) {
+      emit(state.copyWith(status: FetchingStatus.error, message: e.toString()));
     }
   }
 }

@@ -29,7 +29,7 @@ class CustomerRepo {
   Future<void> getAll() async {
     Response response;
 
-    response = await api.getAll(_token, pathUrl: _urlPath);
+    response = await api.get(token: _token, pathUrl: _urlPath);
     _datas = List<CustomerModel>.from(
         response.data['data'].map((e) => CustomerModel.fromJson(e))).toList();
   }
@@ -40,8 +40,8 @@ class CustomerRepo {
   }) async {
     Response response;
     try {
-      response = await api.getAll(
-        _token,
+      response = await api.get(
+        token: _token,
         pathUrl: "$_urlPath/by_location/$branchCode",
         params: params,
       );
@@ -60,17 +60,17 @@ class CustomerRepo {
     return response.data['message'];
   }
 
-  Future<String> update(
+  Future<Map<String, dynamic>> updateByField(
       {required String customerCode,
       required Map<String, dynamic> data}) async {
     Response response;
 
     response = await api.update(
       _token,
-      pathUrl: _urlPath + customerCode,
+      pathUrl: '$_urlPath/by_field/$customerCode',
       data: data,
     );
-    return response.data['message'];
+    return {"message": response.data['message'], "data": response.data['data']};
   }
 
   Future<List<CustomerModel>> offlineSearch(String value) async {

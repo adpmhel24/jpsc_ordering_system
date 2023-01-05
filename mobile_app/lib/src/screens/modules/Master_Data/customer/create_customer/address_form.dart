@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -9,15 +8,16 @@ import 'package:mobile_app/src/screens/widgets/custom_text_field.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
-import '../../../../../global_bloc/bloc_customer/create_customer/bloc.dart';
 import '../../../../utils/constant.dart';
 import '../../../../widgets/custom_dropdown_search.dart';
 
 class AddressFormScreen extends StatefulWidget {
-  const AddressFormScreen({Key? key, required this.createCustomerBloc})
-      : super(key: key);
+  const AddressFormScreen({
+    Key? key,
+    required this.onSubmit,
+  }) : super(key: key);
 
-  final CreateCustomerBloc createCustomerBloc;
+  final void Function(Map<String, dynamic>) onSubmit;
 
   @override
   State<AddressFormScreen> createState() => _AddressFormScreenState();
@@ -154,18 +154,17 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
             child: ElevatedButton(
               onPressed: value.isEmpty
                   ? null
-                  : () {
-                      widget.createCustomerBloc.add(CustAddressAdded({
-                        "province": selectedProvince?.name ?? "",
-                        "city_municipality":
-                            selectedCityMunicipality?.name ?? "",
-                        "brgy": selectedBrgy?.name ?? "",
-                        "other_details": _otherDetailsController.text,
-                        "street_address": _street.value,
-                        "is_default": true,
-                      }));
-                      context.router.pop();
-                    },
+                  : () => widget.onSubmit(
+                        {
+                          "province": selectedProvince?.name ?? "",
+                          "city_municipality":
+                              selectedCityMunicipality?.name ?? "",
+                          "brgy": selectedBrgy?.name ?? "",
+                          "other_details": _otherDetailsController.text,
+                          "street_address": _street.value,
+                          "is_default": isDefault,
+                        },
+                      ),
               child: const Text("Add"),
             ),
           );
@@ -205,6 +204,8 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                   );
                 } on HttpException catch (e) {
                   CustomAnimatedDialog.error(context, message: e.message);
+                } catch (e) {
+                  CustomAnimatedDialog.error(context, message: e.toString());
                 }
                 context.loaderOverlay.hide();
               } else {

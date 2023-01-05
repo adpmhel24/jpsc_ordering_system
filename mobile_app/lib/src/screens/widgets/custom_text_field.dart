@@ -63,7 +63,7 @@ class CustomTextField extends StatelessWidget {
   final bool? _readOnly;
   final Function()? _onTap;
   final TextAlign? _textAlign;
-  final Function(String value)? _onChanged;
+  final void Function(String value)? _onChanged;
   final AutovalidateMode? _autovalidateMode;
   final bool? _enabled;
   final bool? _obscureText;

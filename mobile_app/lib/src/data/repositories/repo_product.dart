@@ -25,8 +25,8 @@ class ProductRepo {
   Future<void> getAll({Map<String, dynamic>? params}) async {
     Response response;
 
-    response = await api.getAll(
-      _token,
+    response = await api.get(
+      token: _token,
       pathUrl: _urlPath,
       params: params,
     );
@@ -37,8 +37,8 @@ class ProductRepo {
   Future<void> getItemWithPriceByBranch(String branchCode) async {
     Response response;
 
-    response = await api.getAll(
-      _token,
+    response = await api.get(
+      token: _token,
       pathUrl: "${_urlPath}with_price/by_branch/$branchCode",
     );
     _datas = List<ProductModel>.from(

@@ -23,7 +23,7 @@ class ItemGroupRepo {
   Future<void> getAll() async {
     Response response;
 
-    response = await api.getAll(_token, pathUrl: _urlPath);
+    response = await api.get(token: _token, pathUrl: _urlPath);
     _datas = List<ItemGroupModel>.from(
         response.data['data'].map((e) => ItemGroupModel.fromJson(e))).toList();
   }

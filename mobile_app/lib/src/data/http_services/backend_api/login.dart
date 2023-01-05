@@ -24,6 +24,25 @@ class LoginAPI {
     return response;
   }
 
+  Future<Response> tryLogin(String token) async {
+    Response response;
+
+    try {
+      response = await _dio.post(
+        '/api/v1/try_login',
+        options: Options(
+          headers: {
+            'Authorization': "Bearer $token",
+            "Accept": "application/json",
+          },
+        ),
+      );
+    } on DioError catch (e) {
+      throw CustomThrowError.throwError(e);
+    }
+    return response;
+  }
+
   ///Singleton factory
   static final LoginAPI _instance = LoginAPI._internal();
 

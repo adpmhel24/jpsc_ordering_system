@@ -213,7 +213,7 @@ class CreateCustomerBloc
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     Map<String, dynamic> data = {
       "customer_schema": {
-        "code": "C_${state.custCode.value}",
+        "code": state.custCode.value,
         "card_name": state.cardName.value,
         "first_name": state.custFirstName.value,
         "last_name": state.custLastName.value,
@@ -243,6 +243,9 @@ class CreateCustomerBloc
           message: e.message,
         ),
       );
+    } catch (e) {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure, message: e.toString()));
     }
   }
 }

@@ -24,7 +24,7 @@ class PriceQuotationRepo {
   // Future<void> getAll({Map<String, dynamic>? params}) async {
   //   Response response;
 
-  //   response = await api.getAll(
+  //   response = await api.get(
   //     _token,
   //     pathUrl: _urlPath,
   //     params: params,
@@ -48,8 +48,8 @@ class PriceQuotationRepo {
   Future<void> getAllMyTransaction({Map<String, dynamic>? params}) async {
     Response response;
 
-    response = await api.getAll(
-      _token,
+    response = await api.get(
+      token: _token,
       pathUrl: "${_urlPath}by_owner",
       params: params,
     );

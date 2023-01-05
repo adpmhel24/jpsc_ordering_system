@@ -27,7 +27,7 @@ class BranchRepo {
   Future<void> getAll() async {
     Response response;
 
-    response = await api.getAll(_token, pathUrl: _urlPath);
+    response = await api.get(token: _token, pathUrl: _urlPath);
     _datas = List<BranchModel>.from(
         response.data['data'].map((e) => BranchModel.fromJson(e))).toList();
   }

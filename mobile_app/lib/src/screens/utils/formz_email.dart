@@ -16,7 +16,7 @@ class FormzEmail extends FormzInput<String, FormzEmailValidator> {
       } else {
         return FormzEmailValidator.invalid;
       }
-    } on Exception catch (_) {
+    } catch (_) {
       return FormzEmailValidator.invalid;
     }
   }

@@ -14,3 +14,5 @@ export 'ph_location_repo.dart';
 export 'repo_price_quotation.dart';
 export 'repo_payment_term.dart';
 export 'repo_curr_user.dart';
+export 'repo_app_version.dart';
+export 'repo_customer_address.dart';

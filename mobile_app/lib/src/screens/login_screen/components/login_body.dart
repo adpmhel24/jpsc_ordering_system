@@ -46,7 +46,7 @@ class LoginBody extends StatelessWidget {
                     ),
                     Constant.heightSpacer,
                     Text("JPSC System",
-                        style: Theme.of(context).textTheme.titleMedium),
+                        style: Theme.of(context).textTheme.titleLarge),
                     Constant.heightSpacer,
                     const LoginForm(),
                     const SizedBox(

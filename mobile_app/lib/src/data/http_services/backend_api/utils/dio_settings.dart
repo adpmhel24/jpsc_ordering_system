@@ -9,13 +9,14 @@ class DioSettings {
 
     if (kReleaseMode) {
       // release mode
-      url = "http://122.54.198.84:8800";
+      url = "https://api.jpoonandsons.com";
     } else {
       // debug mode
       // url = "http://192.168.1.4:8001";
       // url = "http://192.168.2.251:8800";
-      url = "http://192.168.2.245:8800";
-      // url = "http://122.54.198.84:8800";
+      // url = "https://api.jpoonandsons.com";
+      url = "http://192.168.2.223:8800";
+      // url = "http://192.168.1.3:8800";
     }
     return Dio(
       BaseOptions(

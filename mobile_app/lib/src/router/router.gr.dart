@@ -11,54 +11,83 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i13;
-import 'package:flutter/material.dart' as _i14;
-import 'package:mobile_app/src/global_bloc/bloc_customer/create_customer/bloc.dart'
-    as _i16;
-import 'package:mobile_app/src/router/router_guard.dart' as _i15;
+import 'package:auto_route/auto_route.dart' as _i15;
+import 'package:auto_route/empty_router_widgets.dart' as _i3;
+import 'package:flutter/material.dart' as _i16;
+import 'package:mobile_app/src/data/models/models.dart' as _i17;
 import 'package:mobile_app/src/screens/login_screen/login_screen.dart' as _i1;
-import 'package:mobile_app/src/screens/modules/main_screen.dart' as _i3;
+import 'package:mobile_app/src/screens/modules/main_screen.dart' as _i4;
 import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_customer/address_form.dart'
-    as _i4;
-import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_customer/create_customer_screen.dart'
-    as _i7;
-import 'package:mobile_app/src/screens/modules/My_Profile/my_profile.dart'
-    as _i8;
-import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/cart/main_screen.dart'
-    as _i11;
-import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/create_pq_screen.dart'
     as _i5;
-import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/customer_selection/main_screen.dart'
+import 'package:mobile_app/src/screens/modules/Master_Data/customer/create_customer/create_customer_screen.dart'
     as _i9;
-import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/product_selection/main_screen.dart'
+import 'package:mobile_app/src/screens/modules/My_Profile/my_profile.dart'
     as _i10;
-import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/pq_base_screen.dart'
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/cart/main_screen.dart'
+    as _i13;
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/create_pq_screen.dart'
+    as _i7;
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/customer_selection/main_screen.dart'
+    as _i11;
+import 'package:mobile_app/src/screens/modules/Price_Quotation/create_price_quotation/product_selection/main_screen.dart'
     as _i12;
+import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/pq_base_screen.dart'
+    as _i14;
 import 'package:mobile_app/src/screens/modules/Price_Quotation/price_quotations/purch_quotations_screen.dart'
-    as _i6;
-import 'package:mobile_app/src/screens/widgets/success_screen.dart' as _i2;
+    as _i8;
+import 'package:mobile_app/src/screens/new_version_screen/new_version_screen.dart'
+    as _i2;
+import 'package:mobile_app/src/screens/widgets/success_screen.dart' as _i6;
 
-class AppRouter extends _i13.RootStackRouter {
-  AppRouter({
-    _i14.GlobalKey<_i14.NavigatorState>? navigatorKey,
-    required this.routeGuard,
-  }) : super(navigatorKey);
-
-  final _i15.RouteGuard routeGuard;
+class AppRouter extends _i15.RootStackRouter {
+  AppRouter([_i16.GlobalKey<_i16.NavigatorState>? navigatorKey])
+      : super(navigatorKey);
 
   @override
-  final Map<String, _i13.PageFactory> pagesMap = {
+  final Map<String, _i15.PageFactory> pagesMap = {
     LoginScreenRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginScreen(),
       );
     },
+    NewVersionScreenRoute.name: (routeData) {
+      final args = routeData.argsAs<NewVersionScreenRouteArgs>();
+      return _i15.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: _i2.NewVersionScreen(
+          key: args.key,
+          activeVersion: args.activeVersion,
+        ),
+      );
+    },
+    NavigationHandlerRoute.name: (routeData) {
+      return _i15.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i3.EmptyRouterPage(),
+      );
+    },
+    MainScreenRoute.name: (routeData) {
+      return _i15.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: const _i4.MainScreen(),
+      );
+    },
+    AddressFormScreenRoute.name: (routeData) {
+      final args = routeData.argsAs<AddressFormScreenRouteArgs>();
+      return _i15.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: _i5.AddressFormScreen(
+          key: args.key,
+          onSubmit: args.onSubmit,
+        ),
+      );
+    },
     SuccessScreenRoute.name: (routeData) {
       final args = routeData.argsAs<SuccessScreenRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: _i2.SuccessScreen(
+        child: _i6.SuccessScreen(
           key: args.key,
           message: args.message,
           buttonLabel: args.buttonLabel,
@@ -67,69 +96,53 @@ class AppRouter extends _i13.RootStackRouter {
         ),
       );
     },
-    MainScreenRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: const _i3.MainScreen(),
-      );
-    },
-    AddressFormScreenRoute.name: (routeData) {
-      final args = routeData.argsAs<AddressFormScreenRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: _i4.AddressFormScreen(
-          key: args.key,
-          createCustomerBloc: args.createCustomerBloc,
-        ),
-      );
-    },
     CreatePriceQuotationScreenRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i5.CreatePriceQuotationScreen(),
+        child: const _i7.CreatePriceQuotationScreen(),
       );
     },
     PriceQuotationScreenRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i6.PriceQuotationScreen(),
+        child: const _i8.PriceQuotationScreen(),
       );
     },
     CreateCustomerScreenRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i7.CreateCustomerScreen(),
+        child: const _i9.CreateCustomerScreen(),
       );
     },
     MyProfilePageRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i8.MyProfilePage(),
+        child: const _i10.MyProfilePage(),
       );
     },
     CustomerSelectionRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i9.CustomerSelectionScreen(),
+        child: const _i11.CustomerSelectionScreen(),
       );
     },
     ProductionSelectionRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i10.ProductSelectionScreen(),
+        child: const _i12.ProductSelectionScreen(),
       );
     },
     CartRoute.name: (routeData) {
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i11.CartScreen(),
+        child: const _i13.CartScreen(),
       );
     },
     PurchaseQuotationsBaseScreenRoute.name: (routeData) {
       final args = routeData.argsAs<PurchaseQuotationsBaseScreenRouteArgs>();
-      return _i13.AdaptivePage<dynamic>(
+      return _i15.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: _i12.PurchaseQuotationsBaseScreen(
+        child: _i14.PurchaseQuotationsBaseScreen(
           key: args.key,
           startdateController: args.startdateController,
           enddateController: args.enddateController,
@@ -141,90 +154,102 @@ class AppRouter extends _i13.RootStackRouter {
   };
 
   @override
-  List<_i13.RouteConfig> get routes => [
-        _i13.RouteConfig(
+  List<_i15.RouteConfig> get routes => [
+        _i15.RouteConfig(
           LoginScreenRoute.name,
           path: '/login',
         ),
-        _i13.RouteConfig(
-          SuccessScreenRoute.name,
-          path: '/success_screen',
+        _i15.RouteConfig(
+          NewVersionScreenRoute.name,
+          path: '/new_version',
         ),
-        _i13.RouteConfig(
-          MainScreenRoute.name,
+        _i15.RouteConfig(
+          NavigationHandlerRoute.name,
           path: '/',
-          guards: [routeGuard],
           children: [
-            _i13.RouteConfig(
-              '#redirect',
+            _i15.RouteConfig(
+              MainScreenRoute.name,
               path: '',
-              parent: MainScreenRoute.name,
-              redirectTo: 'create_pq',
-              fullMatch: true,
-            ),
-            _i13.RouteConfig(
-              CreatePriceQuotationScreenRoute.name,
-              path: 'create_pq',
-              parent: MainScreenRoute.name,
+              parent: NavigationHandlerRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   '#redirect',
                   path: '',
-                  parent: CreatePriceQuotationScreenRoute.name,
-                  redirectTo: 'select_customer',
+                  parent: MainScreenRoute.name,
+                  redirectTo: 'create_pq',
                   fullMatch: true,
                 ),
-                _i13.RouteConfig(
-                  CustomerSelectionRoute.name,
-                  path: 'select_customer',
-                  parent: CreatePriceQuotationScreenRoute.name,
+                _i15.RouteConfig(
+                  CreatePriceQuotationScreenRoute.name,
+                  path: 'create_pq',
+                  parent: MainScreenRoute.name,
+                  children: [
+                    _i15.RouteConfig(
+                      '#redirect',
+                      path: '',
+                      parent: CreatePriceQuotationScreenRoute.name,
+                      redirectTo: 'select_customer',
+                      fullMatch: true,
+                    ),
+                    _i15.RouteConfig(
+                      CustomerSelectionRoute.name,
+                      path: 'select_customer',
+                      parent: CreatePriceQuotationScreenRoute.name,
+                    ),
+                    _i15.RouteConfig(
+                      ProductionSelectionRoute.name,
+                      path: 'select_product',
+                      parent: CreatePriceQuotationScreenRoute.name,
+                    ),
+                    _i15.RouteConfig(
+                      CartRoute.name,
+                      path: 'select_product',
+                      parent: CreatePriceQuotationScreenRoute.name,
+                    ),
+                  ],
                 ),
-                _i13.RouteConfig(
-                  ProductionSelectionRoute.name,
-                  path: 'select_product',
-                  parent: CreatePriceQuotationScreenRoute.name,
+                _i15.RouteConfig(
+                  PriceQuotationScreenRoute.name,
+                  path: 'price_quotations',
+                  parent: MainScreenRoute.name,
+                  children: [
+                    _i15.RouteConfig(
+                      PurchaseQuotationsBaseScreenRoute.name,
+                      path: 'my_transaction',
+                      parent: PriceQuotationScreenRoute.name,
+                    )
+                  ],
                 ),
-                _i13.RouteConfig(
-                  CartRoute.name,
-                  path: 'select_product',
-                  parent: CreatePriceQuotationScreenRoute.name,
+                _i15.RouteConfig(
+                  CreateCustomerScreenRoute.name,
+                  path: 'create_customer',
+                  parent: MainScreenRoute.name,
+                ),
+                _i15.RouteConfig(
+                  MyProfilePageRoute.name,
+                  path: 'my_profile',
+                  parent: MainScreenRoute.name,
                 ),
               ],
             ),
-            _i13.RouteConfig(
-              PriceQuotationScreenRoute.name,
-              path: 'price_quotations',
-              parent: MainScreenRoute.name,
-              children: [
-                _i13.RouteConfig(
-                  PurchaseQuotationsBaseScreenRoute.name,
-                  path: 'my_transaction',
-                  parent: PriceQuotationScreenRoute.name,
-                )
-              ],
+            _i15.RouteConfig(
+              AddressFormScreenRoute.name,
+              path: 'address_form',
+              parent: NavigationHandlerRoute.name,
             ),
-            _i13.RouteConfig(
-              CreateCustomerScreenRoute.name,
-              path: 'create_customer',
-              parent: MainScreenRoute.name,
-            ),
-            _i13.RouteConfig(
-              MyProfilePageRoute.name,
-              path: 'my_profile',
-              parent: MainScreenRoute.name,
+            _i15.RouteConfig(
+              SuccessScreenRoute.name,
+              path: 'success_screen',
+              parent: NavigationHandlerRoute.name,
             ),
           ],
-        ),
-        _i13.RouteConfig(
-          AddressFormScreenRoute.name,
-          path: '/address_form',
         ),
       ];
 }
 
 /// generated route for
 /// [_i1.LoginScreen]
-class LoginScreenRoute extends _i13.PageRouteInfo<void> {
+class LoginScreenRoute extends _i15.PageRouteInfo<void> {
   const LoginScreenRoute()
       : super(
           LoginScreenRoute.name,
@@ -235,17 +260,113 @@ class LoginScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i2.SuccessScreen]
-class SuccessScreenRoute extends _i13.PageRouteInfo<SuccessScreenRouteArgs> {
+/// [_i2.NewVersionScreen]
+class NewVersionScreenRoute
+    extends _i15.PageRouteInfo<NewVersionScreenRouteArgs> {
+  NewVersionScreenRoute({
+    _i16.Key? key,
+    required _i17.AppVersionModel activeVersion,
+  }) : super(
+          NewVersionScreenRoute.name,
+          path: '/new_version',
+          args: NewVersionScreenRouteArgs(
+            key: key,
+            activeVersion: activeVersion,
+          ),
+        );
+
+  static const String name = 'NewVersionScreenRoute';
+}
+
+class NewVersionScreenRouteArgs {
+  const NewVersionScreenRouteArgs({
+    this.key,
+    required this.activeVersion,
+  });
+
+  final _i16.Key? key;
+
+  final _i17.AppVersionModel activeVersion;
+
+  @override
+  String toString() {
+    return 'NewVersionScreenRouteArgs{key: $key, activeVersion: $activeVersion}';
+  }
+}
+
+/// generated route for
+/// [_i3.EmptyRouterPage]
+class NavigationHandlerRoute extends _i15.PageRouteInfo<void> {
+  const NavigationHandlerRoute({List<_i15.PageRouteInfo>? children})
+      : super(
+          NavigationHandlerRoute.name,
+          path: '/',
+          initialChildren: children,
+        );
+
+  static const String name = 'NavigationHandlerRoute';
+}
+
+/// generated route for
+/// [_i4.MainScreen]
+class MainScreenRoute extends _i15.PageRouteInfo<void> {
+  const MainScreenRoute({List<_i15.PageRouteInfo>? children})
+      : super(
+          MainScreenRoute.name,
+          path: '',
+          initialChildren: children,
+        );
+
+  static const String name = 'MainScreenRoute';
+}
+
+/// generated route for
+/// [_i5.AddressFormScreen]
+class AddressFormScreenRoute
+    extends _i15.PageRouteInfo<AddressFormScreenRouteArgs> {
+  AddressFormScreenRoute({
+    _i16.Key? key,
+    required void Function(Map<String, dynamic>) onSubmit,
+  }) : super(
+          AddressFormScreenRoute.name,
+          path: 'address_form',
+          args: AddressFormScreenRouteArgs(
+            key: key,
+            onSubmit: onSubmit,
+          ),
+        );
+
+  static const String name = 'AddressFormScreenRoute';
+}
+
+class AddressFormScreenRouteArgs {
+  const AddressFormScreenRouteArgs({
+    this.key,
+    required this.onSubmit,
+  });
+
+  final _i16.Key? key;
+
+  final void Function(Map<String, dynamic>) onSubmit;
+
+  @override
+  String toString() {
+    return 'AddressFormScreenRouteArgs{key: $key, onSubmit: $onSubmit}';
+  }
+}
+
+/// generated route for
+/// [_i6.SuccessScreen]
+class SuccessScreenRoute extends _i15.PageRouteInfo<SuccessScreenRouteArgs> {
   SuccessScreenRoute({
-    _i14.Key? key,
+    _i16.Key? key,
     required String message,
     required String buttonLabel,
-    required void Function(_i14.BuildContext)? onButtonPressed,
+    required void Function(_i16.BuildContext)? onButtonPressed,
     String? submessage,
   }) : super(
           SuccessScreenRoute.name,
-          path: '/success_screen',
+          path: 'success_screen',
           args: SuccessScreenRouteArgs(
             key: key,
             message: message,
@@ -267,13 +388,13 @@ class SuccessScreenRouteArgs {
     this.submessage,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
   final String message;
 
   final String buttonLabel;
 
-  final void Function(_i14.BuildContext)? onButtonPressed;
+  final void Function(_i16.BuildContext)? onButtonPressed;
 
   final String? submessage;
 
@@ -284,57 +405,9 @@ class SuccessScreenRouteArgs {
 }
 
 /// generated route for
-/// [_i3.MainScreen]
-class MainScreenRoute extends _i13.PageRouteInfo<void> {
-  const MainScreenRoute({List<_i13.PageRouteInfo>? children})
-      : super(
-          MainScreenRoute.name,
-          path: '/',
-          initialChildren: children,
-        );
-
-  static const String name = 'MainScreenRoute';
-}
-
-/// generated route for
-/// [_i4.AddressFormScreen]
-class AddressFormScreenRoute
-    extends _i13.PageRouteInfo<AddressFormScreenRouteArgs> {
-  AddressFormScreenRoute({
-    _i14.Key? key,
-    required _i16.CreateCustomerBloc createCustomerBloc,
-  }) : super(
-          AddressFormScreenRoute.name,
-          path: '/address_form',
-          args: AddressFormScreenRouteArgs(
-            key: key,
-            createCustomerBloc: createCustomerBloc,
-          ),
-        );
-
-  static const String name = 'AddressFormScreenRoute';
-}
-
-class AddressFormScreenRouteArgs {
-  const AddressFormScreenRouteArgs({
-    this.key,
-    required this.createCustomerBloc,
-  });
-
-  final _i14.Key? key;
-
-  final _i16.CreateCustomerBloc createCustomerBloc;
-
-  @override
-  String toString() {
-    return 'AddressFormScreenRouteArgs{key: $key, createCustomerBloc: $createCustomerBloc}';
-  }
-}
-
-/// generated route for
-/// [_i5.CreatePriceQuotationScreen]
-class CreatePriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
-  const CreatePriceQuotationScreenRoute({List<_i13.PageRouteInfo>? children})
+/// [_i7.CreatePriceQuotationScreen]
+class CreatePriceQuotationScreenRoute extends _i15.PageRouteInfo<void> {
+  const CreatePriceQuotationScreenRoute({List<_i15.PageRouteInfo>? children})
       : super(
           CreatePriceQuotationScreenRoute.name,
           path: 'create_pq',
@@ -345,9 +418,9 @@ class CreatePriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i6.PriceQuotationScreen]
-class PriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
-  const PriceQuotationScreenRoute({List<_i13.PageRouteInfo>? children})
+/// [_i8.PriceQuotationScreen]
+class PriceQuotationScreenRoute extends _i15.PageRouteInfo<void> {
+  const PriceQuotationScreenRoute({List<_i15.PageRouteInfo>? children})
       : super(
           PriceQuotationScreenRoute.name,
           path: 'price_quotations',
@@ -358,8 +431,8 @@ class PriceQuotationScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.CreateCustomerScreen]
-class CreateCustomerScreenRoute extends _i13.PageRouteInfo<void> {
+/// [_i9.CreateCustomerScreen]
+class CreateCustomerScreenRoute extends _i15.PageRouteInfo<void> {
   const CreateCustomerScreenRoute()
       : super(
           CreateCustomerScreenRoute.name,
@@ -370,8 +443,8 @@ class CreateCustomerScreenRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i8.MyProfilePage]
-class MyProfilePageRoute extends _i13.PageRouteInfo<void> {
+/// [_i10.MyProfilePage]
+class MyProfilePageRoute extends _i15.PageRouteInfo<void> {
   const MyProfilePageRoute()
       : super(
           MyProfilePageRoute.name,
@@ -382,8 +455,8 @@ class MyProfilePageRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.CustomerSelectionScreen]
-class CustomerSelectionRoute extends _i13.PageRouteInfo<void> {
+/// [_i11.CustomerSelectionScreen]
+class CustomerSelectionRoute extends _i15.PageRouteInfo<void> {
   const CustomerSelectionRoute()
       : super(
           CustomerSelectionRoute.name,
@@ -394,8 +467,8 @@ class CustomerSelectionRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i10.ProductSelectionScreen]
-class ProductionSelectionRoute extends _i13.PageRouteInfo<void> {
+/// [_i12.ProductSelectionScreen]
+class ProductionSelectionRoute extends _i15.PageRouteInfo<void> {
   const ProductionSelectionRoute()
       : super(
           ProductionSelectionRoute.name,
@@ -406,8 +479,8 @@ class ProductionSelectionRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i11.CartScreen]
-class CartRoute extends _i13.PageRouteInfo<void> {
+/// [_i13.CartScreen]
+class CartRoute extends _i15.PageRouteInfo<void> {
   const CartRoute()
       : super(
           CartRoute.name,
@@ -418,13 +491,13 @@ class CartRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.PurchaseQuotationsBaseScreen]
+/// [_i14.PurchaseQuotationsBaseScreen]
 class PurchaseQuotationsBaseScreenRoute
-    extends _i13.PageRouteInfo<PurchaseQuotationsBaseScreenRouteArgs> {
+    extends _i15.PageRouteInfo<PurchaseQuotationsBaseScreenRouteArgs> {
   PurchaseQuotationsBaseScreenRoute({
-    _i14.Key? key,
-    required _i14.TextEditingController startdateController,
-    required _i14.TextEditingController enddateController,
+    _i16.Key? key,
+    required _i16.TextEditingController startdateController,
+    required _i16.TextEditingController enddateController,
     int? pqStatus,
     required String docStatus,
   }) : super(
@@ -451,11 +524,11 @@ class PurchaseQuotationsBaseScreenRouteArgs {
     required this.docStatus,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
-  final _i14.TextEditingController startdateController;
+  final _i16.TextEditingController startdateController;
 
-  final _i14.TextEditingController enddateController;
+  final _i16.TextEditingController enddateController;
 
   final int? pqStatus;
 

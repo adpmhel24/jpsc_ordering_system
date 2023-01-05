@@ -17,3 +17,5 @@ class LoginSubmitted extends AuthEvent {
 }
 
 class LogoutSubmitted extends AuthEvent {}
+
+class TryToLogin extends AuthEvent {}

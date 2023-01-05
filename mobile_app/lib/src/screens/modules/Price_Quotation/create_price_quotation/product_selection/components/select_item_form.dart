@@ -25,6 +25,7 @@ class SelectItemForm extends StatefulWidget {
 }
 
 class _SelectItemFormState extends State<SelectItemForm> {
+  final TextEditingController _itemCodeController = TextEditingController();
   final TextEditingController _itemNameController = TextEditingController();
   final TextEditingController _actualPriceController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
@@ -44,7 +45,8 @@ class _SelectItemFormState extends State<SelectItemForm> {
         widget.product.price?.toStringAsFixed(2) ?? "0.00";
     _actualPriceController.text =
         widget.product.price?.toStringAsFixed(2) ?? "0.00";
-    _itemNameController.text = widget.product.code;
+    _itemCodeController.text = widget.product.code;
+    _itemNameController.text = widget.product.description ?? "";
     _totalController.text = widget.product.price?.toStringAsFixed(2) ?? "0.00";
     _uomController.text = widget.product.saleUomCode ?? "";
     super.initState();
@@ -52,6 +54,7 @@ class _SelectItemFormState extends State<SelectItemForm> {
 
   @override
   void dispose() {
+    _itemCodeController.dispose();
     _itemNameController.dispose();
     _unitPriceController.dispose();
     _quantityController.dispose();
@@ -94,6 +97,14 @@ class _SelectItemFormState extends State<SelectItemForm> {
               const SizedBox(
                 height: 20,
               ),
+              CustomTextField(
+                labelText: 'Item Code',
+                controller: _itemCodeController,
+                readOnly: true,
+                enabled: false,
+                prefixIcon: const Icon(LineIcons.shoppingBasket),
+              ),
+              Constant.heightSpacer,
               CustomTextField(
                 labelText: 'Item Name',
                 controller: _itemNameController,
@@ -142,7 +153,7 @@ class _SelectItemFormState extends State<SelectItemForm> {
                                   CartItemAdded(
                                     CartItemModel(
                                       id: uuid.v1(),
-                                      itemCode: _itemNameController.text,
+                                      itemCode: _itemCodeController.text,
                                       quantity: double.parse(
                                           _quantityController.text),
                                       srpPrice: double.parse(

@@ -37,11 +37,13 @@ class CustomAnimatedDialog {
   static Future<Object?> success({
     required BuildContext context,
     required String message,
+    bool? barrierDismissible,
     void Function(BuildContext)? onPositiveClick,
   }) {
     context.loaderOverlay.hide();
     return showAnimatedDialog(
       context: context,
+      barrierDismissible: barrierDismissible ?? false,
       builder: (BuildContext cntx) {
         return ClassicGeneralDialogWidget(
           titleText: 'Success!',
@@ -53,6 +55,36 @@ class CustomAnimatedDialog {
               onPositiveClick(cntx);
             }
           },
+        );
+      },
+      animationType: DialogTransitionType.size,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  static Future<Object?> newVersionAvailable({
+    required BuildContext context,
+    required String message,
+    bool? barrierDismissible,
+    void Function(BuildContext)? onPositiveClick,
+  }) {
+    context.loaderOverlay.hide();
+    return showAnimatedDialog(
+      context: context,
+      barrierDismissible: barrierDismissible ?? false,
+      builder: (BuildContext cntx) {
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: ClassicGeneralDialogWidget(
+            titleText: 'Success!',
+            contentText: message,
+            positiveText: 'Okay',
+            onPositiveClick: () {
+              if (onPositiveClick != null) {
+                onPositiveClick(cntx);
+              }
+            },
+          ),
         );
       },
       animationType: DialogTransitionType.size,

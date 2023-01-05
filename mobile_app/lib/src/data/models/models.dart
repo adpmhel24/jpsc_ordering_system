@@ -18,3 +18,4 @@ export 'ph_location/municipality/municipality_model.dart';
 export 'ph_location/province/province_model.dart';
 export 'sales_order/model.dart';
 export 'payment_terms/model.dart';
+export 'app_version/model.dart';

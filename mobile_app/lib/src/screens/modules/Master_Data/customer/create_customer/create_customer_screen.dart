@@ -149,8 +149,16 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
           Constant.heightSpacer,
           TextButton(
             onPressed: () {
-              context.router.push(AddressFormScreenRoute(
-                  createCustomerBloc: context.read<CreateCustomerBloc>()));
+              context.navigateTo(
+                AddressFormScreenRoute(onSubmit: (Map<String, dynamic> data) {
+                  context.read<CreateCustomerBloc>().add(
+                        CustAddressAdded(
+                          data,
+                        ),
+                      );
+                  context.router.pop();
+                }),
+              );
             },
             child: const Text("Insert Address"),
           ),
@@ -280,7 +288,6 @@ class _CreateCustomerBodyState extends State<CreateCustomerBody> {
       controller: _codeController,
       labelText: "Card Code *",
       prefixIcon: const Icon(Icons.person),
-      prefix: const Text("C_"),
       maxLength: 15,
       onChanged: (v) {
         createCustomerBloc.add(CustCodeChanged(v.trim()));

@@ -11,6 +11,47 @@ class ProductCard extends StatelessWidget {
   final ProductModel product;
   const ProductCard({Key? key, required this.product}) : super(key: key);
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return ClipRRect(
+  //     borderRadius: BorderRadius.circular(10),
+  //     child: GridTile(
+  //       header: Text(
+  //         product.code,
+  //         style: Theme.of(context).textTheme.subtitle1,
+  //       ),
+  //       footer: GridTileBar(
+  //         backgroundColor: Theme.of(context).brightness == Brightness.dark
+  //             ? const Color.fromARGB(255, 93, 50, 50)
+  //             : const Color(0xFFFFCBCB),
+  //         leading: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               'Price : ${formatStringToDecimal(product.price!.toStringAsFixed(2))}',
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       child: GestureDetector(
+  //         onTap: () {
+  //           _showButtonSheet(context);
+  //         },
+  //         child: Container(
+  //           padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+  //           color: Theme.of(context).brightness == Brightness.dark
+  //               ? Colors.grey.shade600
+  //               : const Color(0xFFE7FBBE),
+  //           child: Text(
+  //             product.description ?? "",
+  //             overflow: TextOverflow.clip,
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -37,10 +78,14 @@ class ProductCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
             color: Theme.of(context).brightness == Brightness.dark
                 ? Colors.grey.shade600
-                : const Color(0xFFE7FBBE),
-            child: Text(
-              product.code,
-              style: Theme.of(context).textTheme.subtitle1,
+                : const Color.fromARGB(255, 221, 242, 176),
+            child: Tooltip(
+              message: product.code,
+              child: Text(
+                product.description ?? "",
+                overflow: TextOverflow.clip,
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
             ),
           ),
         ),

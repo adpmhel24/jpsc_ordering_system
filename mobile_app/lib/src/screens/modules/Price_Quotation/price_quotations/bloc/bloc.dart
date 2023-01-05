@@ -42,6 +42,8 @@ class PriceQuotationsBloc extends Bloc<SalesOrdersEvent, PriceQuotationsState> {
           message: e.message,
         ),
       );
+    } catch (e) {
+      emit(state.copyWith(status: FetchingStatus.error, message: e.toString()));
     }
   }
 }

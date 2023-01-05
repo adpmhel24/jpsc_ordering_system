@@ -71,7 +71,7 @@ class ChangePasswordBloc
     } on HttpException catch (e) {
       emit(state.copyWith(
           status: FormzStatus.submissionFailure, message: e.message));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(state.copyWith(
           status: FormzStatus.submissionFailure, message: e.toString()));
     }

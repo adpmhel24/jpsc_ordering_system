@@ -30,8 +30,8 @@ class BaseAPI {
     return response;
   }
 
-  Future<Response> getAll(
-    String token, {
+  Future<Response> get({
+    String? token,
     required String pathUrl,
     Map<String, dynamic>? params,
   }) async {

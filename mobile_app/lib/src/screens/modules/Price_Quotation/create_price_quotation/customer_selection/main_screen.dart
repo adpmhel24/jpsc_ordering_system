@@ -1,13 +1,19 @@
+import 'dart:io';
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:mobile_app/src/screens/widgets/custom_animated_dialog.dart';
 import 'package:mobile_app/src/screens/widgets/custom_text_field.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../../data/models/models.dart';
 import '../../../../../data/repositories/repos.dart';
+import '../../../../../router/router.gr.dart';
 import '../../../../utils/constant.dart';
 
 import '../../../../widgets/custom_dropdown_search.dart';
@@ -32,6 +38,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   late CreatePriceQuotationBloc bloc;
+  late CustomerRepo _customerRepo;
 
   TextEditingController customerCodeController = TextEditingController();
   TextEditingController cardNameController = TextEditingController();
@@ -50,6 +57,7 @@ class _BodyState extends State<Body> {
   void initState() {
     _branchesCode = context.read<SystemUserBranchRepo>().currentUserBranch();
     bloc = context.read<CreatePriceQuotationBloc>();
+    _customerRepo = context.read<CustomerRepo>();
 
     super.initState();
   }
@@ -68,7 +76,8 @@ class _BodyState extends State<Body> {
   void onSelectedCustomerChanged() {
     CustomerAddressModel? address;
     if (selectedCustomer != null && selectedCustomer!.addresses.isNotEmpty) {
-      address = selectedCustomer?.addresses.firstWhere((e) => e!.isDefault);
+      address =
+          selectedCustomer?.addresses.firstWhereOrNull((e) => e!.isDefault);
     }
     customerCodeController.text = selectedCustomer?.code ?? "";
     cardNameController.text = selectedCustomer?.cardName ?? "";
@@ -81,6 +90,69 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
 """;
 
     bloc.add(AddressChanged(addressController.text));
+  }
+
+  void _onAddingCustomerAddress(Map<String, dynamic> data) {
+    if (selectedCustomer != null) {
+      final repo = context.read<CustomerAddressRepo>();
+      CustomAnimatedDialog.warning(context,
+          message: "Are you sure you want to proceed?",
+          onPositiveClick: (cntx) async {
+        context.router.pop();
+
+        try {
+          context.loaderOverlay.show();
+
+          final result = await repo.createCustomerAddress(
+              customerCode: selectedCustomer!.code, data: data);
+
+          setState(() {
+            selectedCustomer!.addresses.add(result["data"]);
+          });
+          context.loaderOverlay.hide();
+          Fluttertoast.showToast(
+              msg: result["message"],
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.TOP,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          context.router.pop(); // to pop the Customer Address Form
+        } on HttpException catch (e) {
+          CustomAnimatedDialog.error(context, message: e.message);
+        } catch (e) {
+          CustomAnimatedDialog.error(context, message: e.toString());
+        }
+      });
+    }
+  }
+
+  void _onUpdateField(Map<String, dynamic> data) {
+    CustomAnimatedDialog.warning(context,
+        message: "Are you sure you want to update?",
+        onPositiveClick: (cnx) async {
+      try {
+        context.loaderOverlay.show();
+        final result = await _customerRepo.updateByField(
+            customerCode: selectedCustomer!.code, data: data);
+        final String message = result["message"];
+        setState(
+          () => selectedCustomer = CustomerModel.fromJson(result["data"]),
+        );
+        context.loaderOverlay.hide();
+        Fluttertoast.showToast(
+            msg: message,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } on HttpException catch (e) {
+        CustomAnimatedDialog.error(context, message: e.message);
+      } catch (e) {
+        CustomAnimatedDialog.error(context, message: e.toString());
+      }
+    });
   }
 
   @override
@@ -119,30 +191,89 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
     );
   }
 
-  CustomTextField _contactNumberField() {
-    return CustomTextField(
-      labelText: "Contact Number",
-      controller: contactNumberController,
-      prefixIcon: const Icon(LineIcons.phone),
+  StatefulBuilder _contactNumberField() {
+    return StatefulBuilder(builder: (context, setState) {
+      return CustomTextField(
+        labelText: "Contact Number",
+        controller: contactNumberController,
+        keyboardType: TextInputType.visiblePassword,
+        prefixIcon: const Icon(LineIcons.phone),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.done),
+          onPressed:
+              selectedCustomer?.contactNumber != contactNumberController.text
+                  ? () {
+                      _onUpdateField({
+                        "contact_number": contactNumberController.text,
+                      });
+                    }
+                  : null,
+        ),
+        onChanged: (v) {
+          setState(
+            () => contactNumberController.text = v,
+          );
+          contactNumberController.selection = TextSelection.collapsed(
+              offset: contactNumberController.text.length);
+        },
+      );
+    });
+  }
+
+  StatefulBuilder _lastNameField() {
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return CustomTextField(
+          labelText: "Last Name",
+          controller: lastNameController,
+          prefixIcon: const Icon(Icons.person),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: selectedCustomer?.lastName != lastNameController.text
+                ? () {
+                    _onUpdateField({
+                      "last_name": lastNameController.text,
+                    });
+                  }
+                : null,
+          ),
+          onChanged: (v) {
+            setState(
+              () => lastNameController.text = v,
+            );
+            lastNameController.selection =
+                TextSelection.collapsed(offset: lastNameController.text.length);
+          },
+        );
+      },
     );
   }
 
-  CustomTextField _lastNameField() {
-    return CustomTextField(
-      labelText: "Last Name",
-      controller: lastNameController,
-      prefixIcon: const Icon(Icons.person),
-      enabled: false,
-    );
-  }
-
-  CustomTextField _firstNameField() {
-    return CustomTextField(
-      labelText: "First Name",
-      controller: firstNameController,
-      prefixIcon: const Icon(Icons.person),
-      enabled: false,
-    );
+  StatefulBuilder _firstNameField() {
+    return StatefulBuilder(builder: (context, setState) {
+      return CustomTextField(
+        labelText: "First Name",
+        controller: firstNameController,
+        prefixIcon: const Icon(Icons.person),
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.done),
+          onPressed: selectedCustomer?.firstName != firstNameController.text
+              ? () {
+                  _onUpdateField({
+                    "first_name": firstNameController.text,
+                  });
+                }
+              : null,
+        ),
+        onChanged: (v) {
+          setState(
+            () => firstNameController.text = v,
+          );
+          firstNameController.selection =
+              TextSelection.collapsed(offset: firstNameController.text.length);
+        },
+      );
+    });
   }
 
   CustomTextField _cardNameField() {
@@ -298,84 +429,103 @@ ${address?.cityMunicipality ?? ''} ${address?.province ?? ''}
           height: (MediaQuery.of(context).size.height * .5),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.separated(
-                itemBuilder: (_, index) {
-                  return Card(
-                    child: InkWell(
-                      onTap: () {
-                        String completeAddress =
-                            """${addresses[index]?.streetAddress ?? ''}
-${addresses[index]?.brgy == null ? '' : 'Brgy. ${addresses[index]?.brgy}'}
-${addresses[index]?.cityMunicipality ?? ''}, ${addresses[index]?.province ?? ''}
-""";
-                        addressController.text = completeAddress;
-                        context
-                            .read<CreatePriceQuotationBloc>()
-                            .add(AddressChanged(addressController.text));
-                        context.router.pop();
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Wrap(
-                                children: [
-                                  const Text(
-                                    'Street Address: ',
-                                  ),
-                                  Text(addresses[index]?.streetAddress ?? ''),
-                                ],
-                              ),
-                              Wrap(
-                                children: [
-                                  const Text(
-                                    'Barangay: ',
-                                  ),
-                                  Text(addresses[index]?.brgy ?? ''),
-                                ],
-                              ),
-                              Wrap(
-                                children: [
-                                  const Text(
-                                    'City / Municipality: ',
-                                  ),
-                                  Text(
-                                      addresses[index]?.cityMunicipality ?? ''),
-                                ],
-                              ),
-                              Wrap(
-                                children: [
-                                  const Text(
-                                    'Province: ',
-                                  ),
-                                  Text(addresses[index]?.province ?? ''),
-                                ],
-                              ),
-                              Wrap(
-                                children: [
-                                  const Text(
-                                    'Other details: ',
-                                  ),
-                                  Text(addresses[index]?.otherDetails ?? ''),
-                                ],
-                              ),
-                            ],
-                          ),
+            child: Column(
+              children: [
+                TextButton(
+                    onPressed: () {
+                      context.router.push(
+                        AddressFormScreenRoute(
+                          onSubmit: (Map<String, dynamic> data) {
+                            _onAddingCustomerAddress(data);
+                          },
                         ),
-                      ),
-                    ),
-                  );
-                },
-                separatorBuilder: (_, index) {
-                  return const Divider(
-                    thickness: 1,
-                    color: Color(0xFFBDBDBD),
-                  );
-                },
-                itemCount: addresses.length),
+                      );
+                    },
+                    child: const Text("Add Address")),
+                Expanded(
+                  child: ListView.separated(
+                      itemBuilder: (_, index) {
+                        return Card(
+                          child: InkWell(
+                            onTap: () {
+                              String completeAddress =
+                                  """${addresses[index]?.streetAddress ?? ''}
+${addresses[index]?.brgy == null ? '' : 'Brgy. ${addresses[index]?.brgy}'}
+${addresses[index]?.cityMunicipality ?? ''}, ${addresses[index]?.province ?? ''}""";
+                              addressController.text = completeAddress;
+                              context
+                                  .read<CreatePriceQuotationBloc>()
+                                  .add(AddressChanged(addressController.text));
+                              context.router.pop();
+                            },
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Wrap(
+                                      children: [
+                                        const Text(
+                                          'Street Address: ',
+                                        ),
+                                        Text(addresses[index]?.streetAddress ??
+                                            ''),
+                                      ],
+                                    ),
+                                    Wrap(
+                                      children: [
+                                        const Text(
+                                          'Barangay: ',
+                                        ),
+                                        Text(addresses[index]?.brgy ?? ''),
+                                      ],
+                                    ),
+                                    Wrap(
+                                      children: [
+                                        const Text(
+                                          'City / Municipality: ',
+                                        ),
+                                        Text(addresses[index]
+                                                ?.cityMunicipality ??
+                                            ''),
+                                      ],
+                                    ),
+                                    Wrap(
+                                      children: [
+                                        const Text(
+                                          'Province: ',
+                                        ),
+                                        Text(addresses[index]?.province ?? ''),
+                                      ],
+                                    ),
+                                    Wrap(
+                                      children: [
+                                        const Text(
+                                          'Other details: ',
+                                        ),
+                                        Text(addresses[index]?.otherDetails ??
+                                            ''),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, index) {
+                        return const Divider(
+                          thickness: 1,
+                          color: Color(0xFFBDBDBD),
+                        );
+                      },
+                      itemCount: addresses.length),
+                ),
+              ],
+            ),
           ),
         );
       },

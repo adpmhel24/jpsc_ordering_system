@@ -25,8 +25,8 @@ class PaymentTermRepo {
   Future<void> getAll({Map<String, dynamic>? params}) async {
     Response response;
 
-    response = await api.getAll(
-      _token,
+    response = await api.get(
+      token: _token,
       pathUrl: _urlPath,
       params: params,
     );
@@ -38,8 +38,8 @@ class PaymentTermRepo {
   Future<void> getByLocation(String location) async {
     Response response;
 
-    response = await api.getAll(
-      _token,
+    response = await api.get(
+      token: _token,
       pathUrl: "$_urlPath$location",
     );
     _datas = List<PaymentTermsModel>.from(

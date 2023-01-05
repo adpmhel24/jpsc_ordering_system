@@ -311,6 +311,9 @@ class CreatePriceQuotationBloc
     } on HttpException catch (e) {
       emit(state.copyWith(
           status: FormzStatus.submissionFailure, message: e.message));
+    } catch (e) {
+      emit(state.copyWith(
+          status: FormzStatus.submissionFailure, message: e.toString()));
     }
   }
 }
