@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+
+  psql_prod_db:
+    platform: linux/amd64
+    container_name: psql_prod_db
+    image: postgres
+    # restart: always
+    ports:
+      - 5431:5432
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - APP_NAME=psql_prod_db
+      - TZ=Asia/Manila
+      - DEBIAN_FRONTEND=noninteractive
+
+  api:
+    platform: linux/amd64
+    container_name: jpsc_test_api
+    build: ./
+    command: uvicorn my_app.main:app --host 0.0.0.0 --port 8001 --reload
+    environment:
+      - APP_NAME=jpsc_test_api
+      - TZ=Asia/Manila
+      - DEBIAN_FRONTEND=noninteractive
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 8800:8001
+    # restart: always
+    depends_on:
+      - psql_prod_db
