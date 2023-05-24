@@ -2,20 +2,20 @@ version: "3.4"
 
 services:
 
-  psql_prod_db:
-    platform: linux/amd64
-    container_name: psql_prod_db
-    image: postgres
-    ports:
-      - 5434:5432
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-      - APP_NAME=psql_prod_db
-      - TZ=Asia/Manila
-      - DEBIAN_FRONTEND=noninteractive
-    restart: always
+  # psql_prod_db:
+  #   platform: linux/amd64
+  #   container_name: psql_prod_db
+  #   image: postgres
+  #   ports:
+  #     - 5434:5432
+  #   environment:
+  #     - POSTGRES_USER=${DB_USER}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+  #     - POSTGRES_DB=${DB_NAME}
+  #     - APP_NAME=psql_prod_db
+  #     - TZ=Asia/Manila
+  #     - DEBIAN_FRONTEND=noninteractive
+  #   restart: always
       
 
   jpsc_prod_api:
@@ -30,26 +30,26 @@ services:
     depends_on:
       - psql_prod_db
     ports:
-      - 8001:8001
+      - 82:8001
     expose:
-      - 8001
+      - 82
     restart: always
 
-  nginx:
-    image: nginx:1.14.2-alpine
-    # image: nginx:stable
-    restart: always
-    environment:
-      - TZ=Asia/Manila
-    volumes:
-      - ./public_html:/public_html
-      - ./conf.d:/etc/nginx/conf.d/
-      - ./dhparam:/etc/nginx/dhparam
-      - ./certbot/conf/:/etc/nginx/ssl/
-      - ./certbot/data:/usr/share/nginx/html/letsencrypt
-    ports:
-      - 80:80
-      - 443:443
+  # nginx:
+  #   image: nginx:1.14.2-alpine
+  #   # image: nginx:stable
+  #   restart: always
+  #   environment:
+  #     - TZ=Asia/Manila
+  #   volumes:
+  #     - ./public_html:/public_html
+  #     - ./conf.d:/etc/nginx/conf.d/
+  #     - ./dhparam:/etc/nginx/dhparam
+  #     - ./certbot/conf/:/etc/nginx/ssl/
+  #     - ./certbot/data:/usr/share/nginx/html/letsencrypt
+  #   ports:
+  #     - 80:80
+  #     - 443:443
 
 
   # certbot:
